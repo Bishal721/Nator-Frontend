@@ -1,0 +1,15 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.card{
+    @apply block bg-white text-black rounded overflow-hidden shadow-md; ;
+}
+
+.auth{
+    @apply flex justify-center items-center min-h-32:
+}
+
+.form{
+    @apply w-96 p-5 bg-white 
+}

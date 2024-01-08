@@ -4,3 +4,4 @@ const Card = ({ children, cardClass }) => {
 };
 
 export default Card;
+  
