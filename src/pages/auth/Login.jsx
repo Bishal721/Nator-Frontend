@@ -1,6 +1,4 @@
-import styles from "./auth.module.scss";
 import { BiLogIn } from "react-icons/bi";
-import Card from "../../components/card/Card";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { useState } from "react";
@@ -9,6 +7,7 @@ import { loginUser, validateEmail } from "../../services/authService";
 import { SET_LOGIN, SET_NAME } from "../../redux/features/auth/authSlice";
 import Loader from "../../components/loader/Loader";
 import OAuthButton from "../../components/OAuthButton";
+import loginimg from "../../assets/Signin.jpg";
 const initialState = {
   email: "",
   password: "",
@@ -50,47 +49,70 @@ const Login = () => {
     }
   };
   return (
-    <div className={`container ${styles.auth}`}>
+    <div className="bg-gray-100 flex justify-center items-center h-screen">
       {isLoading && <Loader />}
-
-      <Card>
-        <div className={styles.form}>
-          <div className="--flex-center">
-            <BiLogIn size={35} color="#999" />
-          </div>
-          <h2> Login</h2>
-
-          <form onSubmit={login}>
+      <div className="w-1/1 h-screen hidden lg:block">
+        <img
+          src={loginimg}
+          alt="Placeholder Image"
+          className="object-cover w-full h-full"
+        />
+      </div>
+      <div className="lg:p-36 md:p-52 sm:20 p-8 w-full lg:w-1/2">
+        <div className="flex items-center  mb-4 text-blue-500">
+          <BiLogIn size={33} />
+          <h1 className="text-3xl font-semibold">&nbsp;Login</h1>
+        </div>
+        <form onSubmit={login}>
+          <div className="mb-4">
             <input
               type="email"
-              placeholder="Email"
-              required
               name="email"
+              placeholder="Email"
+              className="w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-blue-500"
+              required
               value={email}
               onChange={HandleInputChange}
             />
+          </div>
+          <div className="mb-4">
             <input
               type="password"
-              placeholder="Password"
-              required
               name="password"
+              placeholder="Password"
+              className="w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-blue-500"
+              required
               value={password}
               onChange={HandleInputChange}
             />
-            <button type="submit" className="--btn --btn-primary --btn-block">
-              Login
-            </button>
-            <p>or</p>
+          </div>
+
+          <div className="mb-6 text-blue-500">
+            <Link to="/forgot" className="hover:underline">
+              Forgot Password
+            </Link>
+          </div>
+          <button
+            type="submit"
+            className="bg-blue-500 hover:bg-blue-600 text-white font-semibold rounded-md py-2 px-4 w-full"
+          >
+            Login
+          </button>
+          <p className="text-center">or</p>
+          <div className="mb-4 flex items-center">
             <OAuthButton />
-            <Link to="/forgot">Forgot Password</Link>
-          </form>
-          <span className={styles.register}>
-            <Link to="/">Home</Link>
-            <p>&nbsp; Don't have an account? </p>
-            <Link to="/register"> Register</Link>
-          </span>
-        </div>
-      </Card>
+          </div>
+        </form>
+        <span className="mt-6 text-blue-500 text-center flex items-center">
+          <Link to="/" className="hover:underline">
+            Home
+          </Link>
+          <p className="text-gray-500">&nbsp; Don't have an account? </p>
+          <Link to="/register" className="hover:underline">
+            Sign up Here
+          </Link>
+        </span>
+      </div>
     </div>
   );
 };

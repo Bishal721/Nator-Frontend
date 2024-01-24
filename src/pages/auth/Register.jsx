@@ -1,6 +1,4 @@
-import styles from "./auth.module.scss";
 import { TiUserAddOutline } from "react-icons/ti";
-import Card from "../../components/card/Card";
 import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { toast } from "react-toastify";
@@ -9,6 +7,8 @@ import { useDispatch } from "react-redux";
 import { SET_LOGIN, SET_NAME } from "../../redux/features/auth/authSlice";
 import Loader from "../../components/loader/Loader";
 import OAuthButton from "../../components/OAuthButton";
+import loginimg from "../../assets/Signin.jpg";
+
 const initialState = {
   name: "",
   email: "",
@@ -57,62 +57,87 @@ const Register = () => {
     }
   };
   return (
-    <div className={`container ${styles.auth}`}>
+    <div className="bg-gray-100 flex justify-center items-center h-screen">
       {isLoading && <Loader />}
-      <Card>
-        <div className={styles.form}>
-          <div className="--flex-center">
-            <TiUserAddOutline size={35} color="#999" />
-          </div>
-          <h2> Register</h2>
-
-          <form onSubmit={UserRegister}>
+      <div className="w-1/1 h-screen hidden lg:block">
+        <img
+          src={loginimg}
+          alt="Placeholder Image"
+          className="object-cover w-full h-full"
+        />
+      </div>
+      <div className="lg:p-36 md:p-52 sm:20 p-8 w-full lg:w-1/2">
+      <div className="flex items-center  mb-4 text-blue-500">
+          <TiUserAddOutline size={33} />
+          <h1 className="text-3xl font-semibold">&nbsp;Register</h1>
+        </div>
+        <form onSubmit={UserRegister}>
+          <div className="mb-4">
             <input
               type="text"
               placeholder="Name"
               required
+              className="w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-blue-500"
               name="name"
               value={name}
               onChange={HandleInputChange}
             />
+          </div>
+          <div className="mb-4">
             <input
               type="email"
               placeholder="Email"
               required
+              className="w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-blue-500"
               name="email"
               value={email}
               onChange={HandleInputChange}
             />
+          </div>
+          <div className="mb-4">
             <input
               type="password"
               placeholder="Password"
               required
+              className="w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-blue-500"
               name="password"
               value={password}
               onChange={HandleInputChange}
             />
+          </div>
+          <div className="mb-4">
             <input
               type="password"
               placeholder="Confirm Password"
               required
+              className="w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-blue-500"
               name="password2"
               value={password2}
               onChange={HandleInputChange}
             />
-            <button type="submit" className="--btn --btn-primary --btn-block">
-              Register
-            </button>
+          </div>
 
-            <p>or</p>
+          <button
+            type="submit"
+            className="bg-blue-500 hover:bg-blue-600 text-white font-semibold rounded-md py-2 px-4 w-full"
+          >
+            Register
+          </button>
+          <p className="text-center">or</p>
+          <div className="mb-4 flex items-center">
             <OAuthButton />
-          </form>
-          <span className={styles.register}>
-            <Link to="/">Home</Link>
-            <p>&nbsp; Already have an account? </p>
-            <Link to="/login">Login</Link>
-          </span>
-        </div>
-      </Card>
+          </div>
+        </form>
+        <span className="mt-6 text-blue-500 text-center flex items-center">
+          <Link to="/" className="hover:underline">
+            Home
+          </Link>
+          <p className="text-gray-500">&nbsp; Already have an account? </p>
+          <Link to="/login" className="hover:underline">
+            Login Here
+          </Link>
+        </span>
+      </div>
     </div>
   );
 };

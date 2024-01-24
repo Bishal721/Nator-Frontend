@@ -7,9 +7,13 @@
 }
 
 .auth{
-    @apply flex justify-center items-center min-h-32:
+    @apply flex justify-center items-center ;
 }
 
 .form{
     @apply w-96 p-5 bg-white 
+}
+
+.container{
+    @apply max-w-5xl my-0 mx-auto py-0 px-5
 }

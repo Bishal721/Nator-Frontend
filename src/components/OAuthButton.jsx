@@ -22,7 +22,7 @@ const OAuthButton = () => {
         console.log(data);
         dispatch(SET_LOGIN(true));
         dispatch(SET_NAME(data.name));
-        navigate("/dashboard");     
+        navigate("/dashboard");
       } catch (error) {
         console.log(error);
       }
@@ -34,7 +34,7 @@ const OAuthButton = () => {
     <button
       type="button"
       onClick={handleGoogleClick}
-      className="bg-red-500 text-white rounded-lg uppercase p-3 block"
+      className="bg-red-500 hover:bg-red-600 text-white font-semibold rounded-md py-2 px-4 w-full"
     >
       Sign in with Google
     </button>
