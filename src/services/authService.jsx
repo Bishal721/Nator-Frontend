@@ -15,7 +15,6 @@ export const registerUser = async (userData) => {
       userData,
       { withCredentials: true }
     );
-
     if (response.statusText === "OK") {
       toast.success("User Registered Successfully");
     }
@@ -42,16 +41,14 @@ export const loginUser = async (userData) => {
     return response.data;
   } catch (error) {
     const message =
-      (error.response && error.response.data && error.response.message) ||
-      error.message ||
-      error.toString();
+      error.response.data.message || error.message || error.toString();
     toast.error(message);
   }
 };
 // Logout User
 export const logoutUser = async () => {
   try {
-    await axios.get(`${BACKEND_URL}/api/users/logout`);
+    await axios.get(`${BACKEND_URL}/api/v1/users/logout`);
     toast.success("Logged out Successfully");
   } catch (error) {
     const message =
@@ -96,7 +93,7 @@ export const resetPassword = async (userData, resetToken) => {
 //Get Login Status
 export const GetLoginStatus = async () => {
   try {
-    const response = await axios.get(`${BACKEND_URL}/api/users/loggedin`);
+    const response = await axios.get(`${BACKEND_URL}/api/v1/users/loggedin`);
     return response.data;
   } catch (error) {
     const message =
@@ -152,11 +149,56 @@ export const ChangeUserPassword = async (formData) => {
   }
 };
 
-export const googleLogin = async (userData)=>{
+export const googleLogin = async (userData) => {
   try {
-    const response = await axios.post(`${BACKEND_URL}/api/auth/google`,userData);
+    const response = await axios.post(
+      `${BACKEND_URL}/api/auth/google`,
+      userData
+    );
     return response.data;
   } catch (error) {
-    console.log(error)
+    console.log(error);
   }
-}
+};
+
+export const getOtp = async (userData) => {
+  try {
+    const response = await axios.post(
+      `${BACKEND_URL}/api/v1/users/otp`,
+      userData
+    );
+    if (response.statusText === "OK") {
+      toast.success("Otp Sent to email");
+    }
+    return response.data;
+  } catch (error) {
+    const message =
+      (error.response && error.response.data && error.response.message) ||
+      error.message ||
+      error.toString();
+    toast.error(message);
+    console.log(error);
+  }
+};
+
+export const compareOtpResponse = async (userData) => {
+  try {
+    const response = await axios.post(
+      `${BACKEND_URL}/api/v1/users/compareotp`,
+      userData
+    );
+
+    if (response.data.message === "Matched") {
+      return true;
+    } else {
+      return false;
+    }
+  } catch (error) {
+    const message =
+      (error.response && error.response.data && error.response.message) ||
+      error.message ||
+      error.toString();
+    toast.error(message);
+    console.log(error);
+  }
+};

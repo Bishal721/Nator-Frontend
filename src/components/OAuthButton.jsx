@@ -22,7 +22,7 @@ const OAuthButton = () => {
         console.log(data);
         dispatch(SET_LOGIN(true));
         dispatch(SET_NAME(data.name));
-        navigate("/dashboard");
+        navigate("/profile");
       } catch (error) {
         console.log(error);
       }

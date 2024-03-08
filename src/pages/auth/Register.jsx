@@ -2,7 +2,10 @@ import { TiUserAddOutline } from "react-icons/ti";
 import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { toast } from "react-toastify";
-import { registerUser, validateEmail } from "../../services/authService";
+import {
+  registerUser,
+  validateEmail,
+} from "../../services/authService";
 import { useDispatch } from "react-redux";
 import { SET_LOGIN, SET_NAME } from "../../redux/features/auth/authSlice";
 import Loader from "../../components/loader/Loader";
@@ -23,10 +26,13 @@ const Register = () => {
   const { name, email, password, password2 } = formData;
   const HandleInputChange = (e) => {
     const { name, value } = e.target;
+    console.log(e.target);
     setformData({ ...formData, [name]: value });
   };
+
   const UserRegister = async (e) => {
     e.preventDefault();
+
     if (!name || !email || !password) {
       return toast.error("All Fields are required");
     }
@@ -50,12 +56,13 @@ const Register = () => {
       const data = await registerUser(userData);
       await dispatch(SET_LOGIN(true));
       await dispatch(SET_NAME(data.name));
-      navigate("/dashboard");
+      navigate("/profile");
       setIsLoading(false);
     } catch (error) {
       setIsLoading(false);
     }
   };
+
   return (
     <div className="bg-gray-100 flex justify-center items-center h-screen">
       {isLoading && <Loader />}
@@ -67,7 +74,7 @@ const Register = () => {
         />
       </div>
       <div className="lg:p-36 md:p-52 sm:20 p-8 w-full lg:w-1/2">
-      <div className="flex items-center  mb-4 text-blue-500">
+        <div className="flex items-center  mb-4 text-blue-500">
           <TiUserAddOutline size={33} />
           <h1 className="text-3xl font-semibold">&nbsp;Register</h1>
         </div>
@@ -132,11 +139,14 @@ const Register = () => {
           <Link to="/" className="hover:underline">
             Home
           </Link>
-          <p className="text-gray-500">&nbsp; Already have an account? </p>
+          <p className="text-gray-500">
+            &nbsp; Already have an account? &nbsp;
+          </p>
           <Link to="/login" className="hover:underline">
             Login Here
           </Link>
         </span>
+        {/* <OtpInput length={6} onOtpSubmit={onOtpSubmit} /> */}
       </div>
     </div>
   );

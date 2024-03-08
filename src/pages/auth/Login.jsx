@@ -42,7 +42,7 @@ const Login = () => {
       const data = await loginUser(userData);
       dispatch(SET_LOGIN(true));
       dispatch(SET_NAME(data.name));
-      navigate("/dashboard");
+      navigate("/profile");
       setIsLoading(false);
     } catch (error) {
       setIsLoading(false);
@@ -107,7 +107,7 @@ const Login = () => {
           <Link to="/" className="hover:underline">
             Home
           </Link>
-          <p className="text-gray-500">&nbsp; Don't have an account? </p>
+          <p className="text-gray-500">&nbsp; Don't have an account? &nbsp;</p>
           <Link to="/register" className="hover:underline">
             Sign up Here
           </Link>

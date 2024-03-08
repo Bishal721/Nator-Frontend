@@ -2,18 +2,26 @@
 @tailwind components;
 @tailwind utilities;
 
-.card{
-    @apply block bg-white text-black rounded overflow-hidden shadow-md; ;
+.card {
+  @apply bg-white text-black border border-solid border-transparent rounded-[5px] overflow-hidden shadow-md;
 }
 
-.auth{
-    @apply flex justify-center items-center ;
+.auth {
+  @apply flex justify-center items-center;
 }
 
-.form{
-    @apply w-96 p-5 bg-white 
+.form {
+  @apply w-96 p-5 bg-white;
 }
 
-.container{
-    @apply max-w-5xl my-0 mx-auto py-0 px-5
+.container {
+  @apply max-w-5xl my-0 mx-auto py-0 px-5;
+}
+
+* {
+  @apply box-border scroll-smooth;
+}
+
+body {
+  @apply bg-[#eeeeee];
 }
