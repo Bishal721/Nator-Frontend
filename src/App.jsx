@@ -6,7 +6,7 @@ import Login from "./pages/auth/Login";
 import Register from "./pages/auth/Register";
 import Forgot from "./pages/auth/Forgot";
 import Reset from "./pages/auth/Reset";
-import Dashboard from "./pages/dashboard/Dashboard";
+import Dashboard from "./admin/pages/dashboard/Dashboard";
 import Layout from "./components/layout/Layout";
 import Profile from "./pages/profile/Profile";
 import { useDispatch } from "react-redux";
@@ -16,7 +16,8 @@ import axios from "axios";
 import { SET_LOGIN } from "./redux/features/auth/authSlice";
 import Packages from "./pages/Packages/Packages";
 import PackageDetail from "./pages/Packages/PackageDetail";
-
+import PrivateRoutes from "./components/protect/PrivateRoutes";
+import UpdatePackage from "./admin/pages/packages/UpdatePackage";
 axios.defaults.withCredentials = true;
 
 function App() {
@@ -39,7 +40,7 @@ function App() {
               <Home />
             </Layout>
           }
-        />{" "}
+        />
         <Route
           path="/packages"
           element={
@@ -52,7 +53,6 @@ function App() {
         <Route path="/register" element={<Register />} />
         <Route path="/forgot" element={<Forgot />} />
         <Route path="/resetpassword/:resetToken" element={<Reset />} />
-        <Route path="/dashboard" element={<Dashboard />} />
         <Route
           path="/profile"
           element={
@@ -69,6 +69,11 @@ function App() {
             </Layout>
           }
         />
+        <Route to={"/admin/update-Packages/:id"} element={UpdatePackage}  />
+
+        <Route element={<PrivateRoutes />}>
+          <Route path="/admin/dashboard" element={<Dashboard />} />
+        </Route>
       </Routes>
     </BrowserRouter>
   );

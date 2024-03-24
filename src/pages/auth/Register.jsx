@@ -2,10 +2,7 @@ import { TiUserAddOutline } from "react-icons/ti";
 import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { toast } from "react-toastify";
-import {
-  registerUser,
-  validateEmail,
-} from "../../services/authService";
+import { registerUser, validateEmail } from "../../services/authService";
 import { useDispatch } from "react-redux";
 import { SET_LOGIN, SET_NAME } from "../../redux/features/auth/authSlice";
 import Loader from "../../components/loader/Loader";
@@ -26,7 +23,6 @@ const Register = () => {
   const { name, email, password, password2 } = formData;
   const HandleInputChange = (e) => {
     const { name, value } = e.target;
-    console.log(e.target);
     setformData({ ...formData, [name]: value });
   };
 

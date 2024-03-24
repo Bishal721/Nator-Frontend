@@ -16,6 +16,7 @@ import Loader from "../../components/loader/Loader";
 import Notification from "../../components/notification/Notification";
 
 const Profile = () => {
+  useRedirectLoggedOutUser("/login");
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const user = useSelector(selectUser);
@@ -34,7 +35,6 @@ const Profile = () => {
     await dispatch(SET_LOGIN(false));
     navigate("/login");
   };
-  useRedirectLoggedOutUser("/login");
   const [profile, setProfile] = useState(initialState);
   const [isLoading, setIsLoading] = useState(false);
   useEffect(() => {
@@ -66,8 +66,11 @@ const Profile = () => {
         bio: profile.bio,
         country: profile.country,
       };
-      const data = await updateUser(formData);
+      await updateUser(formData);
       setIsLoading(false);
+      setInterval(() => {
+        window.location.reload(false);
+      }, 2000);
       toast.success("User Updated");
     } catch (error) {
       setIsLoading(false);
@@ -78,7 +81,7 @@ const Profile = () => {
   return (
     <>
       {isLoading && <Loader />}
-      {<Notification/>}
+      {profile?.isVerified === false ? <Notification /> : ""}
       {!isLoading && profile === null ? (
         <p>Semething Went Wrong, Please Reload The Page</p>
       ) : (

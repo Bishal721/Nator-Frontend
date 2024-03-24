@@ -28,11 +28,11 @@ const Navbar = () => {
   let [open, setOpen] = useState(false);
   return (
     <div>
-      <div className="w-full bg-blue-500">
-        <nav className="md:container flex justify-between items-center w-full bg-blue-500  text-white py-4 mx-auto">
+      <div className="w-full bg-white">
+        <nav className="md:container flex justify-between items-center w-full  text-gray-700 py-4 mx-auto">
           <div>
             <Link
-              className="text-4xl text-white cursor-pointer font-bold font-heading"
+              className="text-4xl text-blue-500 cursor-pointer font-bold font-heading"
               to="/"
             >
               {/* <img className="h-9" src="logo.png" alt="logo" /> */}
@@ -40,28 +40,34 @@ const Navbar = () => {
             </Link>
           </div>
           <div
-            className={`md:static absolute bg-blue-500 text-base font-semibold md:min-h-fit min-h-[50vh] left-0 top-[-100%] md:w-auto w-full flex items-center px-5 ease-in ${open ? "top-[8%] " : "top-[-100%] "} z-20`}
+            className={`md:static absolute  text-base bg-white  font-medium md:min-h-fit min-h-[50vh] left-0 top-[-100%] md:w-auto w-full flex items-center px-5 ease-in ${open ? "top-[8%] " : "top-[-100%] "} z-50`}
           >
             <ul className="flex md:flex-row flex-col md:items-center md:gap-[4vw] gap-8">
               {Links.map((link, index) => (
                 <li key={index}>
-                  <Link className="hover:text-gray-300 " to={link.link}>
+                  <Link className="hover:text-blue-500 " to={link.link}>
                     {link.name}
                   </Link>
                 </li>
               ))}
               <ShowOnLogOut>
                 <li>
-                  <Link to="/register">Register</Link>
+                  <Link to="/register" className="hover:text-blue-500 ">
+                    Register
+                  </Link>
                 </li>
                 <li>
-                  <Link to="/login">Login</Link>
+                  <Link to="/login" className="hover:text-blue-500 ">
+                    Login
+                  </Link>
                 </li>
               </ShowOnLogOut>
 
               <ShowOnLogin>
                 <li>
-                  <Link to="/profile">Profile</Link>
+                  <Link to="/profile" className="hover:text-blue-500">
+                    Profile
+                  </Link>
                 </li>
               </ShowOnLogin>
             </ul>

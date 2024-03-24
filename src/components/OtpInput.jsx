@@ -1,10 +1,13 @@
 import { useState, useEffect, useRef } from "react";
 import { RxCross2 } from "react-icons/rx";
-import { compareOtpResponse } from "../services/authService";
-import { toast } from "react-toastify";
+import { getOtp } from "../services/authService";
+import Loader from "./loader/Loader";
+// import { toast } from "react-toastify";
 
-const OtpInput = ({ length, onClose, onOtpSubmit }) => {
+const OtpInput = ({ length, onClose, onOtpSubmit = () => {} }) => {
   const [otp, setOtp] = useState(new Array(length).fill(""));
+
+  const [isLoading, setIsLoading] = useState(false);
 
   const inputRefs = useRef([]);
   const modelRef = useRef();
@@ -32,6 +35,7 @@ const OtpInput = ({ length, onClose, onOtpSubmit }) => {
 
     // submit trigger
     const combinedOtp = newOtp.join("");
+    if (combinedOtp.length === length) onOtpSubmit(combinedOtp);
 
     // Move to next input if current field is filled
     if (value && index < length - 1 && inputRefs.current[index + 1]) {
@@ -59,77 +63,71 @@ const OtpInput = ({ length, onClose, onOtpSubmit }) => {
       inputRefs.current[index - 1].focus();
     }
   };
-  const compareOtp = async (combinedOtp) => {
-    console.log(combinedOtp);
-    e.preventDefault();
-    const userData = {
-      otp: combinedOtp,
-    };
-    console.log(userData);
-    const comp = await compareOtpResponse(userData);
-    console.log(comp);
-    // if (comp === true) {
-    //   // onOtpSubmit(comp);
-    //   onClose();
-    //   toast.success("Verified");
-    // } else {
-    //   toast.success("Not Verified");
-    // }
+  const resendEmail = async () => {
+    setIsLoading(true);
+    await getOtp();
+    setIsLoading(false);
   };
   return (
-    <div
-      ref={modelRef}
-      onClick={closeModel}
-      className="fixed inset-0 bg-opacity-40 backdrop-blur-md flex justify-center items-center"
-    >
-      <div className="relative bg-white px-6 pt-10 pb-9 shadow-xl mx-auto w-full max-w-lg rounded-2xl">
-        <div className="mx-auto flex w-full max-w-md flex-col space-y-16">
-          <div className="flex flex-col items-center justify-center text-center space-y-2">
-            <button className="place-self-end" onClick={onClose}>
-              <RxCross2 size={26} />
-            </button>
-            <div className="font-semibold text-3xl">
-              <p>Please Verify Your Email</p>
-            </div>
-            <div className="flex flex-row text-sm font-medium text-gray-400">
-              <p>We have sent a code to your email </p>
-            </div>
-          </div>
-
-          <div>
-            <form onSubmit={compareOtp}>
-              <div className="flex flex-col space-y-9">
-                <div className="flex justify-center items-center gap-3">
-                  {otp.map((value, index) => {
-                    return (
-                      <input
-                        key={index}
-                        type="text"
-                        ref={(input) => (inputRefs.current[index] = input)}
-                        value={value}
-                        onChange={(e) => handleChange(index, e)}
-                        onClick={() => handleClick(index)}
-                        onKeyDown={(e) => handleKeyDown(index, e)}
-                        className="w-16 h-16 text-center text-lg border  border-black rounded-xl"
-                        required
-                      />
-                    );
-                  })}
-                </div>
-                <div>
-                  <button
-                    type="submit"
-                    className="flex flex-row items-center justify-center text-center w-full border rounded-xl outline-none py-5 bg-blue-700 border-none text-white text-sm shadow-sm"
-                  >
-                    Verify Account
-                  </button>
-                </div>
+    <>
+      {isLoading && <Loader />}
+      <div
+        ref={modelRef}
+        onClick={closeModel}
+        className="fixed inset-0 bg-opacity-40 backdrop-blur-md flex justify-center items-center"
+      >
+        <div className="relative bg-white px-6 pt-10 pb-9 shadow-xl mx-auto w-full max-w-lg rounded-2xl">
+          <div className="mx-auto flex w-full max-w-md flex-col space-y-16">
+            <div className="flex flex-col items-center justify-center text-center space-y-2">
+              <button className="place-self-end" onClick={onClose}>
+                <RxCross2 size={26} />
+              </button>
+              <div className="font-semibold text-3xl">
+                <p>Please Verify Your Email</p>
               </div>
-            </form>
+              <div className="flex flex-row text-sm font-medium text-gray-400">
+                <p>We have sent a code to your email </p>
+              </div>
+            </div>
+
+            <div>
+              <form>
+                <div className="flex flex-col space-y-9">
+                  <div className="flex justify-center items-center gap-3">
+                    {otp.map((value, index) => {
+                      return (
+                        <input
+                          key={index}
+                          type="text"
+                          ref={(input) => (inputRefs.current[index] = input)}
+                          value={value}
+                          onChange={(e) => handleChange(index, e)}
+                          onClick={() => handleClick(index)}
+                          onKeyDown={(e) => handleKeyDown(index, e)}
+                          className="w-16 h-16 text-center text-lg border  border-black rounded-xl"
+                          required
+                        />
+                      );
+                    })}
+                  </div>
+                </div>
+              </form>
+              <div className="w-full mt-5 flex justify-center items-center ">
+                <p className=" text-gray-400 ">
+                  If you Didn't Receive Otp. &nbsp;
+                </p>
+                <p
+                  className="cursor-pointer text-blue-600 "
+                  onClick={resendEmail}
+                >
+                  <b>Resend Otp</b>
+                </p>
+              </div>
+            </div>
           </div>
         </div>
       </div>
-    </div>
+    </>
   );
 };
 

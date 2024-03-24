@@ -161,12 +161,9 @@ export const googleLogin = async (userData) => {
   }
 };
 
-export const getOtp = async (userData) => {
+export const getOtp = async () => {
   try {
-    const response = await axios.post(
-      `${BACKEND_URL}/api/v1/users/otp`,
-      userData
-    );
+    const response = await axios.post(`${BACKEND_URL}/api/v1/users/otp`);
     if (response.statusText === "OK") {
       toast.success("Otp Sent to email");
     }
@@ -187,18 +184,16 @@ export const compareOtpResponse = async (userData) => {
       `${BACKEND_URL}/api/v1/users/compareotp`,
       userData
     );
+    console.log(response);
+    toast.success("Otp Verified");
 
-    if (response.data.message === "Matched") {
-      return true;
-    } else {
-      return false;
-    }
+    // if (response.data.message === "Matched") {
+    //   return true;
+    // } else {
+    //   return false;
+    // }
   } catch (error) {
-    const message =
-      (error.response && error.response.data && error.response.message) ||
-      error.message ||
-      error.toString();
+    const message = error.response.data.message;
     toast.error(message);
-    console.log(error);
   }
 };
