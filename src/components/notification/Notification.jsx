@@ -1,20 +1,20 @@
 import React, { useState } from "react";
 import OtpInput from "../OtpInput";
-import { compareOtpResponse } from "../../services/authService";
 import Loader from "../loader/Loader";
+import { compareOtpResponse } from "../../redux/features/auth/authSlice";
+import { useDispatch, useSelector } from "react-redux";
 
 const Notification = () => {
   const [showModel, setShowModel] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
+  const { isLoading } = useSelector((state) => state.auth);
+  const dispatch = useDispatch();
 
   const onOtpSubmit = async (otp) => {
-    setIsLoading(true);
     const userData = {
       otp,
     };
-    await compareOtpResponse(userData);
+    dispatch(compareOtpResponse(userData));
     setShowModel(false);
-    setIsLoading(false);
     window.location.reload(false);
   };
   return (

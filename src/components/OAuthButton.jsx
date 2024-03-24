@@ -1,9 +1,8 @@
 import { GoogleAuthProvider, getAuth, signInWithPopup } from "firebase/auth";
 import { app } from "../firebase";
 import { useDispatch } from "react-redux";
-import { SET_LOGIN, SET_NAME } from "../redux/features/auth/authSlice";
-import { googleLogin } from "../services/authService";
 import { useNavigate } from "react-router-dom";
+import { googleLogin } from "../redux/features/auth/authSlice";
 const OAuthButton = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -18,10 +17,7 @@ const OAuthButton = () => {
         photo: result.user.photoURL,
       };
       try {
-        const data = await googleLogin(userData);
-        console.log(data);
-        dispatch(SET_LOGIN(true));
-        dispatch(SET_NAME(data.name));
+        dispatch(googleLogin(userData));
         navigate("/profile");
       } catch (error) {
         console.log(error);

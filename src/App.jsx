@@ -9,11 +9,15 @@ import Reset from "./pages/auth/Reset";
 import Dashboard from "./admin/pages/dashboard/Dashboard";
 import Layout from "./components/layout/Layout";
 import Profile from "./pages/profile/Profile";
-import { useDispatch } from "react-redux";
-import { GetLoginStatus } from "./services/authService";
+import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 import axios from "axios";
-import { SET_LOGIN } from "./redux/features/auth/authSlice";
+import {
+  getLoginStatus,
+  getUser,
+  selectIsLoggedIn,
+  selectUser,
+} from "./redux/features/auth/authSlice";
 import Packages from "./pages/Packages/Packages";
 import PackageDetail from "./pages/Packages/PackageDetail";
 import PrivateRoutes from "./components/protect/PrivateRoutes";
@@ -22,13 +26,16 @@ axios.defaults.withCredentials = true;
 
 function App() {
   const dispatch = useDispatch();
+  const isLoggedIn = useSelector(selectIsLoggedIn);
+  const user = useSelector(selectUser);
+
   useEffect(() => {
-    async function loginStatus() {
-      const status = await GetLoginStatus();
-      dispatch(SET_LOGIN(status));
+    dispatch(getLoginStatus());
+    console.log(isLoggedIn);
+    if (isLoggedIn && user === null) {
+      dispatch(getUser());
     }
-    loginStatus();
-  }, [dispatch]);
+  }, [isLoggedIn, user, dispatch]);
   return (
     <BrowserRouter>
       <ToastContainer />
@@ -69,7 +76,7 @@ function App() {
             </Layout>
           }
         />
-        <Route to={"/admin/update-Packages/:id"} element={UpdatePackage}  />
+        <Route to={"/admin/update-Packages/:id"} element={UpdatePackage} />
 
         <Route element={<PrivateRoutes />}>
           <Route path="/admin/dashboard" element={<Dashboard />} />

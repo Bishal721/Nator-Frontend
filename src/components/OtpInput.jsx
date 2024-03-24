@@ -1,14 +1,15 @@
 import { useState, useEffect, useRef } from "react";
 import { RxCross2 } from "react-icons/rx";
-import { getOtp } from "../services/authService";
 import Loader from "./loader/Loader";
+import { RESET, getOtp } from "../redux/features/auth/authSlice";
+import { useDispatch } from "react-redux";
 // import { toast } from "react-toastify";
 
 const OtpInput = ({ length, onClose, onOtpSubmit = () => {} }) => {
   const [otp, setOtp] = useState(new Array(length).fill(""));
 
   const [isLoading, setIsLoading] = useState(false);
-
+  const dispatch = useDispatch();
   const inputRefs = useRef([]);
   const modelRef = useRef();
 
@@ -65,7 +66,8 @@ const OtpInput = ({ length, onClose, onOtpSubmit = () => {} }) => {
   };
   const resendEmail = async () => {
     setIsLoading(true);
-    await getOtp();
+    dispatch(getOtp());
+    dispatch(RESET());
     setIsLoading(false);
   };
   return (

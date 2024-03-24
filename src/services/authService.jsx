@@ -8,192 +8,102 @@ export const validateEmail = (email) => {
   );
 };
 // Register User
-export const registerUser = async (userData) => {
-  try {
-    const response = await axios.post(
-      `${BACKEND_URL}/api/v1/users/register`,
-      userData,
-      { withCredentials: true }
-    );
-    if (response.statusText === "OK") {
-      toast.success("User Registered Successfully");
-    }
-    return response.data;
-  } catch (error) {
-    const message =
-      (error.response && error.response.data && error.response.message) ||
-      error.message ||
-      error.toString();
-    toast.error(message);
-  }
+const registerUser = async (userData) => {
+  const response = await axios.post(
+    `${BACKEND_URL}/api/v1/users/register`,
+    userData,
+    { withCredentials: true }
+  );
+  return response.data;
 };
 // Login User
-export const loginUser = async (userData) => {
-  try {
-    const response = await axios.post(
-      `${BACKEND_URL}/api/v1/users/login`,
-      userData
-    );
-
-    if (response.statusText === "OK") {
-      toast.success("Login  Successful");
-    }
-    return response.data;
-  } catch (error) {
-    const message =
-      error.response.data.message || error.message || error.toString();
-    toast.error(message);
-  }
+const loginUser = async (userData) => {
+  const response = await axios.post(
+    `${BACKEND_URL}/api/v1/users/login`,
+    userData
+  );
+  return response.data;
 };
 // Logout User
-export const logoutUser = async () => {
-  try {
-    await axios.get(`${BACKEND_URL}/api/v1/users/logout`);
-    toast.success("Logged out Successfully");
-  } catch (error) {
-    const message =
-      (error.response && error.response.data && error.response.message) ||
-      error.message ||
-      error.toString();
-    toast.error(message);
-  }
+const logoutUser = async () => {
+  const response = await axios.get(`${BACKEND_URL}/api/v1/users/logout`);
+  console.log(response.data.message);
+  return response.data.message;
 };
 // Forgot Password
-export const forgotPassword = async (userData) => {
-  try {
-    const response = await axios.post(
-      `${BACKEND_URL}/api/v1/users/forgotpassword`,
-      userData
-    );
-    toast.success(response.data.message);
-  } catch (error) {
-    const message =
-      (error.response && error.response.data && error.response.message) ||
-      error.message ||
-      error.toString();
-    toast.error(message);
-  }
+const forgotPassword = async (userData) => {
+  const response = await axios.post(
+    `${BACKEND_URL}/api/v1/users/forgotpassword`,
+    userData
+  );
+  return response.data.message;
 };
 //Password Reset
-export const resetPassword = async (userData, resetToken) => {
-  try {
-    const response = await axios.put(
-      `${BACKEND_URL}/api/v1/users/resetpassword/${resetToken}`,
-      userData
-    );
-    return response.data;
-  } catch (error) {
-    const message =
-      (error.response && error.response.data && error.response.message) ||
-      error.message ||
-      error.toString();
-    toast.error(message);
-  }
+const resetPassword = async (userData, resetToken) => {
+  const response = await axios.put(
+    `${BACKEND_URL}/api/v1/users/resetpassword/${resetToken}`,
+    userData
+  );
+  return response.data.message;
 };
 //Get Login Status
-export const GetLoginStatus = async () => {
-  try {
-    const response = await axios.get(`${BACKEND_URL}/api/v1/users/loggedin`);
-    return response.data;
-  } catch (error) {
-    const message =
-      (error.response && error.response.data && error.response.message) ||
-      error.message ||
-      error.toString();
-    toast.error(message);
-  }
+const GetLoginStatus = async () => {
+  const response = await axios.get(`${BACKEND_URL}/api/v1/users/loggedin`);
+  return response.data;
 };
 //Get User Data
-export const GetUser = async () => {
-  try {
-    const response = await axios.get(`${BACKEND_URL}/api/v1/users/getuser`);
-    return response.data;
-  } catch (error) {
-    const message =
-      (error.response && error.response.data && error.response.message) ||
-      error.message ||
-      error.toString();
-    toast.error(message);
-  }
+const GetUser = async () => {
+  const response = await axios.get(`${BACKEND_URL}/api/v1/users/getuser`);
+  return response.data;
 };
 //Update Profile
-export const updateUser = async (formData) => {
-  try {
-    const response = await axios.patch(
-      `${BACKEND_URL}/api/v1/users/updateuser`,
-      formData
-    );
-    return response.data;
-  } catch (error) {
-    const message =
-      (error.response && error.response.data && error.response.message) ||
-      error.message ||
-      error.toString();
-    toast.error(message);
-  }
+const updateUser = async (formData) => {
+  const response = await axios.patch(
+    `${BACKEND_URL}/api/v1/users/updateuser`,
+    formData
+  );
+  return response.data;
 };
 //Change Password
-export const ChangeUserPassword = async (formData) => {
-  try {
-    const response = await axios.patch(
-      `${BACKEND_URL}/api/v1/users/changepassword`,
-      formData
-    );
-    return response.data;
-  } catch (error) {
-    const message =
-      (error.response && error.response.data && error.response.message) ||
-      error.message ||
-      error.toString();
-    toast.error(message);
-  }
+const ChangeUserPassword = async (formData) => {
+  const response = await axios.patch(
+    `${BACKEND_URL}/api/v1/users/changepassword`,
+    formData
+  );
+  return response.data;
 };
 
-export const googleLogin = async (userData) => {
-  try {
-    const response = await axios.post(
-      `${BACKEND_URL}/api/auth/google`,
-      userData
-    );
-    return response.data;
-  } catch (error) {
-    console.log(error);
-  }
+const googleLogin = async (userData) => {
+  const response = await axios.post(`${BACKEND_URL}/api/auth/google`, userData);
+  return response.data;
 };
 
-export const getOtp = async () => {
-  try {
-    const response = await axios.post(`${BACKEND_URL}/api/v1/users/otp`);
-    if (response.statusText === "OK") {
-      toast.success("Otp Sent to email");
-    }
-    return response.data;
-  } catch (error) {
-    const message =
-      (error.response && error.response.data && error.response.message) ||
-      error.message ||
-      error.toString();
-    toast.error(message);
-    console.log(error);
-  }
+const getOtp = async () => {
+  const response = await axios.post(`${BACKEND_URL}/api/v1/users/otp`);
+  return response.data;
 };
 
-export const compareOtpResponse = async (userData) => {
-  try {
-    const response = await axios.post(
-      `${BACKEND_URL}/api/v1/users/compareotp`,
-      userData
-    );
-    console.log(response);
-    toast.success("Otp Verified");
-
-    // if (response.data.message === "Matched") {
-    //   return true;
-    // } else {
-    //   return false;
-    // }
-  } catch (error) {
-    const message = error.response.data.message;
-    toast.error(message);
-  }
+const compareOtpResponse = async (userData) => {
+  const response = await axios.post(
+    `${BACKEND_URL}/api/v1/users/compareotp`,
+    userData
+  );
+  return response.data;
 };
+
+const authService = {
+  registerUser,
+  loginUser,
+  logoutUser,
+  forgotPassword,
+  resetPassword,
+  GetLoginStatus,
+  GetUser,
+  updateUser,
+  ChangeUserPassword,
+  googleLogin,
+  getOtp,
+  compareOtpResponse,
+};
+
+export default authService;

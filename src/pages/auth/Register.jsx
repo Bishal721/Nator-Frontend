@@ -1,10 +1,10 @@
 import { TiUserAddOutline } from "react-icons/ti";
 import { Link, useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
-import { registerUser, validateEmail } from "../../services/authService";
-import { useDispatch } from "react-redux";
-import { SET_LOGIN, SET_NAME } from "../../redux/features/auth/authSlice";
+import { validateEmail } from "../../services/authService";
+import { useDispatch, useSelector } from "react-redux";
+import { RESET, registerUser } from "../../redux/features/auth/authSlice";
 import Loader from "../../components/loader/Loader";
 import OAuthButton from "../../components/OAuthButton";
 import loginimg from "../../assets/Signin.jpg";
@@ -18,8 +18,10 @@ const initialState = {
 const Register = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const [isLoading, setIsLoading] = useState(false);
   const [formData, setformData] = useState(initialState);
+  const { isLoading, isLoggedIn, isSuccess, message } = useSelector(
+    (state) => state.auth
+  );
   const { name, email, password, password2 } = formData;
   const HandleInputChange = (e) => {
     const { name, value } = e.target;
@@ -47,17 +49,16 @@ const Register = () => {
       password,
     };
 
-    setIsLoading(true);
-    try {
-      const data = await registerUser(userData);
-      await dispatch(SET_LOGIN(true));
-      await dispatch(SET_NAME(data.name));
-      navigate("/profile");
-      setIsLoading(false);
-    } catch (error) {
-      setIsLoading(false);
-    }
+    await dispatch(registerUser(userData));
   };
+
+  useEffect(() => {
+    if (isSuccess && isLoggedIn) {
+      navigate("/profile");
+    }
+
+    dispatch(RESET());
+  }, [isLoggedIn, isSuccess, dispatch, navigate]);
 
   return (
     <div className="bg-gray-100 flex justify-center items-center h-screen">
@@ -142,7 +143,6 @@ const Register = () => {
             Login Here
           </Link>
         </span>
-        {/* <OtpInput length={6} onOtpSubmit={onOtpSubmit} /> */}
       </div>
     </div>
   );

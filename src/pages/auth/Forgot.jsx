@@ -1,10 +1,13 @@
 import { AiOutlineMail } from "react-icons/ai";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
-import { forgotPassword } from "../../services/authService";
 import { useState } from "react";
+import { RESET, forgotPassword } from "../../redux/features/auth/authSlice";
+import { useDispatch, useSelector } from "react-redux";
 const Forgot = () => {
   const [email, setEmail] = useState("");
+  const dispatch = useDispatch();
+  const { isLoading } = useSelector((state) => state.auth);
   const forgot = async (e) => {
     e.preventDefault();
     if (!email) {
@@ -15,8 +18,8 @@ const Forgot = () => {
       email,
     };
 
-    await forgotPassword(userData);
-    setEmail("");
+    await dispatch(forgotPassword(userData));
+    await dispatch(RESET(userData));
   };
   return (
     <div className="max-w-md mx-auto my-10 bg-white p-8 rounded-xl shadow shadow-slate-300 mt-36">

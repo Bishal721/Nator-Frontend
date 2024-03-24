@@ -1,8 +1,13 @@
 import { MdPassword } from "react-icons/md";
-import { Link, useParams } from "react-router-dom";
-import { useState } from "react";
+import { Link, useNavigate, useParams } from "react-router-dom";
+import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
-import { resetPassword } from "../../services/authService";
+import {
+  RESET,
+  logoutUser,
+  resetPassword,
+} from "../../redux/features/auth/authSlice";
+import { useDispatch, useSelector } from "react-redux";
 
 const initialState = {
   password: "",
@@ -12,6 +17,12 @@ const Reset = () => {
   const [formData, setformData] = useState(initialState);
   const { password, password2 } = formData;
   const { resetToken } = useParams();
+
+  const { isLoading, isLoggedIn, isSuccess, message } = useSelector(
+    (state) => state.auth
+  );
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const HandleInputChange = (e) => {
     const { name, value } = e.target;
@@ -33,17 +44,21 @@ const Reset = () => {
       password,
       password2,
     };
-    try {
-      const data = await resetPassword(userData, resetToken);
-      toast.success(data.message);
-    } catch (error) {
-      console.log(error.message);
-    }
+    await dispatch(resetPassword({ userData, resetToken }));
   };
+  useEffect(() => {
+    if (isSuccess && message.includes("Reset Successful")) {
+      navigate("/login");
+      dispatch(logoutUser());
+    }
+
+    dispatch(RESET());
+  }, [dispatch, navigate, message, isSuccess]);
+
   return (
     <div className="max-w-md mx-auto my-10 bg-white p-8 rounded-xl shadow shadow-slate-300 mt-36">
       <div className="flex justify-center">
-      <MdPassword size={35} color="#999" />
+        <MdPassword size={35} color="#999" />
       </div>
       <div className="flex justify-center">
         <h2 className="text-3xl font-medium text-orange-500 ">

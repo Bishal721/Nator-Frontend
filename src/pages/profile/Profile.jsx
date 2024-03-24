@@ -1,15 +1,13 @@
-import React, { useState } from "react";
+import React, { useLayoutEffect, useState } from "react";
 import { useEffect } from "react";
 import { FaBars, FaPowerOff, FaCog, FaBook } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
-import { GetUser, logoutUser, updateUser } from "../../services/authService";
 import useRedirectLoggedOutUser from "../../customHooks/useRedirectLoggedOutUser";
 import { toast } from "react-toastify";
 import {
-  SET_LOGIN,
-  SET_NAME,
-  SET_USER,
-  selectUser,
+  getUser,
+  logoutUser,
+  updateUser,
 } from "../../redux/features/auth/authSlice";
 import { useDispatch, useSelector } from "react-redux";
 import Loader from "../../components/loader/Loader";
@@ -19,7 +17,9 @@ const Profile = () => {
   useRedirectLoggedOutUser("/login");
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const user = useSelector(selectUser);
+  const { isLoading, isLoggedIn, isSuccess, message, user } = useSelector(
+    (state) => state.auth
+  );
   const initialState = {
     name: user?.name || "",
     email: user?.email || "",
@@ -29,34 +29,24 @@ const Profile = () => {
     bio: user?.bio || "",
     image: user?.image || "",
     country: user?.country || "",
+    role: user?.role || "",
+    isVerified: user?.isVerified || false,
   };
-  const logout = async (e) => {
-    await logoutUser();
-    await dispatch(SET_LOGIN(false));
+  const logout = () => {
+    dispatch(logoutUser());
     navigate("/login");
   };
   const [profile, setProfile] = useState(initialState);
-  const [isLoading, setIsLoading] = useState(false);
   useEffect(() => {
-    setIsLoading(true);
-    async function getUserData() {
-      const data = await GetUser();
-      setProfile(data);
-      setIsLoading(false);
-      await dispatch(SET_USER(data));
-      await dispatch(SET_NAME(data.name));
-    }
-    getUserData();
+    dispatch(getUser());
   }, [dispatch]);
 
   const HandleInputChange = (e) => {
     const { name, value } = e.target;
     setProfile({ ...profile, [name]: value });
   };
-
   const updateProfile = async (e) => {
     e.preventDefault();
-    setIsLoading(true);
     try {
       const formData = {
         name: profile.name,
@@ -66,17 +56,32 @@ const Profile = () => {
         bio: profile.bio,
         country: profile.country,
       };
-      await updateUser(formData);
-      setIsLoading(false);
+      dispatch(updateUser(formData));
       setInterval(() => {
         window.location.reload(false);
       }, 2000);
       toast.success("User Updated");
     } catch (error) {
-      setIsLoading(false);
       toast.error(error.message);
     }
   };
+
+  useLayoutEffect(() => {
+    if (user) {
+      setProfile({
+        ...profile,
+        name: user.name,
+        email: user.email,
+        phone: user.phone,
+        bio: user.bio,
+        role: user.role,
+        address: user.address,
+        city: user.city,
+        country: user.country,
+        isVerified: user.isVerified,
+      });
+    }
+  }, [user]);
 
   return (
     <>
