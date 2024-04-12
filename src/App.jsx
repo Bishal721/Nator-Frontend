@@ -20,22 +20,24 @@ import {
 } from "./redux/features/auth/authSlice";
 import Packages from "./pages/Packages/Packages";
 import PackageDetail from "./pages/Packages/PackageDetail";
-import PrivateRoutes from "./components/protect/PrivateRoutes";
-import UpdatePackage from "./admin/pages/packages/UpdatePackage";
+import AdminLayout from "./admin/components/AdminLayout";
+import AddPackage from "./admin/pages/packages/addPackage/AddPackage";
+import UpdatePackage from "./admin/pages/packages/updatepackage/UpdatePackage";
 axios.defaults.withCredentials = true;
 
 function App() {
   const dispatch = useDispatch();
   const isLoggedIn = useSelector(selectIsLoggedIn);
   const user = useSelector(selectUser);
-
   useEffect(() => {
-    dispatch(getLoginStatus());
-    console.log(isLoggedIn);
-    if (isLoggedIn && user === null) {
-      dispatch(getUser());
+    async function fetch() {
+      await dispatch(getLoginStatus());
+      if (isLoggedIn && user === null) {
+        dispatch(getUser());
+      }
     }
-  }, [isLoggedIn, user, dispatch]);
+    fetch();
+  }, [isLoggedIn, user, dispatch, fetch]);
   return (
     <BrowserRouter>
       <ToastContainer />
@@ -76,10 +78,13 @@ function App() {
             </Layout>
           }
         />
-        <Route to={"/admin/update-Packages/:id"} element={UpdatePackage} />
 
-        <Route element={<PrivateRoutes />}>
-          <Route path="/admin/dashboard" element={<Dashboard />} />
+        <Route path="/admin" element={<AdminLayout />}>
+          <Route path="dashboard" element={<Dashboard />} />
+          {/* <Route path="packages" element={<UpdatePackage />} /> */}
+          <Route path="add-package" element={<AddPackage />} />
+
+          <Route path="edit-packages/:id" element={<UpdatePackage />} />
         </Route>
       </Routes>
     </BrowserRouter>

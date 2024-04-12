@@ -5,6 +5,7 @@ import { Link, useNavigate } from "react-router-dom";
 import useRedirectLoggedOutUser from "../../customHooks/useRedirectLoggedOutUser";
 import { toast } from "react-toastify";
 import {
+  RESET,
   getUser,
   logoutUser,
   updateUser,
@@ -14,12 +15,12 @@ import Loader from "../../components/loader/Loader";
 import Notification from "../../components/notification/Notification";
 
 const Profile = () => {
-  useRedirectLoggedOutUser("/login");
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { isLoading, isLoggedIn, isSuccess, message, user } = useSelector(
     (state) => state.auth
   );
+  useRedirectLoggedOutUser("/login");
   const initialState = {
     name: user?.name || "",
     email: user?.email || "",
@@ -34,9 +35,12 @@ const Profile = () => {
   };
   const logout = () => {
     dispatch(logoutUser());
+    dispatch(RESET());
     navigate("/login");
   };
   const [profile, setProfile] = useState(initialState);
+  const [profileImage, setProfileImage] = useState("");
+
   useEffect(() => {
     dispatch(getUser());
   }, [dispatch]);
@@ -45,9 +49,36 @@ const Profile = () => {
     const { name, value } = e.target;
     setProfile({ ...profile, [name]: value });
   };
+
+  const HandleImageChange = (e) => {
+    setProfileImage(e.target.files[0]);
+  };
   const updateProfile = async (e) => {
     e.preventDefault();
     try {
+      // Handle Image Upload to Cloudinary
+      let imageURL;
+      if (
+        profileImage &&
+        (profileImage.type === "image/jpeg" ||
+          profileImage.type === "image/jpg" ||
+          profileImage.type === "image/png")
+      ) {
+        const image = new FormData();
+        image.append("file", profileImage);
+        image.append("cloud_name", "bishalshrestha");
+        image.append("upload_preset", "cffyxll1");
+
+        // First save image to cloudinary
+        const response = await fetch(
+          "https://api.cloudinary.com/v1_1/bishalshrestha/image/upload",
+          { method: "post", body: image }
+        );
+        const imgData = await response.json();
+        imageURL = imgData.url.toString();
+        console.log(imageURL);
+      }
+
       const formData = {
         name: profile.name,
         phone: profile.phone,
@@ -55,12 +86,12 @@ const Profile = () => {
         city: profile.city,
         bio: profile.bio,
         country: profile.country,
+        image: profileImage ? imageURL : profile.image,
       };
-      dispatch(updateUser(formData));
-      setInterval(() => {
-        window.location.reload(false);
-      }, 2000);
-      toast.success("User Updated");
+      const data = await dispatch(updateUser(formData));
+      if (data.meta.requestStatus) {
+        navigate("/");
+      }
     } catch (error) {
       toast.error(error.message);
     }
@@ -86,7 +117,7 @@ const Profile = () => {
   return (
     <>
       {isLoading && <Loader />}
-      {profile?.isVerified === false ? <Notification /> : ""}
+      {!profile?.isVerified && <Notification />}
       {!isLoading && profile === null ? (
         <p>Semething Went Wrong, Please Reload The Page</p>
       ) : (
@@ -97,7 +128,7 @@ const Profile = () => {
             </div>
 
             <div className="flex justify-center py-4 place-items-center">
-              <span className="rounded-full overflow-hidden md:w-48  h-auto ">
+              <span className="rounded overflow-hidden md:w-64  h-auto ">
                 <img src={user?.image} alt="profile Pic" />
               </span>
             </div>
@@ -130,7 +161,7 @@ const Profile = () => {
               <h2 className="md:text-3xl text-md">Edit Profile</h2>
               <form onSubmit={updateProfile}>
                 <div className="grid grid-cols-2 mt-4 ">
-                  <div className="col-span-2 ">
+                  <div className="col-span-2 text-sm">
                     <div className="col-span-2 ">
                       <div>
                         <label htmlFor="fname" className="md:text-xl text-md">
@@ -149,14 +180,14 @@ const Profile = () => {
                       </div>
                     </div>
                     <div className="grid grid-cols-2 gap-3 mt-4">
-                      <div>
+                      <div >
                         <label htmlFor="Email" className="md:text-xl text-md">
                           Email Address
                         </label>
                         <input
                           type="email"
                           id="Email"
-                          className="w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-blue-500"
+                          className="w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-blue-500 bg-white "
                           value={profile?.email}
                           disabled={true}
                           placeholder="Someone@gmail.com"
@@ -241,16 +272,21 @@ const Profile = () => {
                       >
                         Upload file
                       </label>
-                      <div dir="rtl">
+                      <div
+                        dir="rtl"
+                        className="border border-solid border-gray-300 rounded-md bg-white"
+                      >
                         <input
-                          className="block w-full py-2 px-3 text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 focus:outline-none  file:rounded
-                      file:border-0 file:text-md file:font-semibold
-                      file:bg-blue-400 file:text-white
-                      hover:file:bg-blue-700 "
+                          className="block w-full text-sm text-slate-500
+                          file:mr-4 file:py-2 file:px-4
+                          file:rounded-full file:border-0
+                          file:text-sm file:font-semibold
+                          file:bg-violet-200 file:text-violet-700
+                          hover:file:bg-violet-100 "
                           id="file_input"
                           type="file"
-                          name="imagefile"
-                          required
+                          name="image"
+                          onChange={HandleImageChange}
                         />
                       </div>
                     </div>

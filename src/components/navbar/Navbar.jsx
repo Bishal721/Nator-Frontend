@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 import { FaBars } from "react-icons/fa";
 import { RiCloseFill } from "react-icons/ri";
 import {
@@ -32,7 +32,7 @@ const Navbar = () => {
         <nav className="md:container flex justify-between items-center w-full  text-gray-700 py-4 mx-auto">
           <div>
             <Link
-              className="text-4xl text-blue-500 cursor-pointer font-bold font-heading"
+              className="text-4xl text-orange-400 cursor-pointer font-bold font-heading"
               to="/"
             >
               {/* <img className="h-9" src="logo.png" alt="logo" /> */}
@@ -42,24 +42,25 @@ const Navbar = () => {
           <div
             className={`md:static absolute  text-base bg-white  font-medium md:min-h-fit min-h-[50vh] left-0 top-[-100%] md:w-auto w-full flex items-center px-5 ease-in ${open ? "top-[8%] " : "top-[-100%] "} z-50`}
           >
-            <ul className="flex md:flex-row flex-col md:items-center md:gap-[4vw] gap-8">
+            <ul className="flex md:flex-row flex-col md:items-center md:gap-[2vw] gap-4 ">
               {Links.map((link, index) => (
                 <li key={index}>
-                  <Link className="hover:text-blue-500 " to={link.link}>
+                  <NavLink className="hover:text-blue-500 " to={link.link}>
                     {link.name}
-                  </Link>
+                  </NavLink>
                 </li>
               ))}
               <ShowOnLogOut>
-                <li>
-                  <Link to="/register" className="hover:text-blue-500 ">
-                    Register
-                  </Link>
+                <li className="ml-4">
+                  <NavLink to="/login">Login</NavLink>
                 </li>
                 <li>
-                  <Link to="/login" className="hover:text-blue-500 ">
-                    Login
-                  </Link>
+                  <NavLink
+                    to="/register"
+                    className=" bg-orange-400 p-2 rounded-full text-white "
+                  >
+                    <button className="w-24">Register</button>
+                  </NavLink>
                 </li>
               </ShowOnLogOut>
 

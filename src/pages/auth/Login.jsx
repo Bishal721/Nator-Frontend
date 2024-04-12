@@ -49,9 +49,9 @@ const Login = () => {
       navigate("/profile");
     }
 
-    // if (isError) {
-    //   navigate(`/loginWithCode/${email}`);
-    // }
+    if (isError) {
+      navigate(`/login`);
+    }
 
     dispatch(RESET());
   }, [isLoggedIn, isSuccess, dispatch, navigate, isError, email]);

@@ -4,6 +4,9 @@ import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { getPackages } from "../../redux/features/packages/packageSlice";
 import { SpinnerImage } from "../../components/loader/Loader";
+import { IoLocationOutline } from "react-icons/io5";
+import { IoMdStarOutline } from "react-icons/io";
+
 const Packages = () => {
   const dispatch = useDispatch();
   const { packages, isLoading, isError, message } = useSelector(
@@ -29,48 +32,67 @@ const Packages = () => {
         </div>
       ) : (
         <div className=" border">
-          <div className="grid  md:grid-cols-3  gap-3 p-4">
+          <div className="grid  md:grid-cols-3  gap-6 p-4">
             {packages.map((pack, index) => {
-              const {
-                name,
-                price,
-                rating,
-                location,
-                difficulty,
-                summary,
-                _id,
-              } = pack;
+              const { name, price, location, _id } = pack;
               return (
                 <Card key={index}>
-                  <div className="relative flex w-96 flex-col rounded-xl bg-white bg-clip-border text-gray-700 shadow-md">
-                    <div className="relative mx-4 mt-4 h-72  overflow-hidden rounded-xl bg-white bg-clip-border text-gray-700">
-                      <img
-                        src="https://course.zinotrustacademy.com/wp-content/uploads/2023/09/Udemy-Course-Image-5.png"
-                        className="h-full w-full object-cover"
-                      />
+                  <div className="relative flex flex-col bg-white bg-clip-border text-gray-700 shadow-md">
+                    <div className="relative  h-72  overflow-hidden  bg-white bg-clip-border text-gray-700">
+                      {pack.image ? (
+                        <img
+                          src={pack.image.filePath}
+                          alt={pack.image.fileName}
+                          className="h-full w-full object-cover"
+                        />
+                      ) : (
+                        <img
+                          src=""
+                          alt="Image Not found "
+                          className="h-full w-full object-cover"
+                        />
+                      )}
                     </div>
-                    <div className="p-6">
-                      <div className="mb-2 flex items-center justify-between">
-                        <p className="block font-sans text-base font-medium leading-relaxed text-blue-gray-900 antialiased">
-                          {name}
+                    <div className="px-4 pt-2">
+                      <div className="mb-2">
+                        <Link to={`/package-details/${_id}`}>
+                          <p className="block font-sans text-xl font-medium leading-relaxed text-blue-400 capitalize  antialiased">
+                            {name}
+                          </p>
+                        </Link>
+                      </div>
+                      <div className="mb-2  flex items-center justify-between">
+                        <p className=" font-sans text-base  leading-relaxed text-gray-400 capitalize flex items-center justify-center  antialiased">
+                          <span className="text-blue-400">
+                            <IoLocationOutline size={23} />
+                          </span>
+                          {location}
                         </p>
-                        <p className="block font-sans text-base font-medium leading-relaxed text-blue-gray-900 antialiased">
-                          Rs {price}
+                        <p className="flex items-center justify-center leading-relaxed text-gray-900 capitalize  antialiased">
+                          <span className="text-blue-500">
+                            <IoMdStarOutline size={23} />
+                          </span>
+                          4
                         </p>
                       </div>
-                      <p className="block font-sans text-sm font-normal leading-normal text-gray-700 antialiased opacity-75">
-                        {summary}
-                      </p>
-                    </div>
-                    <div className="p-6 pt-0">
-                      <Link to={`/package-details/${_id}`}>
-                        <button
-                          className="block w-full select-none rounded-lg bg-blue-gray-900/10 py-3 px-6 text-center align-middle font-sans text-xs font-bold uppercase text-blue-gray-900 transition-all hover:scale-105 focus:scale-105  hover:bg-blue-300 focus:opacity-[0.85] active:scale-100 active:opacity-[0.85] disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
-                          type="button"
-                        >
-                          View Details
-                        </button>
-                      </Link>
+                      <div className="mb-2 flex items-center justify-between">
+                        <p className="block font-sans text-base leading-relaxed text-blue-gray-900 antialiased">
+                          <span className="text-blue-400 font-semibold">
+                            &#36; {price}
+                          </span>
+                          &nbsp;/ Per Person
+                        </p>
+                        <span>
+                          <Link to={`/package-details/${_id}`}>
+                            <button
+                              className=" rounded-lg bg-blue-400 p-2 text-white align-middle font-sans text-base  text-blue-gray-900 transition-all  hover:bg-orange-400 "
+                              type="button"
+                            >
+                              Book Now
+                            </button>
+                          </Link>
+                        </span>
+                      </div>
                     </div>
                   </div>
                 </Card>

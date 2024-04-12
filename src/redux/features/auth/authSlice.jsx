@@ -221,7 +221,6 @@ const authSlice = createSlice({
   initialState,
   reducers: {
     RESET(state) {
-      state.twoFactor = false;
       state.isError = false;
       state.isSuccess = false;
       state.isLoading = false;
@@ -240,7 +239,6 @@ const authSlice = createSlice({
         state.isLoggedIn = true;
         state.user = action.payload;
         toast.success("Registration Successful");
-        console.log(action.payload);
       })
       .addCase(registerUser.rejected, (state, action) => {
         state.isLoading = false;
@@ -259,11 +257,12 @@ const authSlice = createSlice({
         state.isLoggedIn = true;
         state.user = action.payload;
         toast.success("Login Successful");
-        console.log(action.payload);
       })
       .addCase(loginUser.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
+        state.isSuccess = false;
+        state.isLoggedIn = false;
         state.message = action.payload;
         state.user = null;
         toast.error(action.payload);
@@ -327,12 +326,12 @@ const authSlice = createSlice({
         state.isSuccess = true;
         state.isLoggedIn = action.payload;
         console.log(action.payload);
+        state.isError = false;
       })
       .addCase(getLoginStatus.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
         state.message = action.payload;
-        console.log(action.payload);
       })
 
       // Get User
@@ -391,7 +390,7 @@ const authSlice = createSlice({
       .addCase(googleLogin.fulfilled, (state, action) => {
         state.isLoading = false;
         state.isSuccess = true;
-        state.isLoggedIn = true;
+        state.F = true;
         state.user = action.payload;
         toast.success("Login Successful");
       })
@@ -410,14 +409,12 @@ const authSlice = createSlice({
         state.isLoading = false;
         state.isSuccess = true;
         state.message = action.payload.message;
-        // console.log(action.payload.message);
         toast.success(action.payload.message);
       })
       .addCase(getOtp.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
         state.message = action.payload;
-        console.log(action.payload);
         toast.error(action.payload);
       })
       // compareOtpResponse

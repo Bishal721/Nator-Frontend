@@ -27,7 +27,6 @@ const loginUser = async (userData) => {
 // Logout User
 const logoutUser = async () => {
   const response = await axios.get(`${BACKEND_URL}/api/v1/users/logout`);
-  console.log(response.data.message);
   return response.data.message;
 };
 // Forgot Password
