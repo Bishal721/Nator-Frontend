@@ -45,7 +45,7 @@ const Forgot = () => {
             onChange={(e) => setEmail(e.target.value)}
           />
 
-          <button className="w-full py-2 font-medium text-white bg-blue-500 hover:bg-blue-400 rounded-lg border-blue-400 hover:shadow inline-flex space-x-2 items-center justify-center">
+          <button className="w-full py-2 font-medium text-white bg-orange-400 hover:bg-orange-500 rounded-lg hover:shadow inline-flex space-x-2 items-center justify-center">
             Get Reset Email
           </button>
 

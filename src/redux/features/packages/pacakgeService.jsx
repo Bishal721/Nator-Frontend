@@ -32,11 +32,32 @@ const deletePackage = async (id) => {
   const response = await axios.delete(API_URL + id);
   return response.data;
 };
+
+//get five packages
+const getFivePackages = async () => {
+  const response = await axios.get(API_URL + "getFivePackages");
+  return response.data;
+};
+
+const createReview = async (formData) => {
+  const response = await axios.post(API_URL + "createReview", formData);
+  return response.data;
+};
+
+const createBooking = async (formData) => {
+  console.log(formData);
+  const response = await axios.post(API_URL + "createBooking ", formData);
+  return response.data;
+};
+
 const packageService = {
   createPackage,
   getPackages,
   getPackage,
   updatePackage,
   deletePackage,
+  getFivePackages,
+  createReview,
+  createBooking,
 };
 export default packageService;

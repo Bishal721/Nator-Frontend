@@ -23,6 +23,7 @@ import PackageDetail from "./pages/Packages/PackageDetail";
 import AdminLayout from "./admin/components/AdminLayout";
 import AddPackage from "./admin/pages/packages/addPackage/AddPackage";
 import UpdatePackage from "./admin/pages/packages/updatepackage/UpdatePackage";
+import HomeLayout from "./components/layout/HomeLayout";
 axios.defaults.withCredentials = true;
 
 function App() {
@@ -45,9 +46,9 @@ function App() {
         <Route
           path="/"
           element={
-            <Layout>
+            <HomeLayout>
               <Home />
-            </Layout>
+            </HomeLayout>
           }
         />
         <Route
@@ -58,8 +59,22 @@ function App() {
             </Layout>
           }
         />
-        <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
+        <Route
+          path="/login"
+          element={
+            <Layout>
+              <Login />
+            </Layout>
+          }
+        />
+        <Route
+          path="/register"
+          element={
+            <Layout>
+              <Register />
+            </Layout>
+          }
+        />
         <Route path="/forgot" element={<Forgot />} />
         <Route path="/resetpassword/:resetToken" element={<Reset />} />
         <Route

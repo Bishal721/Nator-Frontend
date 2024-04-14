@@ -23,7 +23,7 @@ const Notification = () => {
       <div className="w-full border border-solid rounded bg-[#de1f1f33] flex justify-start p-4 mt-3">
         <p>
           <b>Message:</b> &nbsp;
-        </p>
+      </p>
         <p>
           To verify your account, check your email for a verification code.
           &nbsp;

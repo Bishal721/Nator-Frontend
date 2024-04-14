@@ -170,7 +170,7 @@ const Profile = () => {
                         <input
                           type="text"
                           id="fname"
-                          className="w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-blue-500"
+                          className="w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-orange-500"
                           value={profile?.name}
                           placeholder="John"
                           name="name"
@@ -187,7 +187,7 @@ const Profile = () => {
                         <input
                           type="email"
                           id="Email"
-                          className="w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-blue-500 bg-white "
+                          className="w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-orange-500 bg-white "
                           value={profile?.email}
                           disabled={true}
                           placeholder="Someone@gmail.com"
@@ -206,7 +206,7 @@ const Profile = () => {
                         <input
                           type="text"
                           id="Phonenum"
-                          className="w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-blue-500"
+                          className="w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-orange-500"
                           value={profile?.phone}
                           placeholder="+9771234567890"
                           name="phone"
@@ -223,7 +223,7 @@ const Profile = () => {
                         <input
                           type="text"
                           id="Address"
-                          className="w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-blue-500"
+                          className="w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-orange-500"
                           value={profile?.address}
                           placeholder="Address"
                           name="address"
@@ -241,7 +241,7 @@ const Profile = () => {
                         <input
                           type="text"
                           id="City"
-                          className="w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-blue-500"
+                          className="w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-orange-500"
                           value={profile?.city}
                           placeholder="City"
                           name="city"
@@ -256,7 +256,7 @@ const Profile = () => {
                         <input
                           type="text"
                           id="Country"
-                          className="w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-blue-500"
+                          className="w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-orange-500"
                           placeholder="Country"
                           value={profile?.country}
                           name="country"
@@ -298,7 +298,7 @@ const Profile = () => {
                         <textarea
                           id="message"
                           rows="6"
-                          className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg focus:outline-none focus:border-blue-500"
+                          className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg focus:outline-none focus:border-orange-500"
                           placeholder="About You"
                           value={profile?.bio}
                           required
@@ -312,7 +312,7 @@ const Profile = () => {
                       <div>
                         <button
                           type="submit"
-                          className="bg-orange-600 mt-5 hover:bg-orange-400 text-white font-semibold rounded-md py-2 px-4 w-40"
+                          className="bg-orange-400 mt-5 hover:bg-orange-500 text-white font-semibold rounded-md py-2 px-4 w-40"
                         >
                           Update Profile
                         </button>

@@ -88,7 +88,7 @@ const Reset = () => {
             onChange={HandleInputChange}
           />
 
-          <button className="w-full py-2 font-medium text-white bg-blue-600 hover:bg-blue-500 rounded-lg border-blue-500 hover:shadow inline-flex space-x-2 items-center justify-center">
+          <button className="w-full py-2 font-medium text-white bg-orange-400 hover:bg-orange-500 rounded-lg border-orange-500 hover:shadow inline-flex space-x-2 items-center justify-center">
             Reset Password
           </button>
 

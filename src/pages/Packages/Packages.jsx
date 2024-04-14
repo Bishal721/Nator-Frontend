@@ -56,28 +56,28 @@ const Packages = () => {
                     <div className="px-4 pt-2">
                       <div className="mb-2">
                         <Link to={`/package-details/${_id}`}>
-                          <p className="block font-sans text-xl font-medium leading-relaxed text-blue-400 capitalize  antialiased">
+                          <p className="block font-sans text-xl font-medium leading-relaxed text-orange-400 capitalize  antialiased">
                             {name}
                           </p>
                         </Link>
                       </div>
                       <div className="mb-2  flex items-center justify-between">
-                        <p className=" font-sans text-base  leading-relaxed text-gray-400 capitalize flex items-center justify-center  antialiased">
-                          <span className="text-blue-400">
+                        <p className=" font-sans text-base  leading-relaxed capitalize flex items-center justify-center  antialiased">
+                          <span className="text-orange-400">
                             <IoLocationOutline size={23} />
                           </span>
                           {location}
                         </p>
                         <p className="flex items-center justify-center leading-relaxed text-gray-900 capitalize  antialiased">
-                          <span className="text-blue-500">
+                          <span className="text-orange-400">
                             <IoMdStarOutline size={23} />
                           </span>
                           4
                         </p>
                       </div>
                       <div className="mb-2 flex items-center justify-between">
-                        <p className="block font-sans text-base leading-relaxed text-blue-gray-900 antialiased">
-                          <span className="text-blue-400 font-semibold">
+                        <p className="block font-sans text-base leading-relaxed  antialiased">
+                          <span className="text-orange-400 font-semibold">
                             &#36; {price}
                           </span>
                           &nbsp;/ Per Person
@@ -85,7 +85,7 @@ const Packages = () => {
                         <span>
                           <Link to={`/package-details/${_id}`}>
                             <button
-                              className=" rounded-lg bg-blue-400 p-2 text-white align-middle font-sans text-base  text-blue-gray-900 transition-all  hover:bg-orange-400 "
+                              className=" rounded-lg bg-orange-400 p-2 text-white align-middle font-sans text-base  transition-all  hover:bg-orange-400 "
                               type="button"
                             >
                               Book Now

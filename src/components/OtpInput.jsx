@@ -119,7 +119,7 @@ const OtpInput = ({ length, onClose, onOtpSubmit = () => {} }) => {
                   If you Didn't Receive Otp. &nbsp;
                 </p>
                 <p
-                  className="cursor-pointer text-blue-600 "
+                  className="cursor-pointer text-orange-400 "
                   onClick={resendEmail}
                 >
                   <b>Resend Otp</b>

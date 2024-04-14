@@ -1,52 +1,34 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Datepicker from "react-tailwindcss-datepicker";
 // import { RiProductHuntLine } from "react-icons/ri";
-import heroImg from "../../assets/hero.jpg";
+import heroImg from "../../assets/heroimage.png";
 import { CiSearch } from "react-icons/ci";
 import CarouselItem from "../../components/carousel/CarouselItem";
 import PackageCarousel from "../../components/carousel/PackageCarousel";
+import { useDispatch, useSelector } from "react-redux";
+import { getFivePackages } from "../../redux/features/packages/packageSlice";
+
 const Home = () => {
-  const Pics = [
-    {
-      name: "Picture",
-      image:
-        "https://course.zinotrustacademy.com/wp-content/uploads/2023/09/Udemy-Course-Image-5.png",
-      id: "1",
-    },
-    {
-      name: "Picture1",
-      image:
-        "https://course.zinotrustacademy.com/wp-content/uploads/2023/09/Udemy-Course-Image-5.png",
-      id: "2",
-    },
-    {
-      name: "Picture2",
-      image:
-        "https://course.zinotrustacademy.com/wp-content/uploads/2023/09/Udemy-Course-Image-5.png",
-      id: "3",
-    },
-    {
-      name: "Picture3",
-      image:
-        "https://course.zinotrustacademy.com/wp-content/uploads/2023/09/Udemy-Course-Image-5.png",
-      id: "4",
-    },
-    {
-      name: "Picture4",
-      image:
-        "https://course.zinotrustacademy.com/wp-content/uploads/2023/09/Udemy-Course-Image-5.png",
-      id: "4",
-    },
-    {
-      name: "Picture5",
-      image:
-        "https://course.zinotrustacademy.com/wp-content/uploads/2023/09/Udemy-Course-Image-5.png",
-      id: "5",
-    },
-  ];
-  const packagess = Pics.map((item) => (
-    <div key={item.id}>
-      <CarouselItem name={item.name} url={item.image} id={item.id} />
+  const dispatch = useDispatch();
+  const { packages, isLoading, isError, message } = useSelector(
+    (state) => state.package
+  );
+  const styles = {
+    backgroundImage: `url(${heroImg})`,
+    backgroundSize: "cover",
+    backgroundRepeat: "no-repeat",
+    backgroundPosition: "center",
+  };
+  useEffect(() => {
+    dispatch(getFivePackages());
+    if (isError) {
+      console.log(message);
+    }
+  }, [dispatch, isError, message]);
+
+   const packagess = packages.map((item) => (
+    <div key={item._id} className="border border-gray-400 h-[25rem] rounded-lg mx-4">
+      <CarouselItem name={item.name} url={item.image.filePath} price={item.price}  id={item._id} />
     </div>
   ));
 
@@ -61,64 +43,67 @@ const Home = () => {
   };
 
   return (
-    <section className="flex flex-col min-h-screen  my-3 ">
-      <div className="flex mb-2 p-2">
-        <form className="rounded-3xl shadow-2xl mx-auto w-full  ">
-          <div className="flex h-16 bg-white p-2 shadow-2xl rounded-full">
-            <input
-              type="text"
-              className="w-[60%] bg-white rounded-tl-full border-2 border-gray-200 hover:bg-gray-100 caret-blue-400 focus:border-blue-400  rounded-bl-full pl-2  text-gray-600 font-normal outline-0"
-              placeholder="Search for your destination..."
-              required
-            />
-            <Datepicker
-              value={value}
-              onChange={handleValueChange}
-              primaryColor={"orange"}
-              useRange={false}
-              placeholder={"Start Date to End Date"}
-              separator={"to"}
-              inputClassName="w-full h-full px-3 text-gray-500 outline-0 hover:bg-gray-100  bg-white border-x-2 border-x-gray-400  caret-blue-400 focus:border-blue-400 border-2 border-gray-200 "
-              containerClassName="relative"
-              toggleClassName="absolute  text-blue-500 rounded-r-lg text-blue-400 right-0 h-full px-3 focus:outline-none "
-              startFrom={new Date()}
-              displayFormat={"DD/MM/YYYY"}
-              minDate={new Date()}
-              showFooter={true}
-            />
-            <button
-              type="submit"
-              className="bg-[#00D6AF] w-[15%] ml-3 flex items-centere justify-center items-center p-2 rounded-full h-12 mt-1 text-white font-semibold hover:bg-[#4CBAA8] "
-            >
-              <CiSearch size={25} />
-              &nbsp; Search
-            </button>
-          </div>
-        </form>
-      </div>
+    <>
+      <section className="h-screen" style={styles}>
+        <div className="h-full w-full flex flex-col justify-center px-[4rem] ">
+          <h3 className="text-white font-bold text-7xl">Good Trips </h3>
+          <h3 className="text-white text-7xl font-bold ">Only.</h3>
 
-      <section className=" w-[95%] mx-auto">
-        <div className="relative text-white">
-          <div className="absolute inset-0 w-full h-full rounded-[50px] bg-black/60 z-0" />
-          <img
-            src={heroImg}
-            className="object-cover max-h-[23rem] rounded-2xl w-full"
-            alt="Hero Image"
-          />
-          <div className="absolute  inset-12  ">
-            <h1 className="text-4xl font-bold mt-10 ">Adventure Begins Here</h1>
-            <h3 className="text-2xl font-semibold mt-9 ">
-              Find the world’s largest collection of tours & travels packages
-            </h3>
-          </div>
-        </div>
-        <div className="w-full m-auto rounded ">
-          <div className="mt-6">
-            <PackageCarousel packages={packagess} />
-          </div>
+          {/* <button className="w-[10rem] py-[6px] rounded-3xl bg-[#98EC65] hover:bg-[#81E047] mt-[1rem]">
+          Explore Now
+        </button> */}
+
+          <form className="sm:flex-row flex-col">
+            <div className="flex h-16 p-2 shadow-2xl border-none bg-none w-2/3 mt-6 sm:flex-nowrap flex-wrap ">
+              <input
+                type="text"
+                className="w-full sm:w-[55%] bg-white rounded border-2 border-gray-200 hover:bg-gray-100 caret-orange-400 focus:border-orange-400  pl-2  text-gray-600 font-normal outline-0 sm:mr-2 mr-0"
+                placeholder="Search for your destination..."
+                required
+              />
+              <Datepicker
+                value={value}
+                onChange={handleValueChange}
+                primaryColor={"orange"}
+                useRange={false}
+                placeholder={"Start Date to End Date"}
+                separator={"to"}
+                inputClassName="w-full h-full px-3 rounded text-gray-500 outline-0 hover:bg-gray-100  bg-white border-x-2 border-x-gray-400  caret-orange-400 focus:border-orange-400 border-2 border-gray-200 "
+                containerClassName="relative"
+                toggleClassName="absolute rounded-r-lg text-orange-400 right-0 h-full px-3 focus:outline-none "
+                startFrom={new Date()}
+                displayFormat={"DD/MM/YYYY"}
+                minDate={new Date()}
+                showFooter={true}
+              />
+              <button
+                type="submit"
+                className="bg-orange-400 w-full sm:w-[20%] ml-2 flex items-center justify-center rounded h-auto text-white font-semibold "
+              >
+                <CiSearch size={25} />
+                &nbsp; Search
+              </button>
+            </div>
+          </form>
         </div>
       </section>
-    </section>
+      <div className="my-14 flex items-center justify-center w-full">
+        <div className="text-3xl">
+          <h2 className="font-semibold mb-3 ml-8">
+            Small group travel that's good all over.
+          </h2>
+          <p className="text-sm text-gray-500">
+            GOOD VIEWS, GOOD FRIENDS AND GOOD TIMES ON OVER 1000 TRIPS IN MORE
+            THAN 100 COUNTRIES
+          </p>
+        </div>
+      </div>
+      <div className="m-auto w-full px-8 ">
+        <div className="my-6">
+          <PackageCarousel packages={packagess} />
+        </div>
+      </div>
+    </>
   );
 };
 

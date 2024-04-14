@@ -153,7 +153,7 @@ const UpdatePackage = () => {
                   <input
                     required
                     type="text"
-                    className="w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-blue-500"
+                    className="w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-orange-500"
                     placeholder="Package Name"
                     name="name"
                     value={packages?.name}
@@ -165,7 +165,7 @@ const UpdatePackage = () => {
                   <input
                     required
                     type="text"
-                    className="w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-blue-500"
+                    className="w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-orange-500"
                     placeholder="Package duration"
                     name="duration"
                     value={packages?.duration}
@@ -177,7 +177,7 @@ const UpdatePackage = () => {
                   <input
                     required
                     type="number"
-                    className="w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-blue-500"
+                    className="w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-orange-500"
                     placeholder="Package Price"
                     name="price"
                     value={packages?.price}
@@ -187,7 +187,7 @@ const UpdatePackage = () => {
                 <div>
                   <label className="block"> Package Difficulty : </label>
                   <select
-                    className="w-full border border-gray-300 rounded-md py-2 px-3 bg-white focus:outline-none focus:border-blue-500"
+                    className="w-full border border-gray-300 rounded-md py-2 px-3 bg-white focus:outline-none focus:border-orange-500"
                     name="difficulty"
                     value={select}
                     onChange={HandleDropDown}
@@ -211,7 +211,7 @@ const UpdatePackage = () => {
                   <input
                     required
                     type="text"
-                    className="w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-blue-500"
+                    className="w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-orange-500"
                     placeholder="Enter Location"
                     name="location"
                     value={packages?.location}
@@ -223,7 +223,7 @@ const UpdatePackage = () => {
                   <input
                     required
                     type="number"
-                    className="w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-blue-500"
+                    className="w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-orange-500"
                     placeholder="Enter maxGroupSize"
                     name="maxGroupSize"
                     value={packages?.maxGroupSize}
@@ -244,7 +244,7 @@ const UpdatePackage = () => {
               <div className="my-4">
                 <button
                   type="submit"
-                  className="font-normal px-4 py-2 border rounded-md cursor-pointer transition duration-300 bg-blue-500 text-white"
+                  className="font-normal px-4 py-2 border rounded-md cursor-pointer transition duration-300 bg-orange-500 text-white"
                 >
                   Update Package
                 </button>

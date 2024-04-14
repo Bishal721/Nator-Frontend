@@ -4,7 +4,7 @@ import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
 
 import { responsive } from "./data";
-const PackageCarousel = ({ packages }) => {
+const PackageCarousel = ({packages} ) => {
   return (
     <div>
       <Carousel
@@ -15,6 +15,7 @@ const PackageCarousel = ({ packages }) => {
         autoPlaySpeed={3000}
         customTransition="all 500ms ease"
         transitionDuration={500}
+        className="w-[90%] mx-28"
       >
         {packages}
       </Carousel>

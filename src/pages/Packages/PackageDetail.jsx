@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import {
+  createReview,
   getPackage,
   selectPackage,
 } from "../../redux/features/packages/packageSlice";
@@ -15,12 +16,15 @@ import { PiMountainsFill } from "react-icons/pi";
 import DOMPurify from "dompurify";
 import { useRef } from "react";
 import BookPackage from "./BookPackage";
+import avatar from "../../assets/avatar.jpg";
+import { toast } from "react-toastify";
 
 const PackageDetail = () => {
   const dispatch = useDispatch();
   const { id } = useParams();
   const { isLoading, isError, message } = useSelector((state) => state.package);
   const packageEdit = useSelector(selectPackage);
+  const isloggedin = useSelector(selectIsLoggedIn);
 
   const [packages, setPackages] = useState(packageEdit);
   const reviewMsgRef = useRef("");
@@ -33,17 +37,29 @@ const PackageDetail = () => {
     if (isError) {
       console.log(message);
     }
-  }, [isError, message, dispatch, id, packageEdit]);
+  }, [isError, message, dispatch, id, packageEdit, packages]);
 
-  // useEffect(() => {
-  //   setPackages(packageEdit);
-  // }, [packag eEdit]);
+
   const submitReview = (e) => {
     e.preventDefault();
+    if (!isloggedin) {
+      return toast.error("User Must Be Logged In Give Reviews");
+    }
     const reviewText = reviewMsgRef.current.value;
+    if (!reviewText || !tourRating || !id) {
+      return toast.error("All Fields are required to post review");
+    }
 
-    alert(`${reviewText}, ${tourRating}`);
+    const formData = {
+      packageId: id,
+      review: reviewText,
+      rating: tourRating,
+    };
+
+    dispatch(createReview(formData));
   };
+
+  const options = { day: "numeric", month: "long", year: "numeric" };
   return (
     <div className="grid grid-cols-6 gap-2 mt-4">
       <div className="col-span-4  p-4">
@@ -60,15 +76,13 @@ const PackageDetail = () => {
         </div>
 
         <div className="p-2 w-full border border-gray-300 my-4 text-sm">
-          <span className="text-2xl hover:text-blue-600 ">
-            {packages?.name}
-          </span>
+          <span className="text-2xl">{packages?.name}</span>
           <div className="mt-4 flex gap-10 items-center capitalize">
             <span className="flex items-center ">
               <IoLocationOutline size={23} /> &nbsp; {packages?.location}
             </span>
             <span className=" flex items-center ">
-              <IoMdStarOutline size={23} /> &nbsp; {packages?.ratingsAverage || 2}
+              <IoMdStarOutline size={23} /> &nbsp;{packages?.review || 2}
             </span>
           </div>
           <div className="mt-4 flex gap-10 items-center capitalize">
@@ -100,14 +114,16 @@ const PackageDetail = () => {
         </div>
 
         <div className="p-2 w-full border border-gray-300 my-4 text-sm">
-          <h4 className="text-2xl mb-4">Reviews (4 reviews)</h4>
+          <h4 className="text-2xl mb-4">
+            Reviews ({packages?.reviews.length} reviews)
+          </h4>
           <form onSubmit={submitReview}>
             <div className="flex item-center gap-2 mb-4">
               <span
                 className="flex items-center cursor-pointer text-orange-400"
                 onClick={() => setTourRating(1)}
               >
-                1 <RiStarSFill size={20} />
+                1 <RiStarSFill size={26} />
               </span>
               <span
                 className="flex items-center cursor-pointer text-orange-400"
@@ -119,19 +135,19 @@ const PackageDetail = () => {
                 className="flex items-center cursor-pointer text-orange-400"
                 onClick={() => setTourRating(3)}
               >
-                3 <RiStarSFill size={20} />
+                3 <RiStarSFill size={26} />
               </span>
               <span
                 className="flex items-center cursor-pointer text-orange-400"
                 onClick={() => setTourRating(4)}
               >
-                4 <RiStarSFill size={20} />
+                4 <RiStarSFill size={26} />
               </span>
               <span
                 className="flex items-center cursor-pointer text-orange-400"
                 onClick={() => setTourRating(5)}
               >
-                5 <RiStarSFill size={20} />
+                5 <RiStarSFill size={26} />
               </span>
             </div>
 
@@ -141,15 +157,55 @@ const PackageDetail = () => {
                 ref={reviewMsgRef}
                 className="w-full border-none py-2 px-0 focus:outline-none bg-inherit"
                 placeholder="share your thoughts here"
+                required
               />
               <button
-                className="bg-blue-500 hover:bg-blue-600 text-white  rounded-[2rem] py-2 px-4 w-44"
+                className="bg-orange-400 hover:bg-orange-500 text-white  rounded-[2rem] py-2 px-4 w-44"
                 type="submit"
               >
                 Submit
               </button>
             </div>
           </form>
+          <div className="mt-10  mx-4 pt-4 px-3">
+            {packages?.reviews.length === 0 ? (
+              <div className="flex justify-start items-center capitalize">
+                <div className="text-lg text-red-500 mx-4">
+                  Reviews Not available
+                </div>
+              </div>
+            ) : (
+              packages?.reviews.map((review, index) => (
+                <div
+                  key={index}
+                  className="flex items-center gap-x-4 mb-4"
+                >
+                  <img
+                    src={avatar}
+                    className="w-14 h-14 rounded-full object-cover"
+                  />
+
+                  <div className="w-full  p-2">
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <h5 className="text-lg mb-0 ">John</h5>
+                        <p className="text-sm text-gray-500">
+                          {new Date("01-03-2024").toLocaleDateString(
+                            "en-US",
+                            options
+                          )}
+                        </p>
+                      </div>
+                      <span className="flex items-center font-medium ">
+                        5 <RiStarSFill className="text-xl text-orange-400" />
+                      </span>
+                    </div>
+                    <h6 className="text-xl text-gray-600">Amazing tour</h6>
+                  </div>
+                </div>
+              ))
+            )}
+          </div>
         </div>
       </div>
       <div className="p-4 col-span-2 rounded-lg border border-solid border-gray-300  ">

@@ -7,7 +7,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { RESET, registerUser } from "../../redux/features/auth/authSlice";
 import Loader from "../../components/loader/Loader";
 import OAuthButton from "../../components/OAuthButton";
-import loginimg from "../../assets/Signin.jpg";
+import loginimg from "../../assets/logimage.png";
 
 const initialState = {
   name: "",
@@ -61,88 +61,87 @@ const Register = () => {
   }, [isLoggedIn, isSuccess, dispatch, navigate]);
 
   return (
-    <div className="bg-gray-100 flex justify-center items-center h-screen">
+    <div className="h-screen ">
       {isLoading && <Loader />}
-      <div className="w-1/1 h-screen hidden lg:block">
-        <img
-          src={loginimg}
-          alt="Placeholder Image"
-          className="object-cover w-full h-full"
-        />
-      </div>
-      <div className="lg:p-36 md:p-52 sm:20 p-8 w-full lg:w-1/2">
-        <div className="flex items-center  mb-4 text-blue-500">
-          <TiUserAddOutline size={33} />
-          <h1 className="text-3xl font-semibold">&nbsp;Register</h1>
+      <div className="flex justify-center items-center h-[40rem] mt-9">
+        <div className="w-1/1 h-2/3  hidden lg:block bg-white shadow-md">
+          <img
+            src={loginimg}
+            alt="Placeholder Image"
+            className="object-cover w-full h-full"
+          />
         </div>
-        <form onSubmit={UserRegister}>
-          <div className="mb-4">
-            <input
-              type="text"
-              placeholder="Name"
-              required
-              className="w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-blue-500"
-              name="name"
-              value={name}
-              onChange={HandleInputChange}
-            />
+        <div className="lg:p-36 md:p-52 sm:20 p-8 w-full lg:w-1/2">
+          <div className="flex items-center  mb-4 text-orange-400">
+            <TiUserAddOutline size={33} />
+            <h1 className="text-3xl font-semibold">&nbsp;Register</h1>
           </div>
-          <div className="mb-4">
-            <input
-              type="email"
-              placeholder="Email"
-              required
-              className="w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-blue-500"
-              name="email"
-              value={email}
-              onChange={HandleInputChange}
-            />
-          </div>
-          <div className="mb-4">
-            <input
-              type="password"
-              placeholder="Password"
-              required
-              className="w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-blue-500"
-              name="password"
-              value={password}
-              onChange={HandleInputChange}
-            />
-          </div>
-          <div className="mb-4">
-            <input
-              type="password"
-              placeholder="Confirm Password"
-              required
-              className="w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-blue-500"
-              name="password2"
-              value={password2}
-              onChange={HandleInputChange}
-            />
-          </div>
+          <form onSubmit={UserRegister}>
+            <div className="mb-4">
+              <input
+                type="text"
+                placeholder="Name"
+                required
+                className="w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-orange-500"
+                name="name"
+                value={name}
+                onChange={HandleInputChange}
+              />
+            </div>
+            <div className="mb-4">
+              <input
+                type="email"
+                placeholder="Email"
+                required
+                className="w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-orange-500"
+                name="email"
+                value={email}
+                onChange={HandleInputChange}
+              />
+            </div>
+            <div className="mb-4">
+              <input
+                type="password"
+                placeholder="Password"
+                required
+                className="w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-orange-500"
+                name="password"
+                value={password}
+                onChange={HandleInputChange}
+              />
+            </div>
+            <div className="mb-4">
+              <input
+                type="password"
+                placeholder="Confirm Password"
+                required
+                className="w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-orange-500"
+                name="password2"
+                value={password2}
+                onChange={HandleInputChange}
+              />
+            </div>
 
-          <button
-            type="submit"
-            className="bg-blue-500 hover:bg-blue-600 text-white font-semibold rounded-md py-2 px-4 w-full"
-          >
-            Register
-          </button>
-          <p className="text-center">or</p>
-          <div className="mb-4 flex items-center">
-            <OAuthButton />
-          </div>
-        </form>
-        <span className="mt-6 text-blue-500 text-center flex items-center">
-          <Link to="/" className="hover:underline">
-            Home
-          </Link>
-          <p className="text-gray-500">
-            &nbsp; Already have an account? &nbsp;
-          </p>
-          <Link to="/login" className="hover:underline">
-            Login Here
-          </Link>
-        </span>
+            <button
+              type="submit"
+              className="bg-black/70 text-white font-semibold rounded-md py-2 px-4 w-full"
+            >
+              Register
+            </button>
+            <p className="text-center">or</p>
+            <div className="mb-4 flex items-center">
+              <OAuthButton />
+            </div>
+          </form>
+          <span className="mt-6 text-orange-400 text-center flex items-center justify-between">
+            <p className="text-gray-500">
+              &nbsp; Already have an account? &nbsp;
+            </p>
+            <Link to="/login" className="hover:underline">
+              Login Here
+            </Link>
+          </span>
+        </div>
       </div>
     </div>
   );

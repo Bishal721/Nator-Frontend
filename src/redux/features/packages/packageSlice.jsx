@@ -93,6 +93,54 @@ export const deletePackage = createAsyncThunk(
   }
 );
 
+export const getFivePackages = createAsyncThunk(
+  "packages/getFivePackages",
+  async (_, thunkAPI) => {
+    try {
+      return await packageService.getFivePackages();
+    } catch (error) {
+      const message =
+        (error.response && error.response.data && error.response.message) ||
+        error.message ||
+        error.toString();
+      console.log(error);
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
+
+export const createReview = createAsyncThunk(
+  "packages/createReview",
+  async (formData, thunkAPI) => {
+    try {
+      return await packageService.createReview(formData);
+    } catch (error) {
+      const message =
+        (error.response && error.response.data && error.response.message) ||
+        error.message ||
+        error.toString();
+      console.log(error);
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
+export const createBooking = createAsyncThunk(
+  "packages/createBooking",
+  async (formData, thunkAPI) => {
+    console.log(formData);
+    try {
+      return await packageService.createBooking(formData);
+    } catch (error) {
+      const message =
+        (error.response && error.response.data && error.response.message) ||
+        error.message ||
+        error.toString();
+      console.log(error);
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
+
 const packageSlice = createSlice({
   name: "package",
   initialState,
@@ -178,6 +226,53 @@ const packageSlice = createSlice({
         toast.success("Package Deleted Successfully");
       })
       .addCase(deletePackage.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.message = action.payload;
+        toast.error(action.payload);
+      }) // get five packages
+      .addCase(getFivePackages.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(getFivePackages.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isSuccess = true;
+        state.isError = false;
+        state.packages = action.payload;
+      })
+      .addCase(getFivePackages.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.message = action.payload;
+        toast.error(action.payload);
+      })
+      .addCase(createReview.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(createReview.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isSuccess = true;
+        state.isError = false;
+        state.packages.push(action.payload);
+        toast.success("Review added successfully");
+      })
+      .addCase(createReview.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.message = action.payload;
+        toast.error(action.payload);
+      })
+      .addCase(createBooking.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(createBooking.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isSuccess = true;
+        state.isError = false;
+        state.packages.push(action.payload);
+        toast.success("Package Booked successfully");
+      })
+      .addCase(createBooking.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
         state.message = action.payload;
