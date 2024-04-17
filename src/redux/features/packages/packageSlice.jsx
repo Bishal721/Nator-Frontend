@@ -220,9 +220,6 @@ const packageSlice = createSlice({
         state.packages = state.packages.filter(
           (Package) => Package._id !== action.payload
         );
-        state.packages = state.packages.filter(
-          (Package) => Package._id !== action.payload
-        );
         toast.success("Package Deleted Successfully");
       })
       .addCase(deletePackage.rejected, (state, action) => {

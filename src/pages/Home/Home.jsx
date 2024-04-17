@@ -26,9 +26,17 @@ const Home = () => {
     }
   }, [dispatch, isError, message]);
 
-   const packagess = packages.map((item) => (
-    <div key={item._id} className="border border-gray-400 h-[25rem] rounded-lg mx-4">
-      <CarouselItem name={item.name} url={item.image.filePath} price={item.price}  id={item._id} />
+  const packagess = packages.map((item) => (
+    <div
+      key={item._id}
+      className="border border-gray-400 h-[25rem] rounded-lg mx-4"
+    >
+      <CarouselItem
+        name={item.name}
+        url={item.image.filePath}
+        price={item.price}
+        id={item._id}
+      />
     </div>
   ));
 
@@ -60,21 +68,6 @@ const Home = () => {
                 className="w-full sm:w-[55%] bg-white rounded border-2 border-gray-200 hover:bg-gray-100 caret-orange-400 focus:border-orange-400  pl-2  text-gray-600 font-normal outline-0 sm:mr-2 mr-0"
                 placeholder="Search for your destination..."
                 required
-              />
-              <Datepicker
-                value={value}
-                onChange={handleValueChange}
-                primaryColor={"orange"}
-                useRange={false}
-                placeholder={"Start Date to End Date"}
-                separator={"to"}
-                inputClassName="w-full h-full px-3 rounded text-gray-500 outline-0 hover:bg-gray-100  bg-white border-x-2 border-x-gray-400  caret-orange-400 focus:border-orange-400 border-2 border-gray-200 "
-                containerClassName="relative"
-                toggleClassName="absolute rounded-r-lg text-orange-400 right-0 h-full px-3 focus:outline-none "
-                startFrom={new Date()}
-                displayFormat={"DD/MM/YYYY"}
-                minDate={new Date()}
-                showFooter={true}
               />
               <button
                 type="submit"

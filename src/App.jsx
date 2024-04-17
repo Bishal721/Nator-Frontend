@@ -24,6 +24,10 @@ import AdminLayout from "./admin/components/AdminLayout";
 import AddPackage from "./admin/pages/packages/addPackage/AddPackage";
 import UpdatePackage from "./admin/pages/packages/updatepackage/UpdatePackage";
 import HomeLayout from "./components/layout/HomeLayout";
+import Flight from "./pages/flight/Flight";
+import ErrorPage from "./ErrorPage";
+import Hotel from "./pages/hotel/Hotel";
+import HotelList from "./pages/hotel/HotelList";
 axios.defaults.withCredentials = true;
 
 function App() {
@@ -56,6 +60,30 @@ function App() {
           element={
             <Layout>
               <Packages />
+            </Layout>
+          }
+        />
+        <Route
+          path="/flights"
+          element={
+            <HomeLayout>
+              <Flight />
+            </HomeLayout>
+          }
+        />
+        <Route
+          path="/hotels"
+          element={
+            <HomeLayout>
+              <Hotel />
+            </HomeLayout>
+          }
+        />
+        <Route
+          path="/hotel-list"
+          element={
+            <Layout>
+              <HotelList />
             </Layout>
           }
         />
@@ -101,6 +129,8 @@ function App() {
 
           <Route path="edit-packages/:id" element={<UpdatePackage />} />
         </Route>
+
+        <Route path="/*" element={<ErrorPage />} />
       </Routes>
     </BrowserRouter>
   );

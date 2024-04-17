@@ -65,9 +65,7 @@ const Navbar = () => {
 
               <ShowOnLogin>
                 <li>
-                  <NavLink to="/profile" className="hover:text-blue-500">
-                    Profile
-                  </NavLink>
+                  <NavLink to="/profile">Profile</NavLink>
                 </li>
               </ShowOnLogin>
               <AdminLink>
