@@ -8,8 +8,10 @@ const createHotel = async (formData) => {
   return response.data;
 };
 // get all hotel data
-const getAllHotels = async () => {
-  const response = await axios.get(API_URL);
+const getAllHotels = async (formData) => {
+  const response = await axios.get(
+    `${API_URL}?city=${formData.city}&min=${formData.min || 1}&max=${formData.max || 999}`
+  );
   return response.data;
 };
 // get single Hotel
@@ -26,8 +28,12 @@ const updateHotel = async (formData) => {
 
 // Delete a  hotel
 const deleteHotel = async (id) => {
-  console.log(API_URL + id);
   const response = await axios.delete(API_URL + id);
+  return response.data;
+};
+
+const getHotelRooms = async (id) => {
+  const response = await axios.get(`${API_URL}room/${id}`);
   return response.data;
 };
 
@@ -37,6 +43,7 @@ const hotelService = {
   deleteHotel,
   getHotel,
   getAllHotels,
+  getHotelRooms,
 };
 
 export default hotelService;

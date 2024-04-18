@@ -4,17 +4,27 @@ import hotelA from "../../assets/HotelA.jpg";
 import hotelB from "../../assets/HotelB.jpg";
 import Datepicker from "react-tailwindcss-datepicker";
 import { CiSearch } from "react-icons/ci";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { getAllHotels } from "../../redux/features/hotels/hotelSlice";
+import { FaPerson } from "react-icons/fa6";
+import { NewSearch } from "../../redux/features/hotels/SearchSlice";
 const Hotel = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const { hotels, isloading, isError, message } = useSelector(
     (state) => state.hotel
   );
+
   let firstFourElements = [];
+  const initialState = {
+    city: "",
+    min: "",
+    max: "",
+  };
+
   useEffect(() => {
-    dispatch(getAllHotels());
+    dispatch(getAllHotels(initialState));
     if (isError) {
       console.log(message);
     }
@@ -24,14 +34,42 @@ const Hotel = () => {
     firstFourElements = hotels.slice(0, 4);
   }
 
-  const [value, setValue] = useState({
+  const [destination, setDestination] = useState("");
+  const [openOptions, setOpenOptions] = useState(false);
+  const [options, setOptions] = useState({
+    adult: 1,
+    children: 0,
+    room: 1,
+  });
+
+  const [dates, setDates] = useState({
     startDate: null,
     endDate: null,
   });
 
   const handleValueChange = (newValue) => {
     console.log("newValue:", newValue);
-    setValue(newValue);
+    setDates(newValue);
+  };
+  const handleOption = (name, operation) => {
+    setOptions((prev) => {
+      return {
+        ...prev,
+        [name]: operation === "i" ? options[name] + 1 : options[name] - 1,
+      };
+    });
+  };
+
+  const handleSubmit = (e) => {
+    const formData = {
+      city: destination,
+      dates,
+      options,
+    };
+    e.preventDefault();
+    const data = dispatch(NewSearch({ payload: formData }));
+    console.log(data);
+    navigate("/hotel-list", { state: formData });
   };
 
   const styles = {
@@ -58,36 +96,138 @@ const Hotel = () => {
 
       <div className="container mb-8">
         <div className=" py-6 h-36  relative z-30 [box-shadow:0px_0px_10px_0px_rgba(0,0,0,0.5)] m-0 -mt-24  bg-slate-50">
-          <form className="sm:flex-row flex-col px-4 flex items-center justify-center mt-4">
-            <div className="flex h-16 p-2 [box-shadow:rgba(0,_0,_0,_0.19)_0px_10px_20px,_rgba(0,_0,_0,_0.23)_0px_6px_6px]   w-full  sm:flex-nowrap flex-wrap">
-              <input
-                type="text"
-                className="w-full sm:w-[55%] bg-white rounded border-2 border-gray-200 hover:bg-gray-100 caret-orange-400 focus:border-orange-400  pl-2  text-gray-600 font-normal outline-0 sm:mr-2 mr-0"
-                placeholder="Search for your destination..."
-                required
-              />
-              <Datepicker
-                value={value}
-                onChange={handleValueChange}
-                primaryColor={"orange"}
-                useRange={false}
-                placeholder={"Start Date to End Date"}
-                separator={"to"}
-                inputClassName="w-full h-full px-3 rounded text-gray-500 outline-0 hover:bg-gray-100  bg-white border-x-1 border-x-gray-200  caret-orange-400 focus:border-orange-400  "
-                containerClassName="relative"
-                toggleClassName="absolute rounded-r-lg text-orange-400 right-0 h-full px-3 focus:outline-none "
-                startFrom={new Date()}
-                displayFormat={"DD/MM/YYYY"}
-                minDate={new Date()}
-                showFooter={true}
-              />
-              <button
-                type="submit"
-                className="bg-orange-400 w-full sm:w-[20%] ml-2 flex items-center justify-center rounded h-auto text-white font-semibold "
-              >
-                <CiSearch size={25} />
-                &nbsp; Search
-              </button>
+          <form
+            className="sm:flex-row flex-col px-4 flex items-center justify-center mt-4"
+            onSubmit={handleSubmit}
+          >
+            <div className="grid grid-cols-12  h-16 p-2 [box-shadow:rgba(0,_0,_0,_0.19)_0px_10px_20px,_rgba(0,_0,_0,_0.23)_0px_6px_6px]   w-full  gap-1">
+              <div className="col-span-6">
+                <div className="grid grid-cols-6 h-full gap-1">
+                  <div className="col-span-3">
+                    <input
+                      type="text"
+                      className="w-full h-full bg-white rounded border-2 border-gray-300 hover:bg-gray-100 caret-orange-400 focus:border-orange-400  pl-2  text-gray-600 font-normal outline-0 sm:mr-2 mr-0"
+                      placeholder="Search for your destination..."
+                      onChange={(e) => setDestination(e.target.value)}
+                      required
+                    />
+                  </div>
+                  <div className="col-span-3 ">
+                    <Datepicker
+                      value={dates}
+                      onChange={handleValueChange}
+                      primaryColor={"orange"}
+                      useRange={false}
+                      placeholder={"Start Date to End Date"}
+                      separator={"to"}
+                      inputClassName="w-full h-full px-3 border border-gray-400  rounded text-gray-500  bg-white  caret-orange-400 focus:border-orange-400  "
+                      containerClassName="relative h-full"
+                      toggleClassName="absolute rounded-r-lg text-orange-400 right-0 px-3 focus:outline-none h-full  "
+                      startFrom={new Date()}
+                      displayFormat={"DD/MM/YYYY"}
+                      minDate={new Date()}
+                      showFooter={true}
+                    />
+                  </div>
+                </div>
+              </div>
+              <div className="col-span-6">
+                <div className="grid grid-cols-6 h-full gap-1">
+                  <div className="col-span-3 border border-gray-400 rounded">
+                    <div className="flex items-center justify-center h-full gap-[10px] ">
+                      <FaPerson />
+                      <span
+                        onClick={() => setOpenOptions(!openOptions)}
+                        className="text-gray-500 cursor-pointer"
+                      >{`${options.adult} adult · ${options.children} children · ${options.room} room`}</span>
+                      {openOptions && (
+                        <div className="absolute top-[108px] bg-[white] text-[gray] rounded-[5px] [box-shadow:0px_0px_10px_-5px_rgba(0,_0,_0,_0.4)]">
+                          <div className="w-[200px] flex justify-between m-[10px]">
+                            <span className="text-md font-medium">Adult</span>
+                            <div className="flex items-center gap-[10px] text-[12px] text-[black]">
+                              <button
+                                type="button"
+                                disabled={options.adult <= 1}
+                                className="w-[30px] h-[30px] border-[1px] border-[solid] flex items-center justify-center  border-orange-400 text-[#0071c2] cursor-pointer bg-[white]"
+                                onClick={() => handleOption("adult", "d")}
+                              >
+                                -
+                              </button>
+                              <span className="text-md font-medium">
+                                {options.adult}
+                              </span>
+                              <button
+                                type="button"
+                                className="w-[30px] h-[30px] border-[1px] border-[solid] flex items-center justify-center  border-orange-400 text-[#0071c2] cursor-pointer bg-[white]"
+                                onClick={() => handleOption("adult", "i")}
+                              >
+                                +
+                              </button>
+                            </div>
+                          </div>
+                          <div className="w-[200px] flex justify-between m-[10px]">
+                            <span className="text-md font-medium">
+                              Children
+                            </span>
+                            <div className="flex items-center gap-[10px] text-[12px] text-[black]">
+                              <button
+                                type="button"
+                                disabled={options.children <= 0}
+                                className="w-[30px] h-[30px] border-[1px] border-[solid] flex items-center justify-center  border-orange-400 text-[#0071c2] cursor-pointer bg-[white]"
+                                onClick={() => handleOption("children", "d")}
+                              >
+                                -
+                              </button>
+                              <span className="text-md font-medium">
+                                {options.children}
+                              </span>
+                              <button
+                                type="button"
+                                className="w-[30px] h-[30px] border-[1px] border-[solid] flex items-center justify-center  border-orange-400 text-[#0071c2] cursor-pointer bg-[white]"
+                                onClick={() => handleOption("children", "i")}
+                              >
+                                +
+                              </button>
+                            </div>
+                          </div>
+                          <div className="w-[200px] flex justify-between m-[10px]">
+                            <span className="text-md font-medium">Room</span>
+                            <div className="flex items-center gap-[10px] text-[12px] text-[black]">
+                              <button
+                                type="button"
+                                disabled={options.room <= 1}
+                                className="w-[30px] h-[30px] border-[1px] border-[solid] flex items-center justify-center  border-orange-400 text-[#0071c2] cursor-pointer bg-[white]"
+                                onClick={() => handleOption("room", "d")}
+                              >
+                                -
+                              </button>
+                              <span className="text-md font-medium">
+                                {options.room}
+                              </span>
+                              <button
+                                type="button"
+                                className="w-[30px] h-[30px] border-[1px] border-[solid] flex items-center justify-center  border-orange-400 text-[#0071c2] cursor-pointer bg-[white]"
+                                onClick={() => handleOption("room", "i")}
+                              >
+                                +
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                  <div className="col-span-3">
+                    <button
+                      type="submit"
+                      className="bg-orange-400  w-full h-full flex items-center justify-center rounded text-white font-semibold "
+                    >
+                      <CiSearch size={25} />
+                      &nbsp; Search
+                    </button>
+                  </div>
+                </div>
+              </div>
             </div>
           </form>
         </div>
@@ -171,9 +311,9 @@ const Hotel = () => {
                       <p className="mt-4 truncate">{item?.desc}</p>
                     </div>
 
-                    <div className="grid grid-cols-2 my-4 text-white font-semibold hover:bg-orange-300">
-                      <Link to={`/hotel-details/${item._id}`}>
-                        <button className="capitalize bg-orange-400 h-11 w-full ">
+                    <div className="w-1/2 my-4 text-white font-semibold ">
+                      <Link to={`/hotel-detail/${item._id}`}>
+                        <button className="capitalize bg-orange-400 h-11 hover:bg-orange-300 w-full ">
                           Read More
                         </button>
                       </Link>
@@ -187,7 +327,7 @@ const Hotel = () => {
                   >
                     <div className="w-full object-cover overflow-hidden h-64">
                       <img
-                        src={item.photos[0] || hotelA}
+                        src={item?.photos || hotelA}
                         alt="Hotel"
                         className="w-full object-cover overflow-hidden"
                       />
@@ -197,9 +337,9 @@ const Hotel = () => {
                       <p className="mt-4 truncate">{item?.desc}</p>
                     </div>
 
-                    <div className="grid grid-cols-2 my-4 text-white font-semibold hover:bg-orange-300">
-                      <Link to={`/hotel-details/${item._id}`}>
-                        <button className="capitalize bg-orange-400 h-11 w-full ">
+                    <div className=" w-1/2 my-4 text-white font-semibold">
+                      <Link to={`/hotel-detail/${item._id}`}>
+                        <button className="capitalize bg-orange-400 h-11 hover:bg-orange-300 w-full ">
                           Read More
                         </button>
                       </Link>

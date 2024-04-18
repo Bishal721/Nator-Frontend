@@ -1,18 +1,29 @@
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
 const SearchItem = ({ item }) => {
+  const location = useLocation();
   return (
     <div className="border-[1px] border-[solid] border-[lightgray] p-[10px] rounded-[5px] flex justify-between gap-[20px] mb-[20px]">
-      <img src={item.photos[0]} alt="" className="w-[200px] h-[200px] object-cover" />
+      <img
+        src={item.photos[0]}
+        alt=""
+        className="w-[200px] h-[200px] object-cover"
+      />
       <div className="flex flex-col gap-[10px] flex-[2]">
-        <h1 className="text-[20px] text-[#0071c2]">{item.name}</h1>
+        <h1 className="text-2xl font-semibold text-orange-400 capitalize ">
+          {item.name}
+        </h1>
         <span className="text-[12px]">{item.distance}m from center</span>
-        <span className="text-[12px] bg-[#008009] text-[white] w-max p-[3px] rounded-[5px]">Free airport taxi</span>
+        <span className="text-[12px] bg-[#008009] text-[white] w-max p-[3px] rounded-[5px]">
+          Free airport taxi
+        </span>
         <span className="text-[12px] font-bold">
           Studio Apartment with Air conditioning
         </span>
         <span className="text-[12px]">{item.desc}</span>
-        <span className="text-[12px] text-[#008009] font-bold">Free cancellation </span>
+        <span className="text-[12px] text-[#008009] font-bold">
+          Free cancellation
+        </span>
         <span className="text-[12px] text-[#008009]">
           You can cancel later, so lock in this great price today!
         </span>
@@ -26,9 +37,18 @@ const SearchItem = ({ item }) => {
         )}
         <div className="text-right flex flex-col gap-[5px]">
           <span className="text-[24px]">${item.cheapestPrice}</span>
-          <span className="text-[12px] text-[gray]">Includes taxes and fees</span>
-          <Link to={`/hotels/${item._id}`}>
-            <button className="bg-[#0071c2] text-[white] font-bold px-[5px] py-[10px] border-[none] cursor-pointer rounded-[5px]">See availability</button>
+          <span className="text-[12px] text-[gray]">
+            Includes taxes and fees
+          </span>
+          <Link
+            to={{
+              pathname: `/hotel-detail/${item._id}`,
+              state: location.state,
+            }}
+          >
+            <button className="bg-orange-400 hover:bg-orange-300 text-[white] font-bold px-[5px] py-[10px] border-[none] cursor-pointer rounded-[5px]">
+              See availability
+            </button>
           </Link>
         </div>
       </div>

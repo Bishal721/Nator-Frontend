@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import {
   createReview,
   getPackage,
-  selectPackage,
 } from "../../redux/features/packages/packageSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
@@ -18,27 +17,29 @@ import { useRef } from "react";
 import BookPackage from "./BookPackage";
 import avatar from "../../assets/avatar.jpg";
 import { toast } from "react-toastify";
+import Loader from "../../components/loader/Loader";
 
 const PackageDetail = () => {
   const dispatch = useDispatch();
   const { id } = useParams();
-  const { isLoading, isError, message } = useSelector((state) => state.package);
-  const packageEdit = useSelector(selectPackage);
+  const { Package, isLoading, isError, message } = useSelector(
+    (state) => state.package
+  );
+  // const packageEdit = useSelector(selectPackage);
   const isloggedin = useSelector(selectIsLoggedIn);
 
-  const [packages, setPackages] = useState(packageEdit);
+  // const [selectPackage, setPackages] = useState(packageEdit);
   const reviewMsgRef = useRef("");
   const [tourRating, setTourRating] = useState(null);
 
   useEffect(() => {
     dispatch(getPackage(id));
-    setPackages(packageEdit);
+    // setPackages(packageEdit);
 
     if (isError) {
       console.log(message);
     }
-  }, [isError, message, dispatch, id, packageEdit, packages]);
-
+  }, [isError, message, dispatch, id]);
 
   const submitReview = (e) => {
     e.preventDefault();
@@ -60,14 +61,18 @@ const PackageDetail = () => {
   };
 
   const options = { day: "numeric", month: "long", year: "numeric" };
+  if (isLoading) {
+    return <Loader />;
+  }
   return (
     <div className="grid grid-cols-6 gap-2 mt-4">
+      {/* {isLoading && <Loader />} */}
       <div className="col-span-4  p-4">
         <div className=" w-full h-[30rem] overflow-hidden object-cover rounded">
-          {packages?.image ? (
+          {Package?.image ? (
             <img
-              src={packages.image.filePath}
-              alt={packages.image.fileName}
+              src={Package.image.filePath}
+              alt={Package.image.fileName}
               className="w-full"
             />
           ) : (
@@ -76,30 +81,30 @@ const PackageDetail = () => {
         </div>
 
         <div className="p-2 w-full border border-gray-300 my-4 text-sm">
-          <span className="text-2xl">{packages?.name}</span>
+          <span className="text-2xl">{Package?.name}</span>
           <div className="mt-4 flex gap-10 items-center capitalize">
             <span className="flex items-center ">
-              <IoLocationOutline size={23} /> &nbsp; {packages?.location}
+              <IoLocationOutline size={23} /> &nbsp; {Package?.location}
             </span>
             <span className=" flex items-center ">
-              <IoMdStarOutline size={23} /> &nbsp;{packages?.review || 2}
+              <IoMdStarOutline size={23} /> &nbsp;{Package?.review || 2}
             </span>
           </div>
           <div className="mt-4 flex gap-10 items-center capitalize">
             <span className="flex items-center ">
-              <AiFillDollarCircle size={23} /> &nbsp; {packages?.price}
+              <AiFillDollarCircle size={23} /> &nbsp; {Package?.price}
               &nbsp;/per person
             </span>
             <span className="flex items-center ">
-              <GiDuration size={23} /> &nbsp; {packages?.duration}
+              <GiDuration size={23} /> &nbsp; {Package?.duration}
             </span>
             <span className="flex items-center ">
-              <RiGroupLine size={23} /> &nbsp; {packages?.maxGroupSize}&nbsp;
-              persons
+              <RiGroupLine size={23} /> &nbsp; {Package?.maxGroupSize}
+              &nbsp; persons
             </span>
             <span className="flex items-center ">
               <PiMountainsFill size={23} /> &nbsp; difficulty level &nbsp;
-              <strong>{packages?.difficulty}</strong>
+              <strong>{Package?.difficulty}</strong>
             </span>
           </div>
           <div className="mt-4 flex gap-10 items-center capitalize">
@@ -107,7 +112,7 @@ const PackageDetail = () => {
           </div>
           <div
             dangerouslySetInnerHTML={{
-              __html: DOMPurify.sanitize(packages?.description),
+              __html: DOMPurify.sanitize(Package?.description),
             }}
             className="capitalize mt-4 "
           ></div>
@@ -115,7 +120,7 @@ const PackageDetail = () => {
 
         <div className="p-2 w-full border border-gray-300 my-4 text-sm">
           <h4 className="text-2xl mb-4">
-            Reviews ({packages?.reviews.length} reviews)
+            Reviews ({Package?.reviews.length} reviews)
           </h4>
           <form onSubmit={submitReview}>
             <div className="flex item-center gap-2 mb-4">
@@ -168,18 +173,15 @@ const PackageDetail = () => {
             </div>
           </form>
           <div className="mt-10  mx-4 pt-4 px-3">
-            {packages?.reviews.length === 0 ? (
+            {Package?.reviews.length === 0 ? (
               <div className="flex justify-start items-center capitalize">
                 <div className="text-lg text-red-500 mx-4">
                   Reviews Not available
                 </div>
               </div>
             ) : (
-              packages?.reviews.map((review, index) => (
-                <div
-                  key={index}
-                  className="flex items-center gap-x-4 mb-4"
-                >
+              Package?.reviews.map((review, index) => (
+                <div key={index} className="flex items-center gap-x-4 mb-4">
                   <img
                     src={avatar}
                     className="w-14 h-14 rounded-full object-cover"
@@ -209,10 +211,7 @@ const PackageDetail = () => {
         </div>
       </div>
       <div className="p-4 col-span-2 rounded-lg border border-solid border-gray-300  ">
-        <BookPackage
-          price={packages?.price}
-          rating={packages?.ratingsAverage}
-        />
+        <BookPackage price={Package?.price} rating={Package?.ratingsAverage} />
       </div>
     </div>
   );

@@ -28,6 +28,7 @@ import Flight from "./pages/flight/Flight";
 import ErrorPage from "./ErrorPage";
 import Hotel from "./pages/hotel/Hotel";
 import HotelList from "./pages/hotel/HotelList";
+import HotelDetail from "./pages/hotel/HotelDetail";
 axios.defaults.withCredentials = true;
 
 function App() {
@@ -84,6 +85,14 @@ function App() {
           element={
             <Layout>
               <HotelList />
+            </Layout>
+          }
+        />
+        <Route
+          path="/hotel-detail/:id"
+          element={
+            <Layout>
+              <HotelDetail />
             </Layout>
           }
         />

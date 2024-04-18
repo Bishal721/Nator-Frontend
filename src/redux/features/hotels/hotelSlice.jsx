@@ -32,9 +32,9 @@ export const createHotel = createAsyncThunk(
 // get all Hotels
 export const getAllHotels = createAsyncThunk(
   "hotels/getAll",
-  async (_, thunkAPI) => {
+  async (formData, thunkAPI) => {
     try {
-      return await hotelService.getAllHotels();
+      return await hotelService.getAllHotels(formData);
     } catch (error) {
       const message =
         (error.response && error.response.data && error.response.message) ||
@@ -83,6 +83,22 @@ export const deleteHotel = createAsyncThunk(
   async (id, thunkAPI) => {
     try {
       return await hotelService.deleteHotel(id);
+    } catch (error) {
+      const message =
+        (error.response && error.response.data && error.response.message) ||
+        error.message ||
+        error.toString();
+      console.log(error);
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
+
+export const getHotelRooms = createAsyncThunk(
+  "hotels/getRoom",
+  async (id, thunkAPI) => {
+    try {
+      return await hotelService.getHotelRooms(id);
     } catch (error) {
       const message =
         (error.response && error.response.data && error.response.message) ||
@@ -175,6 +191,21 @@ const hotelSlice = createSlice({
         toast.success("Hotel Deleted Successfully");
       })
       .addCase(deleteHotel.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.message = action.payload;
+        toast.error(action.payload);
+      }) // Get  Hotel Rooms
+      .addCase(getHotelRooms.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(getHotelRooms.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isSuccess = true;
+        state.isError = false;
+        state.hotels = action.payload;
+      })
+      .addCase(getHotelRooms.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
         state.message = action.payload;
