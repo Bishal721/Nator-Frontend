@@ -5,6 +5,7 @@ import { toast } from "react-toastify";
 const initialState = {
   Hotel: null,
   hotels: [],
+  hotelrooms: [],
   isError: false,
   isSuccess: false,
   isLoading: false,
@@ -15,8 +16,12 @@ const initialState = {
 export const createHotel = createAsyncThunk(
   "hotels/create",
   async (formData, thunkAPI) => {
-    console.log(formData);
     try {
+      // // Convert FormData to a plain object
+      // const convertedFormData = Object.fromEntries(formData);
+
+      // console.log(convertedFormData);
+      console.log(formData);
       return await hotelService.createHotel(formData);
     } catch (error) {
       const message =
@@ -66,6 +71,8 @@ export const updateHotel = createAsyncThunk(
   "hotels/update",
   async ({ id, formData }, thunkAPI) => {
     try {
+      console.log(id);
+      console.log(formData);
       return await hotelService.updateHotel(id, formData);
     } catch (error) {
       const message =
@@ -203,7 +210,7 @@ const hotelSlice = createSlice({
         state.isLoading = false;
         state.isSuccess = true;
         state.isError = false;
-        state.hotels = action.payload;
+        state.hotelrooms = action.payload;
       })
       .addCase(getHotelRooms.rejected, (state, action) => {
         state.isLoading = false;

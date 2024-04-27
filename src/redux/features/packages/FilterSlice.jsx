@@ -2,6 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   filteredPackages: [],
+  filteredHotels: [],
 };
 
 const FilterSlice = createSlice({
@@ -17,11 +18,21 @@ const FilterSlice = createSlice({
       );
       state.filteredPackages = tempPackages;
     },
+    FILTER_HOTELS(state, action) {
+      const { hotels, search } = action.payload;
+      const tempHotels = hotels.filter(
+        (hotel) =>
+          hotel.name.toLowerCase().includes(search.toLowerCase()) ||
+          hotel.city.toLowerCase().includes(search.toLowerCase())
+      );
+      state.filteredHotels = tempHotels;
+    },
   },
 });
 
-export const { FILTER_PACKAGES } = FilterSlice.actions;
+export const { FILTER_PACKAGES, FILTER_HOTELS } = FilterSlice.actions;
 
 export const selectFilteredPackage = (state) => state.filter.filteredPackages;
+export const selectFilteredHotels = (state) => state.filter.filteredHotels;
 
 export default FilterSlice.reducer;

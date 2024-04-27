@@ -43,6 +43,73 @@ export const updateRoomAvailability = createAsyncThunk(
     }
   }
 );
+
+export const updateRoom = createAsyncThunk(
+  "rooms/update",
+  async ({ id, formData }, thunkAPI) => {
+    try {
+      const data = await roomService.updateRoom(id, formData);
+      console.log("data", data);
+      return data;
+    } catch (error) {
+      const message =
+        (error.response && error.response.data && error.response.message) ||
+        error.message ||
+        error.toString();
+      console.log(error);
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
+
+export const deleteRoom = createAsyncThunk(
+  "rooms/delete",
+  async ({ id, HotelId }, thunkAPI) => {
+    try {
+      const data = await roomService.deleteRoom(id, HotelId);
+      return data;
+    } catch (error) {
+      const message =
+        (error.response && error.response.data && error.response.message) ||
+        error.message ||
+        error.toString();
+      console.log(error);
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
+
+export const getRoom = createAsyncThunk(
+  "rooms/getRoom",
+  async (id, thunkAPI) => {
+    try {
+      return await roomService.getRoom(id);
+    } catch (error) {
+      const message =
+        (error.response && error.response.data && error.response.message) ||
+        error.message ||
+        error.toString();
+      console.log(error);
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
+
+export const getAllRooms = createAsyncThunk(
+  "rooms/getAll",
+  async (_, thunkAPI) => {
+    try {
+      return await roomService.getAllRooms();
+    } catch (error) {
+      const message =
+        (error.response && error.response.data && error.response.message) ||
+        error.message ||
+        error.toString();
+      console.log(error);
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
 const roomSlice = createSlice({
   name: "room",
   initialState,
@@ -77,6 +144,68 @@ const roomSlice = createSlice({
         toast.success("Room Booked Successfully");
       })
       .addCase(updateRoomAvailability.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.message = action.payload;
+        toast.error(action.payload);
+      })
+      //Update Package
+      .addCase(updateRoom.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(updateRoom.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isSuccess = true;
+        state.isError = false;
+        toast.success("Room Updated Successfully");
+      })
+      .addCase(updateRoom.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.message = action.payload;
+        toast.error(action.payload);
+      }) // Delete Room
+      .addCase(deleteRoom.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(deleteRoom.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isSuccess = true;
+        state.isError = false;
+        state.rooms = state.rooms.filter((Room) => Room._id !== action.payload);
+        toast.success("Room Deleted Successfully");
+      })
+      .addCase(deleteRoom.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.message = action.payload;
+        toast.error(action.payload);
+      }) //get Room
+      .addCase(getRoom.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(getRoom.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isSuccess = true;
+        state.isError = false;
+        state.Room = action.payload;
+      })
+      .addCase(getRoom.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.message = action.payload;
+        toast.error(action.payload);
+      }) // get all Rooms
+      .addCase(getAllRooms.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(getAllRooms.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isSuccess = true;
+        state.isError = false;
+        state.rooms = action.payload;
+      })
+      .addCase(getAllRooms.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
         state.message = action.payload;

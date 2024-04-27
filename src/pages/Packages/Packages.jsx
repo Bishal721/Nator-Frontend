@@ -14,7 +14,13 @@ const Packages = () => {
   );
 
   // console.log(packages);
-
+  const shortenText = (text, n) => {
+    if (text.length > n) {
+      const shortenedText = text.substring(0, n).concat("...");
+      return shortenedText;
+    }
+    return text;
+  };
   useEffect(() => {
     dispatch(getPackages());
     // console.log(nm);
@@ -39,25 +45,27 @@ const Packages = () => {
                 <Card key={index}>
                   <div className="relative flex flex-col bg-white bg-clip-border text-gray-700 shadow-md">
                     <div className="relative  h-72  overflow-hidden  bg-white bg-clip-border text-gray-700">
-                      {pack.image ? (
-                        <img
-                          src={pack.image.filePath}
-                          alt={pack.image.fileName}
-                          className="h-full w-full object-cover"
-                        />
-                      ) : (
-                        <img
-                          src=""
-                          alt="Image Not found "
-                          className="h-full w-full object-cover"
-                        />
-                      )}
+                      <div className="h-full w-full">
+                        {pack.image ? (
+                          <img
+                            src={pack.image.filePath}
+                            alt={pack.image.fileName}
+                            className="h-full w-full object-cover"
+                          />
+                        ) : (
+                          <img
+                            src=""
+                            alt="Image Not found "
+                            className="h-full w-full object-cover"
+                          />
+                        )}
+                      </div>
                     </div>
                     <div className="px-4 pt-2">
                       <div className="mb-2">
                         <Link to={`/package-details/${_id}`}>
                           <p className="block font-sans text-xl font-medium leading-relaxed text-orange-400 capitalize  antialiased">
-                            {name}
+                            {shortenText(name, 22)}
                           </p>
                         </Link>
                       </div>

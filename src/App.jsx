@@ -20,7 +20,6 @@ import {
 } from "./redux/features/auth/authSlice";
 import Packages from "./pages/Packages/Packages";
 import PackageDetail from "./pages/Packages/PackageDetail";
-import AdminLayout from "./admin/components/AdminLayout";
 import AddPackage from "./admin/pages/packages/addPackage/AddPackage";
 import UpdatePackage from "./admin/pages/packages/updatepackage/UpdatePackage";
 import HomeLayout from "./components/layout/HomeLayout";
@@ -29,6 +28,9 @@ import ErrorPage from "./ErrorPage";
 import Hotel from "./pages/hotel/Hotel";
 import HotelList from "./pages/hotel/HotelList";
 import HotelDetail from "./pages/hotel/HotelDetail";
+import AdminLayout from "./admin/components/layout/AdminLayout";
+import AddHotel from "./admin/pages/hotel/AddHotel";
+import UpdateHotel from "./admin/pages/hotel/UpdateHotel";
 axios.defaults.withCredentials = true;
 
 function App() {
@@ -133,10 +135,11 @@ function App() {
 
         <Route path="/admin" element={<AdminLayout />}>
           <Route path="dashboard" element={<Dashboard />} />
-          {/* <Route path="packages" element={<UpdatePackage />} /> */}
           <Route path="add-package" element={<AddPackage />} />
 
           <Route path="edit-packages/:id" element={<UpdatePackage />} />
+          <Route path="add-hotels" element={<AddHotel />} />
+          <Route path="edit-hotels/:id" element={<UpdateHotel />} />
         </Route>
 
         <Route path="/*" element={<ErrorPage />} />

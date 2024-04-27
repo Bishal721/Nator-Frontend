@@ -9,6 +9,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { getAllHotels } from "../../redux/features/hotels/hotelSlice";
 import { FaPerson } from "react-icons/fa6";
 import { NewSearch } from "../../redux/features/hotels/SearchSlice";
+import DOMPurify from "dompurify";
+
 const Hotel = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -21,6 +23,13 @@ const Hotel = () => {
     city: "",
     min: "",
     max: "",
+  };
+  const shortenText = (text, n) => {
+    if (text.length > n) {
+      const shortenedText = text.substring(0, n).concat("...");
+      return shortenedText;
+    }
+    return text;
   };
 
   useEffect(() => {
@@ -256,7 +265,7 @@ const Hotel = () => {
             </div>
           </div>
           <div className="col-span-6 my-8 mx-4 p-4">
-            <div className="flex justify-between items-center">
+            <div className="flex justify-between items-center flex-col">
               <h2 className="text-5xl font-bold mb-8 ">
                 Experience the Life of Mykonos City
               </h2>
@@ -301,14 +310,23 @@ const Hotel = () => {
                   >
                     <div className="w-full object-cover overflow-hidden h-64">
                       <img
-                        src={item.photos[0] || hotelA}
+                        src={item?.photos?.filePath || hotelA}
                         alt="Hotel"
-                        className="w-full object-cover overflow-hidden"
+                        className="w-full h-full object-cover overflow-hidden"
                       />
                     </div>
                     <div>
-                      <h3 className="text-2xl font-semibold">{item?.title}</h3>
-                      <p className="mt-4 truncate">{item?.desc}</p>
+                      <h3 className="text-lg ">
+                        {shortenText(item?.name, 22)}
+                      </h3>
+                      <p
+                        dangerouslySetInnerHTML={{
+                          __html: DOMPurify.sanitize(
+                            shortenText(item.desc, 20)
+                          ),
+                        }}
+                        className="mt-4 "
+                      ></p>
                     </div>
 
                     <div className="w-1/2 my-4 text-white font-semibold ">
@@ -323,18 +341,27 @@ const Hotel = () => {
               : hotels.map((item) => (
                   <div
                     key={item._id}
-                    className="col-span-3 w-[95%] h-[26rem] border border-gray-400 p-4"
+                    className="col-span-3 w-full h-[30rem] border border-gray-400 p-4"
                   >
-                    <div className="w-full object-cover overflow-hidden h-64">
+                    <div className="w-full object-fill overflow-hidden h-64">
                       <img
-                        src={item?.photos || hotelA}
+                        src={item?.photos?.filePath || hotelA}
                         alt="Hotel"
-                        className="w-full object-cover overflow-hidden"
+                        className="w-full h-full object-fill overflow-hidden"
                       />
                     </div>
                     <div>
-                      <h3 className="text-2xl font-semibold">{item?.title}</h3>
-                      <p className="mt-4 truncate">{item?.desc}</p>
+                      <h3 className="text-xl font-medium my-4">
+                        {shortenText(item?.name, 22)}
+                      </h3>
+                      <p
+                        dangerouslySetInnerHTML={{
+                          __html: DOMPurify.sanitize(
+                            shortenText(item.desc, 50)
+                          ),
+                        }}
+                        className="mt-4"
+                      ></p>
                     </div>
 
                     <div className=" w-1/2 my-4 text-white font-semibold">

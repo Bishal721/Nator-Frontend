@@ -1,8 +1,8 @@
 import React from "react";
 import { Outlet } from "react-router-dom";
-import Sidebar from "./Sidebar";
-import Header from "./Header";
-import isAdminRedirect from "../../customHooks/isAdminRedirect";
+import Sidebar from "../Sidebar";
+import Header from "../Header";
+import isAdminRedirect from "../../../customHooks/isAdminRedirect";
 
 export default function AdminLayout() {
   isAdminRedirect();

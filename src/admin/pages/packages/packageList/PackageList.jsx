@@ -146,7 +146,7 @@ const PackageList = ({ packages, isLoading }) => {
                         {location}
                       </td>
                       <td>
-                        {"Rs. "}
+                        {"$ "}
                         {price}
                       </td>
                       <td>{duration}</td>

@@ -8,6 +8,7 @@ import {
   HiOutlineQuestionMarkCircle,
   HiOutlineCog,
   HiOutlineShoppingCart,
+  HiOutlineUsers,
 } from "react-icons/hi";
 
 export const DASHBOARD_SIDEBAR_LINKS = [
@@ -23,12 +24,12 @@ export const DASHBOARD_SIDEBAR_LINKS = [
     path: "add-package",
     icon: <HiOutlineShoppingCart />,
   },
-  // {
-  //   key: "customers",
-  //   label: "Customers",
-  //   path: "customers",
-  //   icon: <HiOutlineUsers />,
-  // },
+  {
+    key: "AddHotels",
+    label: "Add Hotels",
+    path: "add-hotels",
+    icon: <HiOutlineUsers />,
+  },
   // {
   //   key: "transactions",
   //   label: "Transactions",

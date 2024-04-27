@@ -1,6 +1,7 @@
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import Card from "../../../components/card/Card";
+import Datepicker from "react-tailwindcss-datepicker";
 // import { useState } from "react";
 const ProductForm = ({
   packages,
@@ -13,6 +14,8 @@ const ProductForm = ({
   select,
   HandleDropDown,
   saveProduct,
+  handleValueChange,
+  dates,
 }) => {
   return (
     <div className="overflow-x-auto">
@@ -138,6 +141,7 @@ const ProductForm = ({
                     onChange={HandleInputChange}
                   />
                 </div>
+
                 <div className="col-span-2 text-black">
                   <label className="block">Package Description :</label>
                   <ReactQuill
@@ -146,6 +150,25 @@ const ProductForm = ({
                     onChange={setDescription}
                     modules={ProductForm.modules}
                     formats={ProductForm.formats}
+                  />
+                </div>
+                <div className="col-span-2 text-black">
+                  <label className="block">Package Description :</label>
+                  <Datepicker
+                    value={dates}
+                    onChange={handleValueChange}
+                    primaryColor={"orange"}
+                    useRange={false}
+                    placeholder={"Start Date to End Date"}
+                    separator={"to"}
+                    inputClassName="w-full h-full px-3 border border-gray-400  rounded text-gray-500  bg-white  caret-orange-400 focus:border-orange-400  "
+                    containerClassName="relative h-9 w-full mb-3 "
+                    toggleClassName="absolute rounded-r-lg text-orange-400 right-0 px-3 focus:outline-none h-full "
+                    startFrom={new Date()}
+                    displayFormat={"DD/MM/YYYY"}
+                    popoverDirection="up"
+                    minDate={new Date()}
+                    // showFooter={true}
                   />
                 </div>
               </div>

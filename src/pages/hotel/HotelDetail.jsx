@@ -82,10 +82,10 @@ const HotelDetail = () => {
       {isLoading && <Loader />}
       <div className="col-span-4  p-4">
         <div className=" w-full h-[30rem] overflow-hidden object-cover rounded">
-          {Hotel?.photo ? (
+          {Hotel?.photos ? (
             <img
-              src={Hotel.image.filePath}
-              alt={Hotel.image.fileName}
+              src={Hotel?.photos.filePath}
+              alt={Hotel?.photos.fileName}
               className="w-full"
             />
           ) : (
@@ -112,7 +112,6 @@ const HotelDetail = () => {
             <span className="flex items-center ">
               Excellent location – {Hotel?.distance}m from center
             </span>
-            <span className="flex items-center ">{Hotel?.title}</span>
           </div>
           <div className="mt-4 flex gap-10 items-center capitalize">
             <h2 className="text-xl">Description</h2>
@@ -128,10 +127,6 @@ const HotelDetail = () => {
       <div className="p-4 col-span-2 rounded-lg border border-solid border-gray-300  ">
         {/* <BookHotel price={Hotel?.cheapestPrice} rating={Hotel?.rating} /> */}
         <div className="flex justify-between gap-[20px] mt-[20px]">
-          {/* <div className="flex-[3]">
-            <h1 className="hotelTitle">{Hotel?.title}</h1>
-            <p className="text-[14px] mt-[20px]">{Hotel?.desc}</p>
-          </div> */}
           <div className="flex-[1] bg-[#ebf3ff] p-[20px] flex flex-col gap-[20px]">
             <h1 className="text-[18px] text-[#555]">
               Perfect for a {days}-night stay!

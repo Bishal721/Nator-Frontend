@@ -26,8 +26,16 @@ const AddPackage = () => {
   const [imagePreview, setImagePreview] = useState(null);
   const [description, setDescription] = useState("");
   const isLoading = useSelector(selectIsLoading);
-  const { name, duration, price, location, maxGroupSize } =
-    packages;
+  const { name, duration, price, location, maxGroupSize } = packages;
+  const [dates, setDates] = useState({
+    startDate: null,
+    endDate: null,
+  });
+
+  const handleValueChange = (newValue) => {
+    console.log("newValue:", newValue);
+    setDates(newValue);
+  };
 
   const HandleInputChange = (e) => {
     const { name, value } = e.target;
@@ -41,23 +49,17 @@ const AddPackage = () => {
     setImagePreview(URL.createObjectURL(e.target.files[0]));
   };
 
-  // const generateSKU = (category) => {
-  //   const letter = category.slice(0, 3).toUpperCase();
-  //   const number = Date.now();
-  //   const Sku = letter + "-" + number;
-  //   return Sku;
-  // };
-
   const saveProduct = async (e) => {
     e.preventDefault();
-
     if (
       !name ||
       !duration ||
       !price ||
       !location ||
       !maxGroupSize ||
-      !description
+      !description ||
+      dates.startDate === null ||
+      dates.endDate === null
     ) {
       return toast.info("Please Fill all required Fields");
     }
@@ -74,20 +76,21 @@ const AddPackage = () => {
     formData.append("price", price);
     formData.append("maxGroupSize", maxGroupSize);
     formData.append("description", description);
+    formData.append("startDate", dates.startDate);
+    formData.append("endDate", dates.endDate);
     if (productImage) {
       formData.append("image", productImage);
     }
-    // formData.append("image", productImage);
-   
+
     console.log(...formData);
 
-    // console.log(formData);
     const data = await dispatch(createPackage(formData));
     if (data.meta.requestStatus === "fulfilled") {
       navigate("/admin/dashboard");
     }
   };
 
+  
   return (
     <div>
       {isLoading && <Loader />}
@@ -101,6 +104,8 @@ const AddPackage = () => {
         HandleInputChange={HandleInputChange}
         HandleImageChange={HandleImageChange}
         select={select}
+        dates={dates}
+        handleValueChange={handleValueChange}
         HandleDropDown={HandleDropDown}
         saveProduct={saveProduct}
       />

@@ -5,7 +5,6 @@ const API_URL = `${BACKEND_URL}/api/v1/package/`;
 
 const createPackage = async (formData) => {
   // console.log(API_URL + "createPackage");
-  console.log(formData);
   const response = await axios.post(API_URL, formData);
   return response.data;
 };

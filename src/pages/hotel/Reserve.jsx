@@ -8,7 +8,7 @@ import { useNavigate } from "react-router-dom";
 const Reserve = ({ setOpen, hotelId, dates }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { hotels, isLoading, isError, message } = useSelector(
+  const { hotelrooms, isLoading, isError, message } = useSelector(
     (state) => state.hotel
   );
 
@@ -71,6 +71,7 @@ const Reserve = ({ setOpen, hotelId, dates }) => {
       console.log(err);
     }
   };
+  console.log(hotelrooms);
   return (
     <>
       {isLoading && <Loader />}
@@ -82,13 +83,13 @@ const Reserve = ({ setOpen, hotelId, dates }) => {
           />
 
           <span>Select your rooms:</span>
-          {hotels.map((item) => (
+          {hotelrooms.map((item) => (
             <div
               className="flex items-center gap-[50px] p-[20px]"
               key={item._id}
             >
               <div className="rItemInfo">
-                <div className="font-medium">{item.title}</div>
+                {/* <div className="font-medium">{item.title}</div> */}
                 <div className="font-light">{item.desc}</div>
                 <div className="text-[12px]">
                   Max people: <b>{item.maxPeople}</b>

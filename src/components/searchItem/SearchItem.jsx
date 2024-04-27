@@ -1,12 +1,21 @@
 import { Link, useLocation } from "react-router-dom";
+import DOMPurify from "dompurify";
 
 const SearchItem = ({ item }) => {
+  const shortenText = (text, n) => {
+    if (text.length > n) {
+      const shortenedText = text.substring(0, n).concat("...");
+      return shortenedText;
+    }
+    return text;
+  };
   const location = useLocation();
+  console.log(item);
   return (
     <div className="border-[1px] border-[solid] border-[lightgray] p-[10px] rounded-[5px] flex justify-between gap-[20px] mb-[20px]">
       <img
-        src={item.photos[0]}
-        alt=""
+        src={item?.photos?.filePath}
+        alt={item?.photos?.fileName}
         className="w-[200px] h-[200px] object-cover"
       />
       <div className="flex flex-col gap-[10px] flex-[2]">
@@ -20,7 +29,12 @@ const SearchItem = ({ item }) => {
         <span className="text-[12px] font-bold">
           Studio Apartment with Air conditioning
         </span>
-        <span className="text-[12px]">{item.desc}</span>
+        <span
+          dangerouslySetInnerHTML={{
+            __html: DOMPurify.sanitize(shortenText(item.desc, 250)),
+          }}
+          className="text-[12px]  text-clip"
+        ></span>
         <span className="text-[12px] text-[#008009] font-bold">
           Free cancellation
         </span>
