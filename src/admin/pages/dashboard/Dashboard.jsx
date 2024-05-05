@@ -2,7 +2,10 @@ import React, { useEffect } from "react";
 import PackageSummary from "../packages/packageSummary/PackageSummary";
 import { useDispatch, useSelector } from "react-redux";
 import PackageList from "../packages/packageList/PackageList";
-import { selectIsLoggedIn } from "../../../redux/features/auth/authSlice";
+import {
+  getAllUsers,
+  selectIsLoggedIn,
+} from "../../../redux/features/auth/authSlice";
 import { getPackages } from "../../../redux/features/packages/packageSlice";
 import HotelList from "../../components/hotelform/HotelList";
 import { getAllHotels } from "../../../redux/features/hotels/hotelSlice";
@@ -23,6 +26,7 @@ const Dashboard = () => {
     if (isLoggedIn === true) {
       dispatch(getPackages());
       dispatch(getAllHotels(initialState));
+      dispatch(getAllUsers());
     }
     if (isError) {
       console.log(message);

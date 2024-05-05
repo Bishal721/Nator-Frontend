@@ -135,6 +135,7 @@ export const createBooking = createAsyncThunk(
         (error.response && error.response.data && error.response.message) ||
         error.message ||
         error.toString();
+      toast.error(error.response.data.message);
       console.log(error);
       return thunkAPI.rejectWithValue(message);
     }
@@ -273,7 +274,6 @@ const packageSlice = createSlice({
         state.isLoading = false;
         state.isError = true;
         state.message = action.payload;
-        toast.error(action.payload);
       });
   },
 });

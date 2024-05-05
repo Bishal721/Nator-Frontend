@@ -25,16 +25,13 @@ const PackageDetail = () => {
   const { Package, isLoading, isError, message } = useSelector(
     (state) => state.package
   );
-  // const packageEdit = useSelector(selectPackage);
   const isloggedin = useSelector(selectIsLoggedIn);
 
-  // const [selectPackage, setPackages] = useState(packageEdit);
   const reviewMsgRef = useRef("");
   const [tourRating, setTourRating] = useState(null);
 
   useEffect(() => {
     dispatch(getPackage(id));
-    // setPackages(packageEdit);
 
     if (isError) {
       console.log(message);
@@ -86,13 +83,27 @@ const PackageDetail = () => {
             <span className="flex items-center ">
               <IoLocationOutline size={23} /> &nbsp; {Package?.location}
             </span>
+            <span className="flex items-center ">
+              Starting From: &nbsp;{" "}
+              {new Date(Package?.startDate).toLocaleDateString(
+                "en-Us",
+                options
+              )}
+            </span>
             <span className=" flex items-center ">
-              <IoMdStarOutline size={23} /> &nbsp;{Package?.review || 2}
+              Ends on: &nbsp;
+              {new Date(Package?.endDate).toLocaleDateString("en-Us", options)}
+            </span>
+            <span className="flex items-center ">
+              <RiGroupLine size={23} /> &nbsp; {Package?.occupiedSpace}
+              &nbsp; Occupied {Package?.maxGroupSize -
+                Package?.occupiedSpace}{" "}
+              space left
             </span>
           </div>
           <div className="mt-4 flex gap-10 items-center capitalize">
             <span className="flex items-center ">
-              <AiFillDollarCircle size={23} /> &nbsp; {Package?.price}
+              <AiFillDollarCircle size={23} /> &nbsp; Rs {Package?.price}
               &nbsp;/per person
             </span>
             <span className="flex items-center ">
@@ -100,7 +111,7 @@ const PackageDetail = () => {
             </span>
             <span className="flex items-center ">
               <RiGroupLine size={23} /> &nbsp; {Package?.maxGroupSize}
-              &nbsp; persons
+              &nbsp; travellers
             </span>
             <span className="flex items-center ">
               <PiMountainsFill size={23} /> &nbsp; difficulty level &nbsp;
@@ -114,7 +125,7 @@ const PackageDetail = () => {
             dangerouslySetInnerHTML={{
               __html: DOMPurify.sanitize(Package?.description),
             }}
-            className="capitalize mt-4 "
+            className=" mt-4 "
           ></div>
         </div>
 
@@ -190,19 +201,20 @@ const PackageDetail = () => {
                   <div className="w-full  p-2">
                     <div className="flex items-center justify-between">
                       <div>
-                        <h5 className="text-lg mb-0 ">John</h5>
+                        <h5 className="text-lg mb-0 ">{review?.username}</h5>
                         <p className="text-sm text-gray-500">
-                          {new Date("01-03-2024").toLocaleDateString(
+                          {new Date(review?.createdAt).toLocaleDateString(
                             "en-US",
                             options
                           )}
                         </p>
                       </div>
                       <span className="flex items-center font-medium ">
-                        5 <RiStarSFill className="text-xl text-orange-400" />
+                        {review?.rating}{" "}
+                        <RiStarSFill className="text-xl text-orange-400" />
                       </span>
                     </div>
-                    <h6 className="text-xl text-gray-600">Amazing tour</h6>
+                    <h6 className="text-xl text-gray-600">{review?.review}</h6>
                   </div>
                 </div>
               ))
@@ -211,7 +223,12 @@ const PackageDetail = () => {
         </div>
       </div>
       <div className="p-4 col-span-2 rounded-lg border border-solid border-gray-300  ">
-        <BookPackage price={Package?.price} rating={Package?.ratingsAverage} />
+        <BookPackage
+          price={Package?.price}
+          rating={Package?.ratingsAverage}
+          maxGroupSize={Package?.maxGroupSize}
+          occupiedSpace={Package?.occupiedSpace}
+        />
       </div>
     </div>
   );

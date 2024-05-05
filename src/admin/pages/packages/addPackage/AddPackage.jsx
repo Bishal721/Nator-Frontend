@@ -16,6 +16,18 @@ const initialState = {
   price: "",
   difficulty: "",
 };
+export const calculateDays = ({ startDate, endDate }) => {
+  // Convert start and end dates to JavaScript Date objects
+  const start = new Date(startDate);
+  const end = new Date(endDate);
+
+  // Calculate the total duration in milliseconds between the start and end dates
+  const totalDurationMillis = end.getTime() - start.getTime();
+  const DAY_DURATION_MILLIS = 24 * 60 * 60 * 1000;
+  const days = Math.ceil(totalDurationMillis / DAY_DURATION_MILLIS);
+
+  return days;
+};
 
 const AddPackage = () => {
   const dispatch = useDispatch();
@@ -33,8 +45,13 @@ const AddPackage = () => {
   });
 
   const handleValueChange = (newValue) => {
-    console.log("newValue:", newValue);
+    // console.log("newValue:", newValue);
     setDates(newValue);
+    const days = calculateDays(newValue);
+    setPackages((prevPackages) => ({
+      ...prevPackages,
+      duration: `${days} days`,
+    }));
   };
 
   const HandleInputChange = (e) => {
@@ -90,7 +107,6 @@ const AddPackage = () => {
     }
   };
 
-  
   return (
     <div>
       {isLoading && <Loader />}

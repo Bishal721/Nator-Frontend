@@ -79,8 +79,10 @@ const ProductForm = ({
                     className="w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-orange-500"
                     placeholder="Package duration"
                     name="duration"
-                    value={packages?.duration}
+                    value={`${packages?.duration}`}
                     onChange={HandleInputChange}
+                    disabled={true}
+                    readOnly={true}
                   />
                 </div>
                 <div>
@@ -153,7 +155,7 @@ const ProductForm = ({
                   />
                 </div>
                 <div className="col-span-2 text-black">
-                  <label className="block">Package Description :</label>
+                  <label className="block">Package Start and End dates :</label>
                   <Datepicker
                     value={dates}
                     onChange={handleValueChange}
@@ -168,7 +170,7 @@ const ProductForm = ({
                     displayFormat={"DD/MM/YYYY"}
                     popoverDirection="up"
                     minDate={new Date()}
-                    // showFooter={true}
+                    showFooter={true}
                   />
                 </div>
               </div>

@@ -11,6 +11,8 @@ import ReactQuill from "react-quill";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
+import { calculateDays } from "../addPackage/AddPackage";
+import Datepicker from "react-tailwindcss-datepicker";
 
 const UpdatePackage = () => {
   const dispatch = useDispatch();
@@ -29,6 +31,21 @@ const UpdatePackage = () => {
   const [imagePreview, setImagePreview] = useState(null);
   const [description, setDescription] = useState("");
   const isLoading = useSelector(selectIsLoading);
+
+  const [dates, setDates] = useState({
+    startDate: null,
+    endDate: null,
+  });
+
+  const handleValueChange = (newValue) => {
+    // console.log("newValue:", newValue);
+    setDates(newValue);
+    const days = calculateDays(newValue);
+    setPackages((prevPackages) => ({
+      ...prevPackages,
+      duration: `${days} days`,
+    }));
+  };
 
   const HandleInputChange = (e) => {
     const { name, value } = e.target;
@@ -53,8 +70,13 @@ const UpdatePackage = () => {
     setSelect(
       packageEdit && packageEdit.difficulty ? packageEdit.difficulty : ""
     );
+    setDates({
+      startDate: new Date(
+        packageEdit?.startDate ? packageEdit.startDate : null
+      ),
+      endDate: new Date(packageEdit?.endDate ? packageEdit.endDate : null),
+    });
   }, [packageEdit]);
-  // const { name, duration, price, location, maxGroupSize } = packages;
 
   const saveProduct = async (e) => {
     e.preventDefault();
@@ -64,7 +86,9 @@ const UpdatePackage = () => {
       !packages?.price ||
       !packages?.location ||
       !packages?.maxGroupSize ||
-      !description
+      !description ||
+      dates.startDate === null ||
+      dates.endDate === null
     ) {
       return toast.info("Please Fill all required Fields");
     }
@@ -80,23 +104,12 @@ const UpdatePackage = () => {
     formData.append("location", packages?.location);
     formData.append("maxGroupSize", packages?.maxGroupSize);
     formData.append("description", description);
+    formData.append("startDate", dates.startDate);
+    formData.append("endDate", dates.endDate);
     if (productImage) {
       formData.append("image", productImage);
     }
     console.log(...formData);
-    // const formData = {
-    //   name: packages?.name,
-    //   duration: packages?.duration,
-    //   difficulty: select,
-    //   price: packages?.price,
-    //   location: packages?.location,
-    //   maxGroupSize: packages?.maxGroupSize,
-    //   description,
-    // };
-
-    // if (productImage) {
-    //   formData.image = productImage;
-    // }
 
     const data = await dispatch(updatePackage({ id, formData }));
     console.log(data.meta.requestStatus);
@@ -238,6 +251,25 @@ const UpdatePackage = () => {
                     onChange={setDescription}
                     modules={UpdatePackage.modules}
                     formats={UpdatePackage.formats}
+                  />
+                </div>
+                <div className="col-span-2 text-black">
+                  <label className="block">Package Start and End dates :</label>
+                  <Datepicker
+                    value={dates}
+                    onChange={handleValueChange}
+                    primaryColor={"orange"}
+                    useRange={false}
+                    placeholder={"Start Date to End Date"}
+                    separator={"to"}
+                    inputClassName="w-full h-full px-3 border border-gray-400  rounded text-gray-500  bg-white  caret-orange-400 focus:border-orange-400  "
+                    containerClassName="relative h-9 w-full mb-3 "
+                    toggleClassName="absolute rounded-r-lg text-orange-400 right-0 px-3 focus:outline-none h-full "
+                    startFrom={new Date()}
+                    displayFormat={"DD/MM/YYYY"}
+                    popoverDirection="up"
+                    minDate={new Date()}
+                    showFooter={true}
                   />
                 </div>
               </div>

@@ -13,6 +13,13 @@ const Home = () => {
   const { packages, isLoading, isError, message } = useSelector(
     (state) => state.package
   );
+  const shortenText = (text, n) => {
+    if (text.length > n) {
+      const shortenedText = text.substring(0, n).concat("...");
+      return shortenedText;
+    }
+    return text;
+  };
   const styles = {
     backgroundImage: `url(${heroImg})`,
     backgroundSize: "cover",
@@ -29,10 +36,10 @@ const Home = () => {
   const packagess = packages.map((item) => (
     <div
       key={item._id}
-      className="border border-gray-400 h-[25rem] rounded-lg mx-4"
+      className="border border-gray-400 h-[31rem] rounded-lg mx-4"
     >
       <CarouselItem
-        name={item.name}
+        name={shortenText(item.name,20)}
         url={item.image.filePath}
         price={item.price}
         id={item._id}
@@ -91,8 +98,8 @@ const Home = () => {
           </p>
         </div>
       </div>
-      <div className="m-auto w-full px-8 ">
-        <div className="my-6">
+      <div className="m-auto w-full px-8 mb-8">
+        <div className="my-3">
           <PackageCarousel packages={packagess} />
         </div>
       </div>

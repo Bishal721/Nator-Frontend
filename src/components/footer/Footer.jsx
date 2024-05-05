@@ -1,5 +1,4 @@
 import { Link } from "react-router-dom";
-// import { FaPhoneAlt } from "react-icons/fa";
 import { FaGithub, FaFacebookSquare } from "react-icons/fa";
 import { FiInstagram } from "react-icons/fi";
 import { FaLinkedin } from "react-icons/fa6";
@@ -28,39 +27,78 @@ const Footer = () => {
   ];
   return (
     <>
-      <footer className="container py-6  border-t border-gray-200 font-light flex flex-col lg:flex-row justify-between items-center">
-        <p className="text-gray-700 mb-6 lg:mb-0">
-          Copyright &copy; Natours {new Date().getFullYear()} All Rights
-          Reserved
-        </p>
-
-        <ul className="list-unstyled flex">
-          <li className="mr-6">
-            <Link
-              to={"/about"}
-              className="text-gray-700 hover:text-gray-900 font-medium block text-sm"
-            >
-              About Us
-            </Link>
-          </li>
-          <li className="mr-6">
-            <Link
-              to={"/contact"}
-              className="text-gray-700 hover:text-gray-900 font-medium block text-sm"
-            >
-              Contact Us
-            </Link>
-          </li>
-          {SocialLink.map((link, index) => (
-            <Link
-              to={link.link}
-              key={index}
-              className="mr-3 flex h-5 w-5 items-center justify-center rounded-full border border-stroke text-dark hover:border-primary hover:bg-primary hover:text-black dark:border-dark-3 dark:text-gray-400  dark:hover:border-primary sm:mr-4 lg:mr-3 xl:mr-4"
-            >
-              {link.icon}
-            </Link>
-          ))}
-        </ul>
+      <footer className="p-4 bg-neutral-200 sm:p-6 ">
+        <div className="mx-auto max-w-screen-xl">
+          <div className="md:flex md:justify-between">
+            <div className="mb-6 md:mb-0">
+              <Link to={"/"} className="flex items-center">
+                <span className="self-center text-3xl font-semibold whitespace-nowrap ">
+                  Natours
+                </span>
+              </Link>
+            </div>
+            <div className="grid grid-cols-2 gap-8 sm:gap-6 sm:grid-cols-3">
+              <div>
+                <h2 className="mb-6 text-sm font-semibold text-gray-900 uppercase ">
+                  Follow us
+                </h2>
+                <ul className="text-gray-600 400">
+                  <li className="mb-4">
+                    <Link className="hover:underline ">Github</Link>
+                  </li>
+                  <li>
+                    <Link className="hover:underline">Discord</Link>
+                  </li>
+                </ul>
+              </div>
+              <div>
+                <h2 className="mb-6 text-sm font-semibold text-gray-900 uppercase ">
+                  Support
+                </h2>
+                <ul className="text-gray-600 400">
+                  <li className="mb-4">
+                    <Link className="hover:underline ">Contact us</Link>
+                  </li>
+                  <li>
+                    <Link className="hover:underline">Help Center</Link>
+                  </li>
+                </ul>
+              </div>
+              <div>
+                <h2 className="mb-6 text-sm font-semibold text-gray-900 uppercase ">
+                  Legal
+                </h2>
+                <ul className="text-gray-600 400">
+                  <li className="mb-4">
+                    <Link className="hover:underline">Privacy Policy</Link>
+                  </li>
+                  <li>
+                    <Link className="hover:underline">
+                      Terms &amp; Conditions
+                    </Link>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+          <hr className="my-6 border-gray-200 sm:mx-auto y-700 lg:my-8" />
+          <div className="sm:flex sm:items-center sm:justify-between">
+            <span className="text-sm text-gray-500 sm:text-center 400">
+              © {new Date().getFullYear()} Natours™ . All Rights Reserved.
+            </span>
+            <div className="flex mt-4 space-x-6 sm:justify-center sm:mt-0">
+              {SocialLink.map((link, index) => (
+                <Link
+                  to={link.link}
+                  key={index}
+                  className="text-gray-500 hover:text-gray-900 -white"
+                >
+                  {link.icon}
+                </Link>
+              ))}
+            </div>
+          </div>
+        </div>
       </footer>
     </>
   );

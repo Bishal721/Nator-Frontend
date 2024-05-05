@@ -90,6 +90,30 @@ const compareOtpResponse = async (userData) => {
   return response.data;
 };
 
+// Get Users
+const getAllUsers = async () => {
+  const response = await axios.get(`${BACKEND_URL}/api/v1/users/getAllUsers`);
+
+  return response.data;
+};
+
+// Upgrade User
+const upgradeUser = async (userData) => {
+  const response = await axios.post(
+    `${BACKEND_URL}/api/v1/users/upgradeUser`,
+    userData
+  );
+
+  return response.data.message;
+};
+
+// Delete User
+const deleteUser = async (id) => {
+  const response = await axios.delete(`${BACKEND_URL}/api/v1/users/${id}`);
+
+  return response.data.message;
+};
+
 const authService = {
   registerUser,
   loginUser,
@@ -103,6 +127,9 @@ const authService = {
   googleLogin,
   getOtp,
   compareOtpResponse,
+  getAllUsers,
+  upgradeUser,
+  deleteUser,
 };
 
 export default authService;

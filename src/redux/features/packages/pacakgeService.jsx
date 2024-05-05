@@ -46,6 +46,7 @@ const createReview = async (formData) => {
 const createBooking = async (formData) => {
   console.log(formData);
   const response = await axios.post(API_URL + "createBooking ", formData);
+  console.log(response);
   return response.data;
 };
 

@@ -1,16 +1,11 @@
+import { FaHotel } from "react-icons/fa";
 import {
   HiOutlineViewGrid,
-  HiOutlineCube,
-  // HiOutlineShoppingCart,
-  // HiOutlineUsers,
-  // HiOutlineDocumentText,
-  // HiOutlineAnnotation,
   HiOutlineQuestionMarkCircle,
   HiOutlineCog,
-  HiOutlineShoppingCart,
   HiOutlineUsers,
 } from "react-icons/hi";
-
+import { TbPackages } from "react-icons/tb";
 export const DASHBOARD_SIDEBAR_LINKS = [
   {
     key: "dashboard",
@@ -19,29 +14,23 @@ export const DASHBOARD_SIDEBAR_LINKS = [
     icon: <HiOutlineViewGrid />,
   },
   {
+    key: "Users",
+    label: "Users",
+    path: "users",
+    icon: <HiOutlineUsers />,
+  },
+  {
     key: "AddPackage",
     label: "Add Package",
     path: "add-package",
-    icon: <HiOutlineShoppingCart />,
+    icon: <TbPackages />,
   },
   {
     key: "AddHotels",
     label: "Add Hotels",
     path: "add-hotels",
-    icon: <HiOutlineUsers />,
+    icon: <FaHotel />,
   },
-  // {
-  //   key: "transactions",
-  //   label: "Transactions",
-  //   path: "transactions",
-  //   icon: <HiOutlineDocumentText />,
-  // },
-  // {
-  //   key: "messages",
-  //   label: "Messages",
-  //   path: "messages",
-  //   icon: <HiOutlineAnnotation />,
-  // },
 ];
 
 export const DASHBOARD_SIDEBAR_BOTTOM_LINKS = [

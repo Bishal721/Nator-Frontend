@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { getPackages } from "../../redux/features/packages/packageSlice";
 import { SpinnerImage } from "../../components/loader/Loader";
 import { IoLocationOutline } from "react-icons/io5";
-import { IoMdStarOutline } from "react-icons/io";
+import { GiDuration } from "react-icons/gi";
 
 const Packages = () => {
   const dispatch = useDispatch();
@@ -78,15 +78,15 @@ const Packages = () => {
                         </p>
                         <p className="flex items-center justify-center leading-relaxed text-gray-900 capitalize  antialiased">
                           <span className="text-orange-400">
-                            <IoMdStarOutline size={23} />
+                            <GiDuration size={23} />
                           </span>
-                          4
+                          {pack.duration} tour
                         </p>
                       </div>
                       <div className="mb-2 flex items-center justify-between">
                         <p className="block font-sans text-base leading-relaxed  antialiased">
                           <span className="text-orange-400 font-semibold">
-                            &#36; {price}
+                            Rs {price}
                           </span>
                           &nbsp;/ Per Person
                         </p>

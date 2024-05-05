@@ -31,6 +31,7 @@ import HotelDetail from "./pages/hotel/HotelDetail";
 import AdminLayout from "./admin/components/layout/AdminLayout";
 import AddHotel from "./admin/pages/hotel/AddHotel";
 import UpdateHotel from "./admin/pages/hotel/UpdateHotel";
+import UserList from "./admin/components/userlist/UserList";
 axios.defaults.withCredentials = true;
 
 function App() {
@@ -140,6 +141,7 @@ function App() {
           <Route path="edit-packages/:id" element={<UpdatePackage />} />
           <Route path="add-hotels" element={<AddHotel />} />
           <Route path="edit-hotels/:id" element={<UpdateHotel />} />
+          <Route path="users" element={<UserList />} />
         </Route>
 
         <Route path="/*" element={<ErrorPage />} />
