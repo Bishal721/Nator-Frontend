@@ -4,12 +4,7 @@ import { FaBars, FaPowerOff, FaCog, FaBook } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
 import useRedirectLoggedOutUser from "../../customHooks/useRedirectLoggedOutUser";
 import { toast } from "react-toastify";
-import {
-  RESET,
-  getUser,
-  logoutUser,
-  updateUser,
-} from "../../redux/features/auth/authSlice";
+import { getUser, updateUser } from "../../redux/features/auth/authSlice";
 import { useDispatch, useSelector } from "react-redux";
 import Loader from "../../components/loader/Loader";
 import Notification from "../../components/notification/Notification";
@@ -33,11 +28,11 @@ const Profile = () => {
     role: user?.role || "",
     isVerified: user?.isVerified || false,
   };
-  const logout = () => {
-    dispatch(logoutUser());
-    dispatch(RESET());
-    navigate("/login");
-  };
+  // const logout = () => {
+  //   dispatch(logoutUser());
+  //   dispatch(RESET());
+  //   navigate("/login");
+  // };
   const [profile, setProfile] = useState(initialState);
   const [profileImage, setProfileImage] = useState("");
 
@@ -121,66 +116,64 @@ const Profile = () => {
       {!isLoading && profile === null ? (
         <p>Semething Went Wrong, Please Reload The Page</p>
       ) : (
-        <div className=" grid md:grid-cols-3 grid-cols-1 gap-7 w-full px-5 py-3 my-7">
-          <div className=" border-2  border-solid rounded-md border-gray-300 p-2">
-            <div className="flex justify-center">
-              <p className="sm:text-3xl text-2xl">Personal Information</p>
-            </div>
+        <div className="flex flex-col ">
+          <div className="bg-zinc-100 mt-1">
+            <div className="relative">
+              <div className="w-full h-72 bg-gray-300 rounded-lg p-2 md:p-0">
+                <img
+                  src={user?.image}
+                  alt="Cover Photo"
+                  className="w-full  h-72 object-cover rounded-lg "
+                />
+              </div>
 
-            <div className="flex justify-center py-4 place-items-center">
-              <span className="rounded overflow-hidden md:w-64  h-auto ">
-                <img src={user?.image} alt="profile Pic" />
-              </span>
-            </div>
-            <div className="flex justify-center mt-4">
-              <p className=" sm:text-2xl text-xl ">{profile?.name}</p>
-            </div>
-            <div className="grid gap-3 mt-20 ml-4 ">
-              <Link className="flex text-xl items-center justify-self-start w-[55%] p-2  ml-3 > space-x-7 hover:text-gray-700 ">
-                <FaBars size={25} />
-                <span> My Tours</span>
-              </Link>
-              <Link className="flex text-xl items-center justify-self-start w-[55%] p-2  ml-3 > space-x-7 hover:text-gray-700 ">
-                <FaBook size={25} />
-                <span> My Bookings</span>
-              </Link>
-              <Link className="flex text-xl items-center justify-self-start w-[55%] p-2  ml-3 > space-x-7 hover:text-gray-700 ">
-                <FaCog size={25} />
-                <span> Settings</span>
-              </Link>
-              <button onClick={logout}>
-                <Link className="flex text-xl items-center justify-self-start w-[55%] p-2  ml-3 > space-x-7 hover:text-gray-700 ">
-                  <FaPowerOff size={25} />
-                  <span> Logout</span>
-                </Link>
-              </button>
+              <div className="absolute top-60 left-0 w-full  md:left-8 lg:left-10 md:w-[95%] ">
+                <div className="flex items-center justify-between flex-col  md:flex-row">
+                  <div className="flex items-center flex-col  md:flex-row md:gap-5 gap-2">
+                    <div className="bg-white p-1 rounded-full w-40 h-40  md:w-44 md:h-44 object-cover">
+                      <img
+                        src={user?.image}
+                        alt="Profile Photo"
+                        className="rounded-full w-40 h-40 md:w-44 md:h-44 object-cover"
+                      />
+                    </div>
+                    <div className="mt-4">
+                      <h2 className="text-xl font-bold">{profile?.name}</h2>
+                    </div>
+                  </div>
+                  <div className="flex mt-4 space-x-4">
+                    <button className="bg-orange-400 text-white px-4 py-2 rounded-md">
+                      Change Password
+                    </button>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
-          <div className="border-2  col-span-2 border-solid  rounded-md border-gray-300">
+
+          <div className="mt-60 mb-8  md:mt-40 border-2  col-span-2 border-solid  rounded-md border-gray-300">
             <div className="p-6">
               <h2 className="md:text-3xl text-md">Edit Profile</h2>
               <form onSubmit={updateProfile}>
-                <div className="grid grid-cols-2 mt-4 ">
-                  <div className="col-span-2 text-sm">
-                    <div className="col-span-2 ">
-                      <div>
-                        <label htmlFor="fname" className="md:text-xl text-md">
-                          Full Name
-                        </label>
-                        <input
-                          type="text"
-                          id="fname"
-                          className="w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-orange-500"
-                          value={profile?.name}
-                          placeholder="John"
-                          name="name"
-                          onChange={HandleInputChange}
-                          required
-                        />
-                      </div>
+                <div className="grid mt-4 ">
+                  <div className=" text-sm">
+                    <div className="">
+                      <label htmlFor="fname" className="md:text-xl text-md">
+                        Full Name
+                      </label>
+                      <input
+                        type="text"
+                        id="fname"
+                        className="w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-orange-500"
+                        value={profile?.name}
+                        placeholder="John"
+                        name="name"
+                        onChange={HandleInputChange}
+                        required
+                      />
                     </div>
-                    <div className="grid grid-cols-2 gap-3 mt-4">
-                      <div >
+                    <div className="grid  md:grid-cols-2 gap-3 mt-4">
+                      <div>
                         <label htmlFor="Email" className="md:text-xl text-md">
                           Email Address
                         </label>
@@ -233,7 +226,7 @@ const Profile = () => {
                       </div>
                     </div>
 
-                    <div className="grid grid-cols-2 gap-3 mt-4">
+                    <div className="grid md:grid-cols-2 gap-3 mt-4">
                       <div>
                         <label htmlFor="City" className="md:text-xl text-md">
                           City
@@ -278,11 +271,11 @@ const Profile = () => {
                       >
                         <input
                           className="block w-full text-sm text-slate-500
-                          file:mr-4 file:py-2 file:px-4
-                          file:rounded-full file:border-0
-                          file:text-sm file:font-semibold
-                          file:bg-violet-200 file:text-violet-700
-                          hover:file:bg-violet-100 "
+                      file:mr-4 file:py-2 file:px-4
+                      file:rounded-full file:border-0
+                      file:text-sm file:font-semibold
+                      file:bg-violet-200 file:text-violet-700
+                      hover:file:bg-violet-100 "
                           id="file_input"
                           type="file"
                           name="image"

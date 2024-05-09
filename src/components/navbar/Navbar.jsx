@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { Link, NavLink } from "react-router-dom";
+import React, { Fragment, useState } from "react";
+import { Link, NavLink, useNavigate } from "react-router-dom";
 import { FaBars } from "react-icons/fa";
 import { RiCloseFill } from "react-icons/ri";
 import {
@@ -7,7 +7,20 @@ import {
   ShowOnLogOut,
   ShowOnLogin,
 } from "../../components/protect/HiddenLinks";
+import {
+  RESET,
+  logoutUser,
+  selectUser,
+} from "../../redux/features/auth/authSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { Menu, Transition } from "@headlessui/react";
+import classNames from "classnames";
+
 const Navbar = () => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const user = useSelector(selectUser);
+  console.log(user);
   const Links = [
     {
       name: "Home",
@@ -18,14 +31,17 @@ const Navbar = () => {
       link: "/packages",
     },
     {
-      name: "Flights",
-      link: "/flights",
-    },
-    {
       name: "Hotels",
       link: "/hotels",
     },
   ];
+
+  const logout = () => {
+    dispatch(logoutUser());
+    dispatch(RESET());
+    navigate("/login");
+  };
+
   let [open, setOpen] = useState(false);
   return (
     <div className="md:sticky md:top-0 z-50 border-b-2 border-b-gray-300 ">
@@ -64,20 +80,85 @@ const Navbar = () => {
               </ShowOnLogOut>
 
               <ShowOnLogin>
-                <li>
-                  <NavLink to="/profile">Profile</NavLink>
-                </li>
-              </ShowOnLogin>
-              <AdminLink>
-                <li>
-                  <NavLink
-                    to="/admin/dashboard"
-                    className=" bg-orange-400 p-2 rounded-full text-white "
+                <Menu as="div" className="relative">
+                  <div>
+                    <Menu.Button className="ml-2 bg-gray-800 flex text-sm rounded-full focus:outline-none focus:ring-2 focus:ring-neutral-400">
+                      <div
+                        className="h-12 w-12 rounded-full bg-sky-500 bg-cover bg-no-repeat bg-center"
+                        style={{
+                          backgroundImage: `url(${user?.image})`,
+                        }}
+                      ></div>
+                    </Menu.Button>
+                  </div>
+                  <Transition
+                    as={Fragment}
+                    enter="transition ease-out duration-100"
+                    enterFrom="transform opacity-0 scale-95"
+                    enterTo="transform opacity-100 scale-100"
+                    leave="transition ease-in duration-75"
+                    leaveFrom="transform opacity-100 scale-100"
+                    leaveTo="transform opacity-0 scale-95"
                   >
-                    <button className="w-24">Dashborad</button>
-                  </NavLink>
-                </li>
-              </AdminLink>
+                    <Menu.Items className="origin-top-right z-10 absolute right-0 mt-2 w-48 rounded-sm shadow-md p-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none">
+                      <Menu.Item>
+                        {({ active }) => (
+                          <div
+                            onClick={() => navigate("/profile")}
+                            className={classNames(
+                              active && "bg-gray-100",
+                              "active:bg-gray-200 rounded-sm px-4 py-2 text-gray-700 cursor-pointer focus:bg-gray-200"
+                            )}
+                          >
+                            My Account
+                          </div>
+                        )}
+                      </Menu.Item>
+                      <Menu.Item>
+                        {({ active }) => (
+                          <div
+                            onClick={() => navigate("/bookings")}
+                            className={classNames(
+                              active && "bg-gray-100",
+                              "active:bg-gray-200 rounded-sm px-4 py-2 text-gray-700 cursor-pointer focus:bg-gray-200"
+                            )}
+                          >
+                            My Bookings
+                          </div>
+                        )}
+                      </Menu.Item>
+                      <AdminLink>
+                        <Menu.Item>
+                          {({ active }) => (
+                            <div
+                              className={classNames(
+                                active && "bg-gray-100",
+                                "active:bg-gray-200 rounded-sm px-4 py-2 text-gray-700 cursor-pointer focus:bg-gray-200"
+                              )}
+                              onClick={() => navigate("/admin/dashboard")}
+                            >
+                              Dashboard
+                            </div>
+                          )}
+                        </Menu.Item>
+                      </AdminLink>
+                      <Menu.Item>
+                        {({ active }) => (
+                          <div
+                            className={classNames(
+                              active && "bg-gray-100",
+                              "active:bg-gray-200 rounded-sm px-4 py-2 text-gray-700 cursor-pointer focus:bg-gray-200"
+                            )}
+                            onClick={logout}
+                          >
+                            Logout
+                          </div>
+                        )}
+                      </Menu.Item>
+                    </Menu.Items>
+                  </Transition>
+                </Menu>
+              </ShowOnLogin>
             </ul>
           </div>
           <div onClick={() => setOpen(!open)} className="mr-12 md:hidden">

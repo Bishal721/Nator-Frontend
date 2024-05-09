@@ -23,7 +23,6 @@ import PackageDetail from "./pages/Packages/PackageDetail";
 import AddPackage from "./admin/pages/packages/addPackage/AddPackage";
 import UpdatePackage from "./admin/pages/packages/updatepackage/UpdatePackage";
 import HomeLayout from "./components/layout/HomeLayout";
-import Flight from "./pages/flight/Flight";
 import ErrorPage from "./ErrorPage";
 import Hotel from "./pages/hotel/Hotel";
 import HotelList from "./pages/hotel/HotelList";
@@ -65,14 +64,6 @@ function App() {
             <Layout>
               <Packages />
             </Layout>
-          }
-        />
-        <Route
-          path="/flights"
-          element={
-            <HomeLayout>
-              <Flight />
-            </HomeLayout>
           }
         />
         <Route
