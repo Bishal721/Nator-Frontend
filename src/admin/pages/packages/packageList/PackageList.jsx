@@ -149,14 +149,9 @@ const PackageList = ({ packages, isLoading }) => {
                         {"$ "}
                         {price}
                       </td>
-                      <td>{duration}</td>
+                      <td>{`${duration} days`}</td>
                       <td>{difficulty}</td>
                       <td className="flex justify-start items-center align-top text-left p-[8px] mr-[7px] cursor-pointer  self-center ">
-                        {/* <span>
-                          <Link to={`../product-detail/${_id}`}>
-                            <AiOutlineEye size={20} color={"purple"} />
-                          </Link>
-                        </span> */}
                         <span>
                           <Link to={`../edit-packages/${_id}`}>
                             <FaEdit size={20} color={"green"} />

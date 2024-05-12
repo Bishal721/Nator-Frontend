@@ -39,9 +39,9 @@ const Home = () => {
       className="border border-gray-400 h-[31rem] rounded-lg mx-4"
     >
       <CarouselItem
-        name={shortenText(item.name,20)}
-        url={item.image.filePath}
-        price={item.price}
+        name={shortenText(item?.name, 20)}
+        url={item.image?.filePath}
+        price={item?.price}
         id={item._id}
       />
     </div>

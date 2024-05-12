@@ -31,20 +31,62 @@ const UpdatePackage = () => {
   const [imagePreview, setImagePreview] = useState(null);
   const [description, setDescription] = useState("");
   const isLoading = useSelector(selectIsLoading);
+  const [recurringDates, setRecurringDates] = useState([]);
+  const [endDate, setEndDate] = useState(null);
 
-  const [dates, setDates] = useState({
-    startDate: null,
-    endDate: null,
-  });
+  // Function to calculate end date based on start date and duration
+  const calculateEndDate = (startDate, duration) => {
+    const endDate = new Date(
+      startDate.getTime() + duration * 24 * 60 * 60 * 1000
+    );
+    return endDate;
+  };
 
-  const handleValueChange = (newValue) => {
-    // console.log("newValue:", newValue);
-    setDates(newValue);
-    const days = calculateDays(newValue);
-    setPackages((prevPackages) => ({
-      ...prevPackages,
-      duration: `${days} days`,
+  // Function to handle package duration change
+  const handleDurationChange = (e) => {
+    const { value } = e.target;
+    setPackages({ ...packages, duration: value });
+
+    // Recalculate end date for each recurring date based on new duration
+    const updatedRecurringDates = recurringDates.map((date) => ({
+      ...date,
+      endDate: calculateEndDate(new Date(date.startDate), parseInt(value))
+        .toISOString()
+        .split("T")[0],
     }));
+    setRecurringDates(updatedRecurringDates);
+  };
+  const addDatePicker = () => {
+    const newDatePickers = [...recurringDates];
+    newDatePickers.push({
+      startDate: null,
+      endDate: null,
+    });
+    setRecurringDates(newDatePickers);
+  };
+  const removeDatePicker = (index) => {
+    const newDatePickers = [...recurringDates];
+    newDatePickers.splice(index, 1);
+    setRecurringDates(newDatePickers);
+  };
+  const handleValueChange = (index, newValue, duration) => {
+    if (!duration) {
+      return toast.info("Please fill the duration field");
+    }
+    const startDate = new Date(newValue.startDate);
+
+    // Calculate the end date
+    const endDate = new Date(
+      startDate.getTime() + duration * 24 * 60 * 60 * 1000
+    );
+
+    // Convert endDate to a string in the same format as startDate
+    const endDateString = endDate.toISOString().split("T")[0];
+
+    const updatedValue = { ...newValue, endDate: endDateString };
+    const newDatePickers = [...recurringDates];
+    newDatePickers[index] = updatedValue;
+    setRecurringDates(newDatePickers);
   };
 
   const HandleInputChange = (e) => {
@@ -58,7 +100,13 @@ const UpdatePackage = () => {
     setProductImage(e.target.files[0]);
     setImagePreview(URL.createObjectURL(e.target.files[0]));
   };
-
+  const isEmptyContent = (content) => {
+    const strippedContent = content.replace(/<\/?[^>]+(>|$)/g, "").trim();
+    return strippedContent.length === 0;
+  };
+  const handleChange = (content, delta, source, editor) => {
+    setDescription(content);
+  };
   useEffect(() => {
     setPackages(packageEdit);
     setImagePreview(
@@ -70,13 +118,31 @@ const UpdatePackage = () => {
     setSelect(
       packageEdit && packageEdit.difficulty ? packageEdit.difficulty : ""
     );
-    setDates({
-      startDate: new Date(
-        packageEdit?.startDate ? packageEdit.startDate : null
-      ),
-      endDate: new Date(packageEdit?.endDate ? packageEdit.endDate : null),
-    });
+    setRecurringDates(
+      packageEdit && packageEdit.recurringDates
+        ? packageEdit.recurringDates
+        : []
+    );
   }, [packageEdit]);
+
+  useEffect(() => {
+    if (packages?.duration) {
+      // Recalculate end date for each recurring date based on package duration
+      const updatedRecurringDates = recurringDates.map((date) => ({
+        ...date,
+        endDate: calculateEndDate(
+          new Date(date.startDate),
+          parseInt(packages.duration)
+        )
+          .toISOString()
+          .split("T")[0],
+      }));
+      setRecurringDates(updatedRecurringDates);
+    }
+  }, [packages?.duration]);
+
+  console.log(packages?.duration);
+  console.log(recurringDates);
 
   const saveProduct = async (e) => {
     e.preventDefault();
@@ -87,8 +153,9 @@ const UpdatePackage = () => {
       !packages?.location ||
       !packages?.maxGroupSize ||
       !description ||
-      dates.startDate === null ||
-      dates.endDate === null
+      !recurringDates || // Check if recurringDates are provided
+      recurringDates.length === 0 || // Check if recurringDates array is not empty
+      isEmptyContent(description)
     ) {
       return toast.info("Please Fill all required Fields");
     }
@@ -104,8 +171,7 @@ const UpdatePackage = () => {
     formData.append("location", packages?.location);
     formData.append("maxGroupSize", packages?.maxGroupSize);
     formData.append("description", description);
-    formData.append("startDate", dates.startDate);
-    formData.append("endDate", dates.endDate);
+    formData.append("recurringDates", JSON.stringify(recurringDates));
     if (productImage) {
       formData.append("image", productImage);
     }
@@ -174,15 +240,15 @@ const UpdatePackage = () => {
                   />
                 </div>
                 <div>
-                  <label className="block">Package Duration :</label>
+                  <label className="block">Package Duration in Days :</label>
                   <input
                     required
-                    type="text"
+                    type="number"
                     className="w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-orange-500"
                     placeholder="Package duration"
                     name="duration"
                     value={packages?.duration}
-                    onChange={HandleInputChange}
+                    onChange={handleDurationChange}
                   />
                 </div>
                 <div>
@@ -248,29 +314,59 @@ const UpdatePackage = () => {
                   <ReactQuill
                     theme="snow"
                     value={description}
-                    onChange={setDescription}
+                    onChange={handleChange}
                     modules={UpdatePackage.modules}
                     formats={UpdatePackage.formats}
                   />
                 </div>
                 <div className="col-span-2 text-black">
                   <label className="block">Package Start and End dates :</label>
-                  <Datepicker
-                    value={dates}
-                    onChange={handleValueChange}
-                    primaryColor={"orange"}
-                    useRange={false}
-                    placeholder={"Start Date to End Date"}
-                    separator={"to"}
-                    inputClassName="w-full h-full px-3 border border-gray-400  rounded text-gray-500  bg-white  caret-orange-400 focus:border-orange-400  "
-                    containerClassName="relative h-9 w-full mb-3 "
-                    toggleClassName="absolute rounded-r-lg text-orange-400 right-0 px-3 focus:outline-none h-full "
-                    startFrom={new Date()}
-                    displayFormat={"DD/MM/YYYY"}
-                    popoverDirection="up"
-                    minDate={new Date()}
-                    showFooter={true}
-                  />
+                  {recurringDates.map((dates, index) => (
+                    <div key={index} className="grid grid-cols-4 gap-2">
+                      <div className="col-span-3">
+                        <Datepicker
+                          value={dates}
+                          onChange={(newValue) =>
+                            handleValueChange(
+                              index,
+                              newValue,
+                              packages?.duration
+                            )
+                          }
+                          asSingle={true}
+                          primaryColor={"orange"}
+                          useRange={false}
+                          placeholder={"Enter Start Date"}
+                          separator={"to"}
+                          inputClassName="w-full h-full px-3 border border-gray-400  rounded text-gray-500  bg-white  caret-orange-400 focus:border-orange-400  "
+                          containerClassName="relative h-9 w-full mb-3 "
+                          toggleClassName="absolute rounded-r-lg text-orange-400 right-0 px-3 focus:outline-none h-full "
+                          startFrom={new Date()}
+                          displayFormat={"DD/MM/YYYY"}
+                          popoverDirection="up"
+                          minDate={new Date()}
+                          showFooter={true}
+                        />
+                      </div>
+                      <div className="h-full">
+                        <button
+                          onClick={() => removeDatePicker(index)}
+                          className="font-normal px-4  h-9 w-full border rounded-md cursor-pointer transition duration-300 bg-orange-500 text-white"
+                        >
+                          Remove
+                        </button>
+                      </div>
+                    </div>
+                  ))}
+                  <div className="mt-1">
+                    <button
+                      type="button"
+                      onClick={addDatePicker}
+                      className="font-normal px-4 py-2 border rounded-md cursor-pointer transition duration-300 bg-orange-500 text-white"
+                    >
+                      Add Date
+                    </button>
+                  </div>
                 </div>
               </div>
               <div className="my-4">

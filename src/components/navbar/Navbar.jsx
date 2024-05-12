@@ -20,7 +20,6 @@ const Navbar = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const user = useSelector(selectUser);
-  console.log(user);
   const Links = [
     {
       name: "Home",

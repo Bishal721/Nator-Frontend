@@ -58,7 +58,6 @@ const AddHotel = () => {
     setDesc(content);
   };
   const isEmptyContent = (content) => {
-    // Remove HTML tags and whitespace
     const strippedContent = content.replace(/<\/?[^>]+(>|$)/g, "").trim();
     return strippedContent.length === 0;
   };
