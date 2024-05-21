@@ -3,6 +3,7 @@ import axios from "axios";
 import { BACKEND_URL } from "../../../services/authService";
 const API_URL = `${BACKEND_URL}/api/v1/package/`;
 
+
 const createPackage = async (formData) => {
   // console.log(API_URL + "createPackage");
   const response = await axios.post(API_URL, formData);

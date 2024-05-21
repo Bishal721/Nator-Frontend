@@ -3,15 +3,29 @@ import { RiCloseLine } from "react-icons/ri";
 import { useDispatch } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
+import axios from "axios";
 import { createBooking } from "../../redux/features/packages/packageSlice";
-import authService from "../../services/authService";
+import authService, { BACKEND_URL } from "../../services/authService";
 import { getUser } from "../../redux/features/auth/authSlice";
+import Select from "react-select";
+import { loadStripe } from "@stripe/stripe-js";
 
 const initialState = {
   guests: "",
 };
-const BookPackage = ({ price, rating, maxGroupSize, occupiedSpace }) => {
+const BookPackage = ({ price, rating, maxGroupSize, Dates, packName }) => {
   const [bookingData, setBookingData] = useState(initialState);
+
+  const options = Dates?.map((date) => ({
+    value: date._id,
+    label: `${date.startDate.split("T")[0]} - ${date.endDate.split("T")[0]}`,
+    space: date.occupiedSpace,
+  }));
+  const [selectedOptions, setSelectedOptions] = useState([]);
+  const HandleSelectOption = (selectedoption) => {
+    setSelectedOptions(selectedoption);
+  };
+
   const [totalPrice, setTotalPrice] = useState(0);
   const { id } = useParams();
   const dispatch = useDispatch();
@@ -21,12 +35,47 @@ const BookPackage = ({ price, rating, maxGroupSize, occupiedSpace }) => {
     setBookingData({ ...bookingData, [name]: value });
   };
   const { guests } = bookingData;
-  console.log(typeof maxGroupSize);
-  console.log(typeof occupiedSpace);
-  const remainingSpace = maxGroupSize - occupiedSpace;
+  const remainingSpace = maxGroupSize - selectedOptions.space;
   useEffect(() => {
     setTotalPrice(price * guests);
   }, [price, guests]);
+
+  const makePayment = async (formData) => {
+    const stripe = await loadStripe(import.meta.env.VITE_PUBLISHABLE_API_KEY);
+
+    const body = {
+      products: [formData],
+    };
+    const headers = {
+      "Content-Type": "application/json",
+    };
+    const response = await axios.post(
+      `${BACKEND_URL}/api/v1/package/checkout`,
+      body, // Pass the body directly
+      { headers: headers } // Pass headers as the third argument
+    );
+
+    const session = await response.data;
+    console.log(session);
+    const result = stripe.redirectToCheckout({
+      sessionId: session.id,
+    });
+
+    if (result.error) {
+      console.log(result.error);
+    } else {
+      onSuccess();
+    }
+  };
+
+  const handlePaymentSuccess = async (formData) => {
+    try {
+      await dispatch(createBooking(formData));
+    } catch (error) {
+      toast.error("Error booking the package. Please try again.");
+      console.error("Booking error:", error);
+    }
+  };
 
   const bookpack = async (e) => {
     e.preventDefault();
@@ -57,15 +106,17 @@ const BookPackage = ({ price, rating, maxGroupSize, occupiedSpace }) => {
         day: "2-digit",
       })
       .replace(/\//g, "-");
-    console.log(date);
     const formData = {
       guests,
       date,
       packageId: id,
       price: totalPrice,
+      Bookfor: selectedOptions.label,
+      dateId: selectedOptions.value,
+      name: packName,
     };
     console.log(formData);
-    await dispatch(createBooking(formData));
+    await makePayment(formData, () => handlePaymentSuccess(formData));
   };
   return (
     <div className="sticky top-24">
@@ -89,6 +140,15 @@ const BookPackage = ({ price, rating, maxGroupSize, occupiedSpace }) => {
               onChange={HandleInputChange}
               className="w-full p-2 rounded-lg  text-base  border-b border-b-gray-400 my-2 focus:outline-none "
               min={0}
+            />
+            <label className="">Select Date</label>
+            <Select
+              options={options}
+              value={selectedOptions}
+              name="rooms"
+              onChange={HandleSelectOption}
+              isMulti={false}
+              placeholder="Select Hotel Rooms"
             />
           </div>
           <div className="mt-2 border border-solid border-gray-300">

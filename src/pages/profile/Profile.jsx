@@ -8,6 +8,7 @@ import { getUser, updateUser } from "../../redux/features/auth/authSlice";
 import { useDispatch, useSelector } from "react-redux";
 import Loader from "../../components/loader/Loader";
 import Notification from "../../components/notification/Notification";
+import ChangePassword from "../../components/changePassword/ChangePassword";
 
 const Profile = () => {
   const dispatch = useDispatch();
@@ -28,17 +29,16 @@ const Profile = () => {
     role: user?.role || "",
     isVerified: user?.isVerified || false,
   };
-  // const logout = () => {
-  //   dispatch(logoutUser());
-  //   dispatch(RESET());
-  //   navigate("/login");
-  // };
   const [profile, setProfile] = useState(initialState);
   const [profileImage, setProfileImage] = useState("");
+
+  const [showChangeModel, setShowChangeModel] = useState(false);
 
   useEffect(() => {
     dispatch(getUser());
   }, [dispatch]);
+
+  const onChnagePasswordSubmit = async () => {};
 
   const HandleInputChange = (e) => {
     const { name, value } = e.target;
@@ -142,10 +142,19 @@ const Profile = () => {
                     </div>
                   </div>
                   <div className="flex mt-4 space-x-4">
-                    <button className="bg-orange-400 text-white px-4 py-2 rounded-md">
+                    <button
+                      className="bg-orange-400 text-white px-4 py-2 rounded-md"
+                      onClick={() => setShowChangeModel(true)}
+                    >
                       Change Password
                     </button>
                   </div>
+                  {showChangeModel && (
+                    <ChangePassword
+                      onClose={() => setShowChangeModel(false)}
+                      onChnagePasswordSubmit={onChnagePasswordSubmit}
+                    />
+                  )}
                 </div>
               </div>
             </div>

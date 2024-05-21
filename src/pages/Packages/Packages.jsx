@@ -80,7 +80,7 @@ const Packages = () => {
                           <span className="text-orange-400">
                             <GiDuration size={23} />
                           </span>
-                          {pack.duration} tour
+                          {pack.duration} days
                         </p>
                       </div>
                       <div className="mb-2 flex items-center justify-between">

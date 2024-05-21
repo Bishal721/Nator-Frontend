@@ -31,6 +31,8 @@ import AdminLayout from "./admin/components/layout/AdminLayout";
 import AddHotel from "./admin/pages/hotel/AddHotel";
 import UpdateHotel from "./admin/pages/hotel/UpdateHotel";
 import UserList from "./admin/components/userlist/UserList";
+import PaymentSuccessPage from "./pages/payment/PaymentSuccessPage";
+import PaymentUnsuccessfulPage from "./pages/payment/PaymentUnsuccessfulPage";
 axios.defaults.withCredentials = true;
 
 function App() {
@@ -107,6 +109,8 @@ function App() {
           }
         />
         <Route path="/forgot" element={<Forgot />} />
+        <Route path="/success" element={<PaymentSuccessPage />} />
+        <Route path="/cancel" element={<PaymentUnsuccessfulPage />} />
         <Route path="/resetpassword/:resetToken" element={<Reset />} />
         <Route
           path="/profile"

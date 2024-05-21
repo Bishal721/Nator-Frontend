@@ -83,7 +83,7 @@ const PackageDetail = () => {
             <span className="flex items-center ">
               <IoLocationOutline size={23} /> &nbsp; {Package?.location}
             </span>
-            <span className="flex items-center ">
+            {/* <span className="flex items-center ">
               Starting From: &nbsp;{" "}
               {new Date(Package?.startDate).toLocaleDateString(
                 "en-Us",
@@ -93,13 +93,13 @@ const PackageDetail = () => {
             <span className=" flex items-center ">
               Ends on: &nbsp;
               {new Date(Package?.endDate).toLocaleDateString("en-Us", options)}
-            </span>
-            <span className="flex items-center ">
+            </span> */}
+            {/* <span className="flex items-center ">
               <RiGroupLine size={23} /> &nbsp; {Package?.occupiedSpace}
               &nbsp; Occupied {Package?.maxGroupSize -
-                Package?.occupiedSpace}{" "}
+                Package?.occupiedSpace}{" "}  
               space left
-            </span>
+            </span> */}
           </div>
           <div className="mt-4 flex gap-10 items-center capitalize">
             <span className="flex items-center ">
@@ -107,7 +107,7 @@ const PackageDetail = () => {
               &nbsp;/per person
             </span>
             <span className="flex items-center ">
-              <GiDuration size={23} /> &nbsp; {Package?.duration}
+              <GiDuration size={23} /> &nbsp; {Package?.duration} days
             </span>
             <span className="flex items-center ">
               <RiGroupLine size={23} /> &nbsp; {Package?.maxGroupSize}
@@ -227,7 +227,8 @@ const PackageDetail = () => {
           price={Package?.price}
           rating={Package?.ratingsAverage}
           maxGroupSize={Package?.maxGroupSize}
-          occupiedSpace={Package?.occupiedSpace}
+          Dates={Package?.recurringDates}
+          packName = {Package?.name}
         />
       </div>
     </div>
