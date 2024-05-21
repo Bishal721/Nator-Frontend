@@ -223,5 +223,5 @@ const hotelSlice = createSlice({
 
 export const {} = hotelSlice.actions;
 export const selectIsLoading = (state) => state.hotel.isLoading;
-export const selectPackage = (state) => state.hotel.Hotel;
+export const selectHotel = (state) => state.hotel.Hotel;
 export default hotelSlice.reducer;

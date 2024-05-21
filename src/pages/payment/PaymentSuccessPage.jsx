@@ -1,9 +1,31 @@
 import { useNavigate } from "react-router-dom";
 import { FaCheckCircle } from "react-icons/fa";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  createBooking,
+  selectBookingFormData,
+} from "../../redux/features/packages/packageSlice";
+import { useEffect } from "react";
 const PaymentSuccessPage = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const storeformData = useSelector(selectBookingFormData);
+  useEffect(() => {
+    // Check for query parameter indicating payment success
+    const queryParams = new URLSearchParams(window.location.search);
+    const paymentStatus = queryParams.get("paymentStatus");
+    if (paymentStatus !== "success") {
+      navigate("/");
+    }
+    if (storeformData) {
+      // Use the formData to create booking
+      dispatch(createBooking(storeformData));
+    }
 
+    console.log("Hello this is store data: " + storeformData);
+  }, [location.search, navigate, storeformData, dispatch]);
   // Function to handle redirection
+
   const redirectToAnotherPage = () => {
     navigate("/packages"); // Replace '/another-page' with the desired route
   };
