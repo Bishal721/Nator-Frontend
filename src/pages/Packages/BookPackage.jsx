@@ -4,14 +4,12 @@ import { useDispatch } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import axios from "axios";
-import {
-  createBooking,
-  storeBookingFormData,
-} from "../../redux/features/packages/packageSlice";
+
 import authService, { BACKEND_URL } from "../../services/authService";
 import { getUser } from "../../redux/features/auth/authSlice";
 import Select from "react-select";
 import { loadStripe } from "@stripe/stripe-js";
+import { storeBookingFormData } from "../../redux/features/bookingdata/bookingdataSlice";
 
 const initialState = {
   guests: "",
@@ -70,16 +68,6 @@ const BookPackage = ({ price, rating, maxGroupSize, Dates, packName }) => {
     }
   };
 
-  const handlePaymentSuccess = async (formData) => {
-    try {
-      console.log("I amd here");
-      await dispatch(createBooking(formData));
-    } catch (error) {
-      toast.error("Error booking the package. Please try again.");
-      console.error("Booking error:", error);
-    }
-  };
-
   const bookpack = async (e) => {
     e.preventDefault();
     let isloggedin = await authService.GetLoginStatus();
@@ -118,9 +106,9 @@ const BookPackage = ({ price, rating, maxGroupSize, Dates, packName }) => {
       dateId: selectedOptions.value,
       name: packName,
     };
-    const aws = await dispatch(storeBookingFormData(formData));
-    console.log(aws);
-    if (aws.requestStatus === "fulfilled") {
+    const data = await dispatch(storeBookingFormData(formData));
+    console.log(data);
+    if (data.meta.requestStatus === "fulfilled") {
       await makePayment(formData);
     }
   };

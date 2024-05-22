@@ -1,33 +1,57 @@
 import { useNavigate } from "react-router-dom";
 import { FaCheckCircle } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
+import { useEffect, useRef } from "react";
 import {
+  RESETBOOKING,
   createBooking,
   selectBookingFormData,
-} from "../../redux/features/packages/packageSlice";
-import { useEffect } from "react";
+} from "../../redux/features/bookingdata/bookingdataSlice";
+
 const PaymentSuccessPage = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const storeformData = useSelector(selectBookingFormData);
+  const bookingInitiated = useRef(false);
+
+  // Extract paymentStatus from query parameters
+  const queryParams = new URLSearchParams(window.location.search);
+  const paymentStatus = queryParams.get("paymentStatus");
+
   useEffect(() => {
-    // Check for query parameter indicating payment success
-    const queryParams = new URLSearchParams(window.location.search);
-    const paymentStatus = queryParams.get("paymentStatus");
     if (paymentStatus !== "success") {
       navigate("/");
-    }
-    if (storeformData) {
-      // Use the formData to create booking
-      dispatch(createBooking(storeformData));
+    } else if (storeformData && !bookingInitiated.current) {
+      bookingInitiated.current = true; // Set the ref to true before handling booking
+      handleBooking();
     }
 
-    console.log("Hello this is store data: " + storeformData);
-  }, [location.search, navigate, storeformData, dispatch]);
-  // Function to handle redirection
+    // Prevent page from reloading
+    window.addEventListener("beforeunload", handleBeforeUnload);
+
+    return () => {
+      window.removeEventListener("beforeunload", handleBeforeUnload);
+    };
+  }, [paymentStatus, navigate, storeformData]);
+
+  const handleBeforeUnload = (event) => {
+    event.preventDefault();
+    event.returnValue = "";
+  };
+
+  const handleBooking = async () => {
+    try {
+      if (storeformData) {
+        await dispatch(createBooking(storeformData));
+        dispatch(RESETBOOKING());
+      }
+    } catch (error) {
+      console.error("Error creating booking:", error);
+    }
+  };
 
   const redirectToAnotherPage = () => {
-    navigate("/packages"); // Replace '/another-page' with the desired route
+    navigate("/packages");
   };
 
   return (

@@ -1,10 +1,29 @@
 import { useNavigate } from "react-router-dom";
 import { FaTimesCircle } from "react-icons/fa"; // Importing the times circle icon
+import { useEffect } from "react";
 
 const PaymentUnsuccessfulPage = () => {
   const navigate = useNavigate();
+  // Extract paymentStatus from query parameters
+  const queryParams = new URLSearchParams(window.location.search);
+  const paymentStatus = queryParams.get("paymentStatus");
 
-  // Function to handle redirection
+  useEffect(() => {
+    if (paymentStatus !== "canceled") {
+      navigate("/");
+    }
+
+    // Prevent page from reloading
+    window.addEventListener("beforeunload", handleBeforeUnload);
+
+    return () => {
+      window.removeEventListener("beforeunload", handleBeforeUnload);
+    };
+  }, [paymentStatus, navigate]);
+  const handleBeforeUnload = (event) => {
+    event.preventDefault();
+    event.returnValue = "";
+  };
   const returnToPreviousPage = () => {
     // Go back to the previous page in history
     navigate("/packages");

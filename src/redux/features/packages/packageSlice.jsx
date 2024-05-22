@@ -9,7 +9,6 @@ const initialState = {
   isSuccess: false,
   isLoading: false,
   message: "",
-  bookingFormData: null,
 };
 // Create Packages
 export const createPackage = createAsyncThunk(
@@ -122,38 +121,6 @@ export const createReview = createAsyncThunk(
         error.toString();
       console.log(error);
       return thunkAPI.rejectWithValue(message);
-    }
-  }
-);
-export const createBooking = createAsyncThunk(
-  "packages/createBooking",
-  async (formData, thunkAPI) => {
-    console.log(formData);
-    try {
-      return await packageService.createBooking(formData);
-    } catch (error) {
-      const message =
-        (error.response && error.response.data && error.response.message) ||
-        error.message ||
-        error.toString();
-      toast.error(error.response.data.message);
-      console.log(error);
-      return thunkAPI.rejectWithValue(message);
-    }
-  }
-);
-// Action creator to store booking form data
-export const storeBookingFormData = createAsyncThunk(
-  "packages/storeBookingFormData",
-  async (formData, thunkAPI) => {
-    console.log(formData);
-    try {
-      // Dispatch an action to update the state with the booking form data
-      return formData;
-    } catch (error) {
-      console.error("Error storing booking form data:", error);
-      // Return error message to be handled by Redux
-      return thunkAPI.rejectWithValue("Error storing booking form data.");
     }
   }
 );
@@ -275,38 +242,6 @@ const packageSlice = createSlice({
         state.isError = true;
         state.message = action.payload;
         toast.error(action.payload);
-      })
-      .addCase(createBooking.pending, (state) => {
-        state.isLoading = true;
-      })
-      .addCase(createBooking.fulfilled, (state, action) => {
-        state.isLoading = false;
-        state.isSuccess = true;
-        state.isError = false;
-        state.packages.push(action.payload);
-        toast.success("Package Booked successfully");
-      })
-      .addCase(createBooking.rejected, (state, action) => {
-        state.isLoading = false;
-        state.isError = true;
-        state.message = action.payload;
-      })
-      // Handle storeBookingFormData pending action
-      .addCase(storeBookingFormData.pending, (state) => {
-        state.isLoading = true;
-      })
-      // Handle storeBookingFormData fulfilled action
-      .addCase(storeBookingFormData.fulfilled, (state, action) => {
-        state.bookingFormData = action.payload;
-        state.isSuccess = true;
-        state.isLoading = false;
-        toast.success("Booking form data stored successfully");
-      })
-      // Handle storeBookingFormData rejected action
-      .addCase(storeBookingFormData.rejected, (state, action) => {
-        state.isError = true;
-        state.isLoading = false;
-        state.message = action.payload;
       });
   },
 });
@@ -314,6 +249,5 @@ const packageSlice = createSlice({
 export const {} = packageSlice.actions;
 export const selectIsLoading = (state) => state.package.isLoading;
 export const selectPackage = (state) => state.package.Package;
-export const selectBookingFormData = (state) => state.package.bookingFormData;
 
 export default packageSlice.reducer;

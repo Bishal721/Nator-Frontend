@@ -3,9 +3,9 @@ import { RiCloseLine } from "react-icons/ri";
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
-import { createBooking } from "../../redux/features/packages/packageSlice";
 import { FaPerson } from "react-icons/fa6";
 import Datepicker from "react-tailwindcss-datepicker";
+import { createBooking } from "../../redux/features/bookingdata/bookingdataSlice";
 
 const initialState = {
   phone: "",
