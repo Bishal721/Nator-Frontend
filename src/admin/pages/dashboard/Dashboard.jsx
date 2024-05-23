@@ -34,7 +34,7 @@ const Dashboard = () => {
   }, [isLoggedIn, isError, message, dispatch]);
   return (
     <div>
-      <PackageSummary packages={packages} />
+      <PackageSummary packages={packages} hotels={hotels} />
       <PackageList packages={packages} isLoading={isLoading} />
       <HotelList hotels={hotels} isLoading={isLoading} />
     </div>

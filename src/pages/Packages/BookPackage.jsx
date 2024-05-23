@@ -14,13 +14,21 @@ import { storeBookingFormData } from "../../redux/features/bookingdata/bookingda
 const initialState = {
   guests: "",
 };
-const BookPackage = ({ price, rating, maxGroupSize, Dates, packName }) => {
+const BookPackage = ({
+  price,
+  rating,
+  maxGroupSize,
+  Dates,
+  packName,
+  maxExtraPeople,
+}) => {
   const [bookingData, setBookingData] = useState(initialState);
-
   const options = Dates?.map((date) => ({
     value: date._id,
     label: `${date.startDate.split("T")[0]} - ${date.endDate.split("T")[0]}`,
     space: date.occupiedSpace,
+    extraSpace: date.extraPeople,
+    status: date.status,
   }));
   const [selectedOptions, setSelectedOptions] = useState([]);
   const HandleSelectOption = (selectedoption) => {
@@ -80,6 +88,10 @@ const BookPackage = ({ price, rating, maxGroupSize, Dates, packName }) => {
     if (user.payload.role === "admin") {
       return toast.error("Only User  can Book the packages");
     }
+    if (selectedOptions.status === "full") {
+      toast.info("Package Already Full ");
+      return toast.info("Please Select another Date ");
+    }
 
     if (!guests || !id) {
       return toast.error("All Fields are required");
@@ -87,9 +99,21 @@ const BookPackage = ({ price, rating, maxGroupSize, Dates, packName }) => {
     if (parseInt(guests) <= 0) {
       return toast.info("Value must be greater than zero");
     }
-    if (guests > maxGroupSize || guests > remainingSpace) {
-      return toast.error(`Space Already full`);
+
+    let extraPeople = selectedOptions.extraSpace;
+    let remainingGuests = parseInt(guests);
+
+    if (remainingGuests > remainingSpace) {
+      extraPeople += remainingGuests - remainingSpace;
+      remainingGuests = remainingSpace;
     }
+
+    if (extraPeople > maxExtraPeople) {
+      return toast.error(
+        "Traveller limit exceeds more than the maximum allowed"
+      );
+    }
+
     let date = new Date()
       .toLocaleDateString("en-us", {
         year: "numeric",
@@ -98,7 +122,8 @@ const BookPackage = ({ price, rating, maxGroupSize, Dates, packName }) => {
       })
       .replace(/\//g, "-");
     const formData = {
-      guests,
+      guests: remainingGuests,
+      extraPeople: extraPeople > 0 ? extraPeople : 0,
       date,
       packageId: id,
       price: totalPrice,

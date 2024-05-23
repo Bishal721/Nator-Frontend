@@ -9,6 +9,7 @@ const initialState = {
   isSuccess: false,
   isLoading: false,
   message: "",
+  maxExtraPeople: null,
 };
 // Create Packages
 export const createPackage = createAsyncThunk(
@@ -59,11 +60,26 @@ export const getPackage = createAsyncThunk(
     }
   }
 );
+export const getExtraPeople = createAsyncThunk(
+  "packages/getextrapeople",
+  async (_, thunkAPI) => {
+    try {
+      return await packageService.getExtraPeople();
+    } catch (error) {
+      const message =
+        (error.response && error.response.data && error.response.message) ||
+        error.message ||
+        error.toString();
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
 
 // Update a  Package
 export const updatePackage = createAsyncThunk(
   "packages/updatePackage",
   async ({ id, formData }, thunkAPI) => {
+    console.log(formData);
     try {
       return await packageService.updatePackage(id, formData);
     } catch (error) {
@@ -242,6 +258,20 @@ const packageSlice = createSlice({
         state.isError = true;
         state.message = action.payload;
         toast.error(action.payload);
+      })
+      .addCase(getExtraPeople.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(getExtraPeople.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isSuccess = true;
+        state.isError = false;
+        state.maxExtraPeople = action.payload;
+      })
+      .addCase(getExtraPeople.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.message = action.payload;
       });
   },
 });
@@ -249,5 +279,4 @@ const packageSlice = createSlice({
 export const {} = packageSlice.actions;
 export const selectIsLoading = (state) => state.package.isLoading;
 export const selectPackage = (state) => state.package.Package;
-
 export default packageSlice.reducer;

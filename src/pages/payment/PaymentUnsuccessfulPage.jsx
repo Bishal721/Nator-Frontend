@@ -1,13 +1,16 @@
 import { useNavigate } from "react-router-dom";
 import { FaTimesCircle } from "react-icons/fa"; // Importing the times circle icon
 import { useEffect } from "react";
+import { useDispatch } from "react-redux";
+import { RESETBOOKING } from "../../redux/features/bookingdata/bookingdataSlice";
 
 const PaymentUnsuccessfulPage = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   // Extract paymentStatus from query parameters
   const queryParams = new URLSearchParams(window.location.search);
   const paymentStatus = queryParams.get("paymentStatus");
-
+  dispatch(RESETBOOKING());
   useEffect(() => {
     if (paymentStatus !== "canceled") {
       navigate("/");

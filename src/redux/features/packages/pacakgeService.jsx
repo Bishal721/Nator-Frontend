@@ -3,7 +3,6 @@ import axios from "axios";
 import { BACKEND_URL } from "../../../services/authService";
 const API_URL = `${BACKEND_URL}/api/v1/package/`;
 
-
 const createPackage = async (formData) => {
   // console.log(API_URL + "createPackage");
   const response = await axios.post(API_URL, formData);
@@ -19,10 +18,16 @@ const getPackage = async (id) => {
   const response = await axios.get(API_URL + id);
   return response.data;
 };
+const getExtraPeople = async () => {
+  const response = await axios.get(API_URL + "getMaxPeople");
+  return response.data;
+};
 
 // Update Product
 const updatePackage = async (id, formData) => {
+  console.log(formData);
   const response = await axios.patch(`${API_URL}${id}`, formData);
+  console.log(response);
   return response.data;
 };
 
@@ -59,6 +64,7 @@ const packageService = {
   deletePackage,
   getFivePackages,
   createReview,
+  getExtraPeople,
   createBooking,
 };
 export default packageService;

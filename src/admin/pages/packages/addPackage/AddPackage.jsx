@@ -42,7 +42,8 @@ const AddPackage = () => {
   const [imagePreview, setImagePreview] = useState(null);
   const [description, setDescription] = useState("");
   const isLoading = useSelector(selectIsLoading);
-  const { name, duration, price, location, maxGroupSize } = packages;
+  const { name, duration, price, location, maxGroupSize, minGroupSize } =
+    packages;
   // const [dates, setDates] = useState({
   //   startDate: null,
   //   endDate: null,
@@ -111,6 +112,7 @@ const AddPackage = () => {
       !price ||
       !location ||
       !maxGroupSize ||
+      !minGroupSize ||
       !description ||
       !recurringDates || // Check if recurringDates are provided
       recurringDates.length === 0 || // Check if recurringDates array is not empty
@@ -118,7 +120,11 @@ const AddPackage = () => {
     ) {
       return toast.info("Please Fill all required Fields");
     }
-
+    if (minGroupSize > maxGroupSize) {
+      return toast.info(
+        "Minimum Group Size cannot be greater than maximum Group Size"
+      );
+    }
     if (!select) {
       return toast.info("Please select Package difficulty");
     }
@@ -130,6 +136,7 @@ const AddPackage = () => {
     formData.append("location", location);
     formData.append("price", price);
     formData.append("maxGroupSize", maxGroupSize);
+    formData.append("minGroupSize", minGroupSize);
     formData.append("description", description);
     formData.append("recurringDates", JSON.stringify(recurringDates));
     if (productImage) {
@@ -256,6 +263,18 @@ const AddPackage = () => {
                       placeholder="Enter Location"
                       name="location"
                       value={packages?.location}
+                      onChange={HandleInputChange}
+                    />
+                  </div>
+                  <div>
+                    <label className="block">Package Min Group Size :</label>
+                    <input
+                      required
+                      type="number"
+                      className="w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-orange-500"
+                      placeholder="Enter minGroupSize"
+                      name="minGroupSize"
+                      value={packages?.minGroupSize}
                       onChange={HandleInputChange}
                     />
                   </div>

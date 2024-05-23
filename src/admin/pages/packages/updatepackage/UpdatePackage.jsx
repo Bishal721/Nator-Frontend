@@ -141,9 +141,6 @@ const UpdatePackage = () => {
     }
   }, [packages?.duration]);
 
-  console.log(packages?.duration);
-  console.log(recurringDates);
-
   const saveProduct = async (e) => {
     e.preventDefault();
     if (
@@ -152,6 +149,7 @@ const UpdatePackage = () => {
       !packages?.price ||
       !packages?.location ||
       !packages?.maxGroupSize ||
+      !packages?.minGroupSize ||
       !description ||
       !recurringDates || // Check if recurringDates are provided
       recurringDates.length === 0 || // Check if recurringDates array is not empty
@@ -163,6 +161,9 @@ const UpdatePackage = () => {
     if (!select) {
       return toast.info("Please select Package difficulty");
     }
+    if (packages?.maxGroupSize < packages?.minGroupSize) {
+      return toast.info("MaxGroupSize must be greater than MinGroupSize");
+    }
     const formData = new FormData();
     formData.append("name", packages?.name);
     formData.append("duration", packages?.duration);
@@ -170,6 +171,7 @@ const UpdatePackage = () => {
     formData.append("price", packages?.price);
     formData.append("location", packages?.location);
     formData.append("maxGroupSize", packages?.maxGroupSize);
+    formData.append("minGroupSize", packages?.minGroupSize);
     formData.append("description", description);
     formData.append("recurringDates", JSON.stringify(recurringDates));
     if (productImage) {
@@ -178,7 +180,6 @@ const UpdatePackage = () => {
     console.log(...formData);
 
     const data = await dispatch(updatePackage({ id, formData }));
-    console.log(data.meta.requestStatus);
     if (data.meta.requestStatus === "fulfilled") {
       await dispatch(getPackages());
       navigate("/admin/dashboard");
@@ -294,6 +295,18 @@ const UpdatePackage = () => {
                     placeholder="Enter Location"
                     name="location"
                     value={packages?.location}
+                    onChange={HandleInputChange}
+                  />
+                </div>
+                <div>
+                  <label className="block">Package Min Group Size :</label>
+                  <input
+                    required
+                    type="number"
+                    className="w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-orange-500"
+                    placeholder="Enter minGroupSize"
+                    name="minGroupSize"
+                    value={packages?.minGroupSize}
                     onChange={HandleInputChange}
                   />
                 </div>
