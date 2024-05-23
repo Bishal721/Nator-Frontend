@@ -130,6 +130,7 @@ const BookPackage = ({
       Bookfor: selectedOptions.label,
       dateId: selectedOptions.value,
       name: packName,
+      specificDateId: selectedOptions.value,
     };
     const data = await dispatch(storeBookingFormData(formData));
     console.log(data);

@@ -1,5 +1,8 @@
 import { useSelector } from "react-redux";
-import { selectIsLoggedIn, selectUser } from "../../redux/features/auth/authSlice";
+import {
+  selectIsLoggedIn,
+  selectUser,
+} from "../../redux/features/auth/authSlice";
 
 export const ShowOnLogin = ({ children }) => {
   const isLoggedin = useSelector(selectIsLoggedIn);
@@ -22,6 +25,15 @@ export const AdminLink = ({ children }) => {
   const user = useSelector(selectUser);
 
   if (isLoggedIn && user?.role === "admin") {
+    return <>{children}</>;
+  }
+  return null;
+};
+export const UserLink = ({ children }) => {
+  const isLoggedIn = useSelector(selectIsLoggedIn);
+  const user = useSelector(selectUser);
+
+  if (isLoggedIn && user?.role === "user") {
     return <>{children}</>;
   }
   return null;

@@ -5,6 +5,11 @@ import packageService from "../packages/pacakgeService";
 const initialState = {
   bookingFormData: null,
   bookings: [],
+  Booking: null,
+  isError: false,
+  isSuccess: false,
+  isLoading: false,
+  message: "",
 };
 
 // Action creator to store booking form data
@@ -41,12 +46,66 @@ export const createBooking = createAsyncThunk(
   }
 );
 
+export const getSingleBooking = createAsyncThunk(
+  "booking/getSingleBooking",
+  async (_, thunkAPI) => {
+    try {
+      return await packageService.getSingleBooking();
+    } catch (error) {
+      const message =
+        (error.response && error.response.data && error.response.message) ||
+        error.message ||
+        error.toString();
+      toast.error(error.response.data.message);
+      console.log(error);
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
+
+export const getAllBookings = createAsyncThunk(
+  "booking/getAllBookings",
+  async (_, thunkAPI) => {
+    try {
+      return await packageService.getAllBookings();
+    } catch (error) {
+      const message =
+        (error.response && error.response.data && error.response.message) ||
+        error.message ||
+        error.toString();
+      toast.error(error.response.data.message);
+      console.log(error);
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
+
+export const CancelBooking = createAsyncThunk(
+  "booking/cancelBooking",
+  async (id, thunkAPI) => {
+    try {
+      return await packageService.CancelBooking(id);
+    } catch (error) {
+      const message =
+        (error.response && error.response.data && error.response.message) ||
+        error.message ||
+        error.toString();
+      toast.error(error.response.data.message);
+      console.log(error);
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
+
 const bookingdataSlice = createSlice({
   name: "booking",
   initialState,
   reducers: {
     RESETBOOKING(state) {
       state.bookingFormData = null;
+    },
+    RESETBOOKINGARR(state) {
+      state.bookings = [];
     },
   },
   extraReducers: (builder) => {
@@ -82,10 +141,54 @@ const bookingdataSlice = createSlice({
         state.isLoading = false;
         state.isError = true;
         state.message = action.payload;
+      })
+      .addCase(getSingleBooking.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(getSingleBooking.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isSuccess = true;
+        state.isError = false;
+        state.bookings = action.payload;
+      })
+      .addCase(getSingleBooking.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.message = action.payload;
+      })
+      .addCase(getAllBookings.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(getAllBookings.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isSuccess = true;
+        state.isError = false;
+        state.bookings = action.payload;
+      })
+      .addCase(getAllBookings.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.message = action.payload;
+      }) // Delete Packages
+      .addCase(CancelBooking.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(CancelBooking.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isSuccess = true;
+        state.isError = false;
+        toast.success("Booking canceled Successfully");
+        toast.info("Your Money will be returned with in a week");
+      })
+      .addCase(CancelBooking.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.message = action.payload;
+        toast.error(action.payload);
       });
   },
 });
-export const { RESETBOOKING } = bookingdataSlice.actions;
+export const { RESETBOOKING, RESETBOOKINGARR } = bookingdataSlice.actions;
 
 export const selectBookingFormData = (state) => state.booking.bookingFormData;
 

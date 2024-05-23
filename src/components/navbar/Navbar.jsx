@@ -6,6 +6,7 @@ import {
   AdminLink,
   ShowOnLogOut,
   ShowOnLogin,
+  UserLink,
 } from "../../components/protect/HiddenLinks";
 import {
   RESET,
@@ -113,19 +114,21 @@ const Navbar = () => {
                           </div>
                         )}
                       </Menu.Item>
-                      <Menu.Item>
-                        {({ active }) => (
-                          <div
-                            onClick={() => navigate("/bookings")}
-                            className={classNames(
-                              active && "bg-gray-100",
-                              "active:bg-gray-200 rounded-sm px-4 py-2 text-gray-700 cursor-pointer focus:bg-gray-200"
-                            )}
-                          >
-                            My Bookings
-                          </div>
-                        )}
-                      </Menu.Item>
+                      <UserLink>
+                        <Menu.Item>
+                          {({ active }) => (
+                            <div
+                              onClick={() => navigate("/bookings")}
+                              className={classNames(
+                                active && "bg-gray-100",
+                                "active:bg-gray-200 rounded-sm px-4 py-2 text-gray-700 cursor-pointer focus:bg-gray-200"
+                              )}
+                            >
+                              My Bookings
+                            </div>
+                          )}
+                        </Menu.Item>
+                      </UserLink>
                       <AdminLink>
                         <Menu.Item>
                           {({ active }) => (

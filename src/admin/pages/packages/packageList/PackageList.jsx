@@ -15,7 +15,6 @@ import {
 } from "../../../../redux/features/packages/FilterSlice";
 import {
   deletePackage,
-  getPackage,
   getPackages,
 } from "../../../../redux/features/packages/packageSlice";
 

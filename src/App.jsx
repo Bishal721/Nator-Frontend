@@ -33,6 +33,7 @@ import UpdateHotel from "./admin/pages/hotel/UpdateHotel";
 import UserList from "./admin/components/userlist/UserList";
 import PaymentSuccessPage from "./pages/payment/PaymentSuccessPage";
 import PaymentUnsuccessfulPage from "./pages/payment/PaymentUnsuccessfulPage";
+import BookingPage from "./pages/booking/BookingPage";
 axios.defaults.withCredentials = true;
 
 function App() {
@@ -117,6 +118,14 @@ function App() {
           element={
             <Layout>
               <Profile />
+            </Layout>
+          }
+        />
+        <Route
+          path="/bookings"
+          element={
+            <Layout>
+              <BookingPage />
             </Layout>
           }
         />
