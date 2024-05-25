@@ -34,6 +34,7 @@ import UserList from "./admin/components/userlist/UserList";
 import PaymentSuccessPage from "./pages/payment/PaymentSuccessPage";
 import PaymentUnsuccessfulPage from "./pages/payment/PaymentUnsuccessfulPage";
 import BookingPage from "./pages/booking/BookingPage";
+import ViewBookings from "./admin/pages/bookings/ViewBookings";
 axios.defaults.withCredentials = true;
 
 function App() {
@@ -146,6 +147,7 @@ function App() {
           <Route path="add-hotels" element={<AddHotel />} />
           <Route path="edit-hotels/:id" element={<UpdateHotel />} />
           <Route path="users" element={<UserList />} />
+          <Route path="Allbookings" element={<ViewBookings />} />
         </Route>
 
         <Route path="/*" element={<ErrorPage />} />

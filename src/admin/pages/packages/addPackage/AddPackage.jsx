@@ -44,10 +44,7 @@ const AddPackage = () => {
   const isLoading = useSelector(selectIsLoading);
   const { name, duration, price, location, maxGroupSize, minGroupSize } =
     packages;
-  // const [dates, setDates] = useState({
-  //   startDate: null,
-  //   endDate: null,
-  // });
+
 
   const [recurringDates, setRecurringDates] = useState([]);
   const addDatePicker = () => {

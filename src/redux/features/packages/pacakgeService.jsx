@@ -64,6 +64,28 @@ const CancelBooking = async (id) => {
   console.log(response);
   return response.data;
 };
+const createCustomBooking = async (formData) => {
+  const response = await axios.post(API_URL + "customBooking ", formData);
+  console.log(response);
+  return response.data;
+};
+
+const getSingleCustomBooking = async () => {
+  const response = await axios.get(`${API_URL}book/getUserSpecificCustom`);
+  return response.data;
+};
+const getAllCustomBookings = async () => {
+  const response = await axios.get(`${API_URL}book/getAllCustomBookings`);
+  return response.data;
+};
+
+const CancelCustomBooking = async (id) => {
+  console.log(id);
+  const response = await axios.patch(API_URL + "cancelCustomBooking/" + id);
+  console.log(response);
+  return response.data;
+};
+
 const packageService = {
   createPackage,
   getPackages,
@@ -77,5 +99,9 @@ const packageService = {
   getSingleBooking,
   getAllBookings,
   CancelBooking,
+  createCustomBooking,
+  CancelCustomBooking,
+  getSingleCustomBooking,
+  getAllCustomBookings,
 };
 export default packageService;

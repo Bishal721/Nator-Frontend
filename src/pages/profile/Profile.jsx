@@ -38,8 +38,6 @@ const Profile = () => {
     dispatch(getUser());
   }, [dispatch]);
 
-  const onChnagePasswordSubmit = async () => {};
-
   const HandleInputChange = (e) => {
     const { name, value } = e.target;
     setProfile({ ...profile, [name]: value });
@@ -150,10 +148,7 @@ const Profile = () => {
                     </button>
                   </div>
                   {showChangeModel && (
-                    <ChangePassword
-                      onClose={() => setShowChangeModel(false)}
-                      onChnagePasswordSubmit={onChnagePasswordSubmit}
-                    />
+                    <ChangePassword onClose={() => setShowChangeModel(false)} />
                   )}
                 </div>
               </div>

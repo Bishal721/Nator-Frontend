@@ -9,6 +9,10 @@ import {
 import { getPackages } from "../../../redux/features/packages/packageSlice";
 import HotelList from "../../components/hotelform/HotelList";
 import { getAllHotels } from "../../../redux/features/hotels/hotelSlice";
+import {
+  RESETBOOKINGARR,
+  getAllBookings,
+} from "../../../redux/features/bookingdata/bookingdataSlice";
 const initialState = {
   city: "",
   min: "",
@@ -22,19 +26,23 @@ const Dashboard = () => {
   );
 
   const { hotels } = useSelector((state) => state.hotel);
+  const { bookings } = useSelector((state) => state.booking);
   useEffect(() => {
     if (isLoggedIn === true) {
       dispatch(getPackages());
       dispatch(getAllHotels(initialState));
       dispatch(getAllUsers());
+      dispatch(RESETBOOKINGARR());
+      dispatch(getAllBookings());
     }
     if (isError) {
       console.log(message);
     }
   }, [isLoggedIn, isError, message, dispatch]);
+
   return (
     <div>
-      <PackageSummary packages={packages} hotels={hotels} />
+      <PackageSummary packages={packages} hotels={hotels} bookings={bookings} />
       <PackageList packages={packages} isLoading={isLoading} />
       <HotelList hotels={hotels} isLoading={isLoading} />
     </div>

@@ -57,7 +57,7 @@ const Navbar = () => {
             </Link>
           </div>
           <div
-            className={`md:static absolute  text-base bg-white  font-medium md:min-h-fit min-h-[50vh] left-0 top-[-100%] md:w-auto w-full flex items-center px-5 ease-in ${open ? "top-[8%] " : "top-[-100%] "} z-50`}
+            className={`md:static absolute  text-base bg-white  font-medium md:min-h-fit min-h-[50vh] left-0 top-[-100%] md:w-auto w-full flex items-center px-5 ease-in ${open ? "top-[8%] " : "top-[-100%] "} z-40`}
           >
             <ul className="flex md:flex-row flex-col md:items-center md:gap-[2vw] gap-4 ">
               {Links.map((link, index) => (

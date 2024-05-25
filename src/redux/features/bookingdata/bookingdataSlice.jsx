@@ -5,6 +5,7 @@ import packageService from "../packages/pacakgeService";
 const initialState = {
   bookingFormData: null,
   bookings: [],
+  custombookings: [],
   Booking: null,
   isError: false,
   isSuccess: false,
@@ -97,6 +98,76 @@ export const CancelBooking = createAsyncThunk(
   }
 );
 
+export const createCustomBooking = createAsyncThunk(
+  "booking/createCustomBooking",
+  async (formData, thunkAPI) => {
+    console.log(formData);
+    try {
+      return await packageService.createCustomBooking(formData);
+    } catch (error) {
+      const message =
+        (error.response && error.response.data && error.response.message) ||
+        error.message ||
+        error.toString();
+      toast.error(error.response.data.message);
+      console.log(error);
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
+
+export const getSingleCustomBooking = createAsyncThunk(
+  "booking/getSingleCustomBooking",
+  async (_, thunkAPI) => {
+    try {
+      return await packageService.getSingleCustomBooking();
+    } catch (error) {
+      const message =
+        (error.response && error.response.data && error.response.message) ||
+        error.message ||
+        error.toString();
+      toast.error(error.response.data.message);
+      console.log(error);
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
+
+export const getAllCustomBookings = createAsyncThunk(
+  "booking/getAllCustomBookings",
+  async (_, thunkAPI) => {
+    try {
+      return await packageService.getAllCustomBookings();
+    } catch (error) {
+      const message =
+        (error.response && error.response.data && error.response.message) ||
+        error.message ||
+        error.toString();
+      toast.error(error.response.data.message);
+      console.log(error);
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
+
+export const CancelCustomBooking = createAsyncThunk(
+  "booking/cancelCustomBooking",
+  async (id, thunkAPI) => {
+    try {
+      return await packageService.CancelCustomBooking(id);
+      re;
+    } catch (error) {
+      const message =
+        (error.response && error.response.data && error.response.message) ||
+        error.message ||
+        error.toString();
+      toast.error(error.response.data.message);
+      console.log(error);
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
+
 const bookingdataSlice = createSlice({
   name: "booking",
   initialState,
@@ -106,6 +177,9 @@ const bookingdataSlice = createSlice({
     },
     RESETBOOKINGARR(state) {
       state.bookings = [];
+    },
+    RESETCUSTOMBOOKINGARR(state) {
+      state.custombookings = [];
     },
   },
   extraReducers: (builder) => {
@@ -141,9 +215,37 @@ const bookingdataSlice = createSlice({
         state.isLoading = false;
         state.isError = true;
         state.message = action.payload;
-      })
-      .addCase(getSingleBooking.pending, (state) => {
+      }) // Delete Packages
+      .addCase(CancelBooking.pending, (state) => {
         state.isLoading = true;
+      })
+      .addCase(CancelBooking.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isSuccess = true;
+        state.isError = false;
+        toast.success("Booking canceled Successfully");
+        toast.info("Your Money will be returned with in a week");
+      })
+      .addCase(CancelBooking.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.message = action.payload;
+        toast.error(action.payload);
+      })
+      .addCase(createCustomBooking.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(createCustomBooking.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isSuccess = true;
+        state.isError = false;
+        state.bookings.push(action.payload);
+        toast.success("Custom Package Booked successfully");
+      })
+      .addCase(createCustomBooking.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.message = action.payload;
       })
       .addCase(getSingleBooking.fulfilled, (state, action) => {
         state.isLoading = false;
@@ -170,25 +272,54 @@ const bookingdataSlice = createSlice({
         state.isError = true;
         state.message = action.payload;
       }) // Delete Packages
-      .addCase(CancelBooking.pending, (state) => {
+      .addCase(CancelCustomBooking.pending, (state) => {
         state.isLoading = true;
       })
-      .addCase(CancelBooking.fulfilled, (state, action) => {
+      .addCase(CancelCustomBooking.fulfilled, (state, action) => {
         state.isLoading = false;
         state.isSuccess = true;
         state.isError = false;
-        toast.success("Booking canceled Successfully");
+        toast.success("Custom Booking canceled Successfully");
         toast.info("Your Money will be returned with in a week");
       })
-      .addCase(CancelBooking.rejected, (state, action) => {
+      .addCase(CancelCustomBooking.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
         state.message = action.payload;
         toast.error(action.payload);
+      })
+      .addCase(getSingleCustomBooking.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(getSingleCustomBooking.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isSuccess = true;
+        state.isError = false;
+        state.custombookings = action.payload;
+      })
+      .addCase(getSingleCustomBooking.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.message = action.payload;
+      })
+      .addCase(getAllCustomBookings.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(getAllCustomBookings.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isSuccess = true;
+        state.isError = false;
+        state.custombookings = action.payload;
+      })
+      .addCase(getAllCustomBookings.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.message = action.payload;
       });
   },
 });
-export const { RESETBOOKING, RESETBOOKINGARR } = bookingdataSlice.actions;
+export const { RESETBOOKING, RESETBOOKINGARR, RESETCUSTOMBOOKINGARR } =
+  bookingdataSlice.actions;
 
 export const selectBookingFormData = (state) => state.booking.bookingFormData;
 

@@ -3,7 +3,7 @@ import Card from "../../components/card/Card";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { getPackages } from "../../redux/features/packages/packageSlice";
-import { SpinnerImage } from "../../components/loader/Loader";
+import Loader from "../../components/loader/Loader";
 import { IoLocationOutline } from "react-icons/io5";
 import { GiDuration } from "react-icons/gi";
 
@@ -31,7 +31,7 @@ const Packages = () => {
 
   return (
     <>
-      {isLoading && <SpinnerImage />}
+      {isLoading && <Loader />}
       {!isLoading && packages.length === 0 ? (
         <div className="flex justify-center items-center">
           <div className="text-2xl text-red-500">No Packages Available</div>

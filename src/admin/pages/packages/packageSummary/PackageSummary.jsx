@@ -15,7 +15,7 @@ export const formatNumbers = (x) => {
   return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 };
 
-const PackageSummary = ({ packages, hotels }) => {
+const PackageSummary = ({ packages, hotels, bookings }) => {
   const { users } = useSelector((state) => state.auth);
 
   return (
@@ -33,11 +33,11 @@ const PackageSummary = ({ packages, hotels }) => {
           title={"Total Packages"}
           count={packages.length}
           bgColor="bg-[#32963d]"
-        />{" "}
+        />
         <InfoBox
           icon={totalBookingIcon}
           title={"Total Bookings"}
-          // count={products.length}
+          count={bookings.length}
           bgColor="bg-[#03a5fc]"
         />
         <InfoBox

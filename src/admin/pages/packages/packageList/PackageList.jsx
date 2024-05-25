@@ -31,7 +31,7 @@ const PackageList = ({ packages, isLoading }) => {
     return text;
   };
 
-  const delProduct = async (id) => {
+  const   delProduct = async (id) => {
     await dispatch(deletePackage(id));
     await dispatch(getPackages());
   };

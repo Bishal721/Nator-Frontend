@@ -10,6 +10,7 @@ import { getAllHotels } from "../../redux/features/hotels/hotelSlice";
 import { FaPerson } from "react-icons/fa6";
 import { NewSearch } from "../../redux/features/hotels/SearchSlice";
 import DOMPurify from "dompurify";
+import Loader from "../../components/loader/Loader";
 
 const Hotel = () => {
   const dispatch = useDispatch();
@@ -90,6 +91,7 @@ const Hotel = () => {
 
   return (
     <>
+      {isloading && <Loader />}
       <section className="h-screen" style={styles}>
         <div className="bg-[#222222] opacity-35 h-full w-full absolute top-[4.75rem] mix-blend-multiply [transition:background_0.3s,_border-radius_0.3s,_opacity_0.3s] z-10"></div>
         <div className="relative  h-full w-full flex flex-col justify-center  items-center px-[4rem] z-30">

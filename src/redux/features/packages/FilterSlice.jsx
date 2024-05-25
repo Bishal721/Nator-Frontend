@@ -5,6 +5,7 @@ const initialState = {
   filteredHotels: [],
   filteredUsers: [],
   filteredBookings: [],
+  filteredCustomBookings: [],
 };
 
 const FilterSlice = createSlice({
@@ -50,16 +51,34 @@ const FilterSlice = createSlice({
       );
       state.filteredBookings = tempBooking;
     },
+    FILTER_CUSTOM_BOOKINGS(state, action) {
+      const { custombookings, search } = action.payload;
+      const tempBooking = custombookings.filter(
+        (book) =>
+          book.packageId.location
+            .toLowerCase()
+            .includes(search.toLowerCase()) ||
+          book.packageId.name.toLowerCase().includes(search.toLowerCase()) ||
+          book.userId.name.toLowerCase().includes(search.toLowerCase())
+      );
+      state.filteredCustomBookings = tempBooking;
+    },
   },
 });
 
-export const { FILTER_PACKAGES, FILTER_HOTELS, FILTER_USERS, FILTER_BOOKINGS } =
-  FilterSlice.actions;
+export const {
+  FILTER_PACKAGES,
+  FILTER_HOTELS,
+  FILTER_USERS,
+  FILTER_BOOKINGS,
+  FILTER_CUSTOM_BOOKINGS,
+} = FilterSlice.actions;
 
 export const selectFilteredPackage = (state) => state.filter.filteredPackages;
 export const selectFilteredHotels = (state) => state.filter.filteredHotels;
 
 export const selectFilteredUsers = (state) => state.filter.filteredUsers;
 export const selectFilteredBookings = (state) => state.filter.filteredBookings;
+export const selectFilteredCustomBookings = (state) => state.filter.filteredCustomBookings;
 
 export default FilterSlice.reducer;

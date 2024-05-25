@@ -5,7 +5,7 @@ import {
   HiOutlineCog,
   HiOutlineUsers,
 } from "react-icons/hi";
-import { TbPackages } from "react-icons/tb";
+import { TbBrandBooking, TbPackages } from "react-icons/tb";
 export const DASHBOARD_SIDEBAR_LINKS = [
   {
     key: "dashboard",
@@ -30,6 +30,12 @@ export const DASHBOARD_SIDEBAR_LINKS = [
     label: "Add Hotels",
     path: "add-hotels",
     icon: <FaHotel />,
+  },
+  {
+    key: "Bookings",
+    label: "Bookings",
+    path: "Allbookings",
+    icon: <TbBrandBooking />,
   },
 ];
 

@@ -5,7 +5,7 @@ import { toast } from "react-toastify";
 import { useDispatch } from "react-redux";
 import { changePassword } from "../../redux/features/auth/authSlice";
 
-const ChangePassword = ({ onClose, onChnagePasswordSubmit }) => {
+const ChangePassword = ({ onClose }) => {
   const [isLoading, setIsLoading] = useState(false);
   const modelRef = useRef();
   const dispatch = useDispatch();
@@ -29,7 +29,6 @@ const ChangePassword = ({ onClose, onChnagePasswordSubmit }) => {
 
   const changePass = async (e) => {
     e.preventDefault();
-    console.log(password.length);
     if (password.length < 6) {
       return toast.error("Passwords must be at least 6 characters");
     }
@@ -40,8 +39,9 @@ const ChangePassword = ({ onClose, onChnagePasswordSubmit }) => {
       oldpassword,
       password,
     };
-
+    setIsLoading(true);
     const data = await dispatch(changePassword(formData));
+    setIsLoading(false);
     if (data.meta.requestStatus === "fulfilled") {
       onClose();
     }
@@ -53,7 +53,7 @@ const ChangePassword = ({ onClose, onChnagePasswordSubmit }) => {
       <div
         ref={modelRef}
         onClick={closeModel}
-        className="fixed inset-0 bg-opacity-40 backdrop-blur-md flex justify-center items-center z-50"
+        className="fixed inset-0 bg-opacity-40 backdrop-blur-md flex justify-center items-center z-[30]"
       >
         <div className="relative bg-neutral-100 px-6 pt-10 pb-9 shadow-xl mx-auto w-full max-w-lg rounded-2xl">
           <div className="mx-auto flex w-full max-w-md flex-col space-y-3">

@@ -1,21 +1,23 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  CancelBooking,
-  RESETBOOKINGARR,
-  getSingleBooking,
-} from "../../redux/features/bookingdata/bookingdataSlice";
-import Search from "../../admin/components/search/Search";
-import { SpinnerImage } from "../../components/loader/Loader";
 import { confirmAlert } from "react-confirm-alert";
 import "react-confirm-alert/src/react-confirm-alert.css";
+import Search from "../../components/search/Search";
+import { SpinnerImage } from "../../../components/loader/Loader";
 import ReactPaginate from "react-paginate";
 import {
   FILTER_BOOKINGS,
   selectFilteredBookings,
-} from "../../redux/features/packages/FilterSlice";
-import CustomBookingPage from "./CustomBookingPage";
-const BookingPage = () => {
+} from "../../../redux/features/packages/FilterSlice";
+import {
+  RESETBOOKINGARR,
+  getAllBookings,
+} from "../../../redux/features/bookingdata/bookingdataSlice";
+import ViewCustomBooking from "./ViewCustomBooking";
+import PackageSummary from "../packages/packageSummary/PackageSummary";
+import BookingSummary from "../packages/packageSummary/BookingSummary";
+
+const ViewBookings = () => {
   const shortenText = (text, n) => {
     if (text.length > n) {
       const shortenedText = text.substring(0, n).concat("...");
@@ -23,16 +25,16 @@ const BookingPage = () => {
     }
     return text;
   };
-
   const dispatch = useDispatch();
   const filteredBookings = useSelector(selectFilteredBookings);
 
   const { bookings, isLoading, isError, message } = useSelector(
     (state) => state.booking
   );
+
   useEffect(() => {
     dispatch(RESETBOOKINGARR());
-    dispatch(getSingleBooking());
+    dispatch(getAllBookings());
 
     if (isError) {
       console.log(message);
@@ -40,26 +42,26 @@ const BookingPage = () => {
   }, [dispatch, message, isError]);
   const [search, setSearch] = useState("");
 
-  const cancelbookingPack = async (id) => {
-    await dispatch(CancelBooking(id));
-    await dispatch(getSingleBooking());
-  };
-  const confirmCancel = (id) => {
-    confirmAlert({
-      title: "Cancel Booking",
-      message: "Are you sure to Cancel Booking",
-      buttons: [
-        {
-          label: "Yes",
-          onClick: () => cancelbookingPack(id),
-        },
-        {
-          label: "No",
-          onClick: () => alert("Click No"),
-        },
-      ],
-    });
-  };
+  // const cancelbookingPack = async (id) => {
+  //   await dispatch(CancelBooking(id));
+  //   await dispatch(getAllBookings());
+  // };
+  // const confirmCancel = (id) => {
+  //   confirmAlert({
+  //     title: "Cancel Booking",
+  //     message: "Are you sure to Cancel Booking",
+  //     buttons: [
+  //       {
+  //         label: "Yes",
+  //         onClick: () => cancelbookingPack(id),
+  //       },
+  //       {
+  //         label: "No",
+  //         onClick: () => alert("Click No"),
+  //       },
+  //     ],
+  //   });
+  // };
 
   //Begin Pagination
 
@@ -81,8 +83,10 @@ const BookingPage = () => {
   useEffect(() => {
     dispatch(FILTER_BOOKINGS({ bookings, search }));
   }, [bookings, search, dispatch]);
+
   return (
     <>
+      <BookingSummary />
       <div className="p-1 w-full overflow-x-auto">
         <div className="flex justify-between items-center ">
           <span>
@@ -127,9 +131,6 @@ const BookingPage = () => {
                   <th scope="col" className="align-top text-left p-3">
                     Booking Status
                   </th>
-                  <th scope="col" className="align-top text-left p-3">
-                    Action
-                  </th>
                 </tr>
               </thead>
               <tbody>
@@ -160,15 +161,6 @@ const BookingPage = () => {
                       <td className="align-top text-left p-3">
                         {shortenText(book?.status, 10)}
                       </td>
-                      <td className="align-top text-left p-3">
-                        <button
-                          className="font-medium bg-orange-400 hover:bg-orange-500 p-2 rounded text-white disabled:bg-gray-400 disabled:cursor-not-allowed"
-                          onClick={() => confirmCancel(book?._id)}
-                          disabled={book?.status === "Canceled"}
-                        >
-                          Cancel Booking
-                        </button>
-                      </td>
                     </tr>
                   );
                 })}
@@ -190,10 +182,10 @@ const BookingPage = () => {
             activeLinkClassName="active"
           />
         </div>
+        <ViewCustomBooking />
       </div>
-      <CustomBookingPage />
     </>
   );
 };
 
-export default BookingPage;
+export default ViewBookings;

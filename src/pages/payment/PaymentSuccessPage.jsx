@@ -5,6 +5,7 @@ import { useEffect, useRef } from "react";
 import {
   RESETBOOKING,
   createBooking,
+  createCustomBooking,
   selectBookingFormData,
 } from "../../redux/features/bookingdata/bookingdataSlice";
 
@@ -19,9 +20,32 @@ const PaymentSuccessPage = () => {
   const paymentStatus = queryParams.get("paymentStatus");
 
   useEffect(() => {
-    if (paymentStatus !== "success") {
+    // if (
+    //   paymentStatus !== "success" &&
+    //   storeformData &&
+    //   !bookingInitiated.current
+    // ) {
+    //   bookingInitiated.current = true; // Set the ref to true before handling booking
+    //   handleBooking();
+    // } else if (
+    //   paymentStatus === "Customsuccess" &&
+    //   storeformData &&
+    //   !bookingInitiated.current
+    // ) {
+    //   bookingInitiated.current = true; // Set the ref to true before handling booking
+    //   handleBooking();
+    // } else {
+    //   navigate("/");
+    // }
+    if (paymentStatus !== "success" && paymentStatus !== "Customsuccess") {
       navigate("/");
-    } else if (storeformData && !bookingInitiated.current) {
+      return;
+    }
+    if (
+      (paymentStatus === "success" || paymentStatus === "Customsuccess") &&
+      storeformData &&
+      !bookingInitiated.current
+    ) {
       bookingInitiated.current = true; // Set the ref to true before handling booking
       handleBooking();
     }
@@ -41,8 +65,12 @@ const PaymentSuccessPage = () => {
 
   const handleBooking = async () => {
     try {
-      if (storeformData) {
+      if (storeformData && paymentStatus === "success") {
         await dispatch(createBooking(storeformData));
+        dispatch(RESETBOOKING());
+      }
+      if (storeformData && paymentStatus === "Customsuccess") {
+        await dispatch(createCustomBooking(storeformData));
         dispatch(RESETBOOKING());
       }
     } catch (error) {
