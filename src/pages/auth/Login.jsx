@@ -42,7 +42,6 @@ const Login = () => {
       password,
     };
     const data = await dispatch(loginUser(userData));
-    console.log(data);
     if (data.payload.role === "admin") {
       navigate("/admin/dashboard");
     }

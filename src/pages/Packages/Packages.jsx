@@ -1,19 +1,25 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Card from "../../components/card/Card";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { getPackages } from "../../redux/features/packages/packageSlice";
 import Loader from "../../components/loader/Loader";
 import { IoLocationOutline } from "react-icons/io5";
 import { GiDuration } from "react-icons/gi";
-
+import {
+  RESETLOCATION,
+  selectLocationFormData,
+} from "../../redux/features/bookingdata/bookingdataSlice";
 const Packages = () => {
   const dispatch = useDispatch();
   const { packages, isLoading, isError, message } = useSelector(
     (state) => state.package
   );
-
-  // console.log(packages);
+  const PackageInitiated = useRef(false);
+  const storeLocationData = useSelector(selectLocationFormData);
+  const initialState = {
+    location: storeLocationData || "",
+  };
   const shortenText = (text, n) => {
     if (text.length > n) {
       const shortenedText = text.substring(0, n).concat("...");
@@ -21,13 +27,28 @@ const Packages = () => {
     }
     return text;
   };
+
   useEffect(() => {
-    dispatch(getPackages());
-    // console.log(nm);
+    if (!PackageInitiated.current) {
+      PackageInitiated.current = true;
+      if (initialState.location) {
+        dispatch(getPackages(initialState));
+      } else {
+        dispatch(getPackages());
+      }
+      // Dispatch RESETLOCATION only if needed, after a specific action, not immediately
+      // dispatch(RESETLOCATION());
+    }
+  }, [dispatch, initialState]);
+  useEffect(() => {
     if (isError) {
       console.log(message);
     }
-  }, [dispatch, isError, message]);
+  }, [isError, message]);
+  const handleShowAll = async () => {
+    dispatch(RESETLOCATION());
+    dispatch(getPackages());
+  };
 
   return (
     <>
@@ -38,6 +59,16 @@ const Packages = () => {
         </div>
       ) : (
         <div className=" border">
+          <div className="grid md:grid-cols-4 ">
+            <div className="col-start-4">
+              <button
+                className="w-full bg-orange-400 hover_bg-orange-500 p-3 text-white rounded"
+                onClick={handleShowAll}
+              >
+                Show All Packages
+              </button>
+            </div>
+          </div>
           <div className="grid  md:grid-cols-3  gap-6 p-4">
             {packages.map((pack, index) => {
               const { name, price, location, _id } = pack;

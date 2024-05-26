@@ -31,7 +31,6 @@ export const updateRoomAvailability = createAsyncThunk(
   async ({ id, formData }, thunkAPI) => {
     try {
       const data = await roomService.updateRoomAvailability(id, formData);
-      console.log("data", data);
       return data;
     } catch (error) {
       const message =
@@ -49,7 +48,6 @@ export const updateRoom = createAsyncThunk(
   async ({ id, formData }, thunkAPI) => {
     try {
       const data = await roomService.updateRoom(id, formData);
-      console.log("data", data);
       return data;
     } catch (error) {
       const message =

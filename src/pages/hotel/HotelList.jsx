@@ -61,14 +61,7 @@ const HotelList = () => {
       console.log(message);
     }
   }, [dispatch, isError]);
-  // }else{
-  //   useEffect(() => {
-  //     dispatch(getAllHotels(initialState));
-  //     if (isError) {
-  //       console.log(message);
-  //     }
-  //   }, [dispatch, isError]);
-  // }
+
 
   const [value, setValue] = useState({
     startDate: null,
@@ -76,13 +69,11 @@ const HotelList = () => {
   });
 
   const handleValueChange = (newValue) => {
-    console.log("newValue:", newValue);
     setValue(newValue);
   };
 
   const handleClick = (e) => {
     e.preventDefault();
-    console.log(destination);
     dispatch(getAllHotels(initialState));
   };
 

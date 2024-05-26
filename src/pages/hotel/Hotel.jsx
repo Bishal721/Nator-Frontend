@@ -58,7 +58,6 @@ const Hotel = () => {
   });
 
   const handleValueChange = (newValue) => {
-    console.log("newValue:", newValue);
     setDates(newValue);
   };
   const handleOption = (name, operation) => {
@@ -78,7 +77,6 @@ const Hotel = () => {
     };
     e.preventDefault();
     const data = dispatch(NewSearch({ payload: formData }));
-    console.log(data);
     navigate("/hotel-list", { state: formData });
   };
 

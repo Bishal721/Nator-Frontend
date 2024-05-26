@@ -20,24 +20,7 @@ const PaymentSuccessPage = () => {
   const paymentStatus = queryParams.get("paymentStatus");
 
   useEffect(() => {
-    // if (
-    //   paymentStatus !== "success" &&
-    //   storeformData &&
-    //   !bookingInitiated.current
-    // ) {
-    //   bookingInitiated.current = true; // Set the ref to true before handling booking
-    //   handleBooking();
-    // } else if (
-    //   paymentStatus === "Customsuccess" &&
-    //   storeformData &&
-    //   !bookingInitiated.current
-    // ) {
-    //   bookingInitiated.current = true; // Set the ref to true before handling booking
-    //   handleBooking();
-    // } else {
-    //   navigate("/");
-    // }
-    if (paymentStatus !== "success" && paymentStatus !== "Customsuccess") {
+      if (paymentStatus !== "success" && paymentStatus !== "Customsuccess") {
       navigate("/");
       return;
     }

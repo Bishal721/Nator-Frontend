@@ -1,20 +1,19 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { confirmAlert } from "react-confirm-alert";
 import "react-confirm-alert/src/react-confirm-alert.css";
 import Search from "../../components/search/Search";
 import { SpinnerImage } from "../../../components/loader/Loader";
 import ReactPaginate from "react-paginate";
 import {
-  FILTER_CUSTOM_BOOKINGS,
-  selectFilteredCustomBookings,
+  FILTER_HOTEL_RESERVE,
+  selectFilteredHotelReserve,
 } from "../../../redux/features/packages/FilterSlice";
 import {
-  RESETBOOKINGARR,
-  getAllCustomBookings,
+  RESETHOTELRESERVEARR,
+  getAllHotelReservation,
 } from "../../../redux/features/bookingdata/bookingdataSlice";
 
-const ViewCustomBooking = () => {
+const ViewHotelReserve = () => {
   const shortenText = (text, n) => {
     if (text.length > n) {
       const shortenedText = text.substring(0, n).concat("...");
@@ -23,15 +22,15 @@ const ViewCustomBooking = () => {
     return text;
   };
   const dispatch = useDispatch();
-  const filteredCustomBookings = useSelector(selectFilteredCustomBookings);
+  const filteredHotelReserve = useSelector(selectFilteredHotelReserve);
 
-  const { custombookings, isLoading, isError, message } = useSelector(
+  const { hotelreserve, isLoading, isError, message } = useSelector(
     (state) => state.booking
   );
 
   useEffect(() => {
-    dispatch(RESETBOOKINGARR());
-    dispatch(getAllCustomBookings());
+    dispatch(RESETHOTELRESERVEARR());
+    dispatch(getAllHotelReservation());
 
     if (isError) {
       console.log(message);
@@ -48,23 +47,24 @@ const ViewCustomBooking = () => {
 
   useEffect(() => {
     const endOffset = itemOffset + itemsPerPage;
-    setCurrentItems(filteredCustomBookings.slice(itemOffset, endOffset));
-    setPageCount(Math.ceil(filteredCustomBookings.length / itemsPerPage));
-  }, [itemOffset, itemsPerPage, filteredCustomBookings]);
+    setCurrentItems(filteredHotelReserve.slice(itemOffset, endOffset));
+    setPageCount(Math.ceil(filteredHotelReserve.length / itemsPerPage));
+  }, [itemOffset, itemsPerPage, filteredHotelReserve]);
   const handlePageClick = (event) => {
-    const newOffset = (event.selected * itemsPerPage) % filteredCustomBookings.length;
+    const newOffset =
+      (event.selected * itemsPerPage) % filteredHotelReserve.length;
 
     setItemOffset(newOffset);
   };
   useEffect(() => {
-    dispatch(FILTER_CUSTOM_BOOKINGS({ custombookings, search }));
-  }, [custombookings, search, dispatch]);
+    dispatch(FILTER_HOTEL_RESERVE({ hotelreserve, search }));
+  }, [hotelreserve, search, dispatch]);
 
   return (
     <div className="p-1 w-full overflow-x-auto">
       <div className="flex justify-between items-center ">
         <span>
-          <h3 className="md:text-2xl">Custom Package Bookings List</h3>
+          <h3 className="md:text-2xl">Hotel Reserve List</h3>
         </span>
         <span>
           <Search value={search} onChange={(e) => setSearch(e.target.value)} />
@@ -73,7 +73,7 @@ const ViewCustomBooking = () => {
       {isLoading && <SpinnerImage />}
 
       <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
-        {!isLoading && custombookings.length === 0 ? (
+        {!isLoading && hotelreserve.length === 0 ? (
           <p>
             <b>"Bookings not Found"</b>
           </p>
@@ -82,25 +82,22 @@ const ViewCustomBooking = () => {
             <thead className="bg-orange-400 text-white w-full">
               <tr>
                 <th scope="col" className="align-top text-left p-3">
-                  {shortenText("Package Name", 20)}
+                  {shortenText("Hotel Name", 20)}
                 </th>
                 <th scope="col" className="align-top text-left p-3">
-                  Package Location
+                  Hotel City
                 </th>
                 <th scope="col" className="align-top text-left p-3">
-                  Package Duration
+                  Hotel Distance
                 </th>
                 <th scope="col" className="align-top text-left p-3">
                   Booked By
                 </th>
                 <th scope="col" className="align-top text-left p-3">
-                  Price
+                  Email
                 </th>
                 <th scope="col" className="align-top text-left p-3">
-                  No of Guests
-                </th>
-                <th scope="col" className="align-top text-left p-3">
-                  Booking Status
+                  Reserve Status
                 </th>
               </tr>
             </thead>
@@ -112,22 +109,19 @@ const ViewCustomBooking = () => {
                     className="hover:cursor-pointer hover:bg-[rgba(31,_147,_255,_0.3)] capitalize"
                   >
                     <td className="align-top text-left p-3">
-                      {shortenText(book?.packageId.name, 10)}
+                      {shortenText(book?.hotelId.name, 10)}
                     </td>
                     <td className="align-top text-left p-3">
-                      {shortenText(book?.packageId.location, 10)}
+                      {shortenText(book?.hotelId.city, 10)}
                     </td>
                     <td className="align-top text-left p-3">
-                      {shortenText(book?.packageId.duration, 10)}&nbsp;days
+                      {shortenText(book?.hotelId.distance, 10)}&nbsp;days
                     </td>
                     <td className="align-top text-left p-3">
                       {shortenText(book?.userId.name, 10)}
                     </td>
-                    <td className="align-top text-left p-3">
-                      Rs&nbsp;{shortenText(book?.price, 10)}
-                    </td>
-                    <td className="align-top text-left p-3">
-                      {shortenText(book?.guests, 10)}
+                    <td className="align-top text-left p-3 normal-case">
+                      {shortenText(book?.userId.email, 10)}
                     </td>
                     <td className="align-top text-left p-3">
                       {shortenText(book?.status, 10)}
@@ -157,4 +151,4 @@ const ViewCustomBooking = () => {
   );
 };
 
-export default ViewCustomBooking;
+export default ViewHotelReserve;

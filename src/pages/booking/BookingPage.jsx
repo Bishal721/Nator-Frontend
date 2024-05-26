@@ -15,6 +15,7 @@ import {
   selectFilteredBookings,
 } from "../../redux/features/packages/FilterSlice";
 import CustomBookingPage from "./CustomBookingPage";
+import HotelReserve from "./HotelReserve";
 const BookingPage = () => {
   const shortenText = (text, n) => {
     if (text.length > n) {
@@ -192,6 +193,7 @@ const BookingPage = () => {
         </div>
       </div>
       <CustomBookingPage />
+      <HotelReserve />
     </>
   );
 };

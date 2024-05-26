@@ -26,7 +26,6 @@ export const makeCustomPayment = async (formData) => {
   );
 
   const session = await response.data;
-  console.log(session);
   const result = stripe.redirectToCheckout({
     sessionId: session.id,
   });
@@ -116,6 +115,9 @@ const CustomBooking = ({ onClose }) => {
     if (user.payload.role === "admin") {
       return toast.error("Only User  can Book the packages");
     }
+    if (user.payload.isVerified === false) {
+      return toast.error("User must be verified please verify your Account");
+    }
     if (
       !guests ||
       !duration ||
@@ -149,7 +151,6 @@ const CustomBooking = ({ onClose }) => {
       Bookfor: dates,
       name: Package?.name,
     };
-    console.log(formData);
 
     const data = await dispatch(storeBookingFormData(formData));
     if (data.meta.requestStatus === "fulfilled") {

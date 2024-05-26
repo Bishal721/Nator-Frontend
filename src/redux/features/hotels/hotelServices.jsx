@@ -5,7 +5,6 @@ const API_URL = `${BACKEND_URL}/api/v1/hotels/`;
 // create new Hotel
 const createHotel = async (formData) => {
   const response = await axios.post(`${API_URL}`, formData);
-  console.log(response.data);
   return response.data;
 };
 // get all hotel data
@@ -23,7 +22,6 @@ const getHotel = async (id) => {
 
 // update Hotel
 const updateHotel = async (id, formData) => {
-  console.log(id, formData);
   const response = await axios.put(API_URL + id, formData);
   return response.data;
 };

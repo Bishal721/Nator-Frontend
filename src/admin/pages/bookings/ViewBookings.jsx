@@ -14,8 +14,8 @@ import {
   getAllBookings,
 } from "../../../redux/features/bookingdata/bookingdataSlice";
 import ViewCustomBooking from "./ViewCustomBooking";
-import PackageSummary from "../packages/packageSummary/PackageSummary";
 import BookingSummary from "../packages/packageSummary/BookingSummary";
+import ViewHotelReserve from "./ViewHotelReserve";
 
 const ViewBookings = () => {
   const shortenText = (text, n) => {
@@ -76,7 +76,7 @@ const ViewBookings = () => {
     setPageCount(Math.ceil(filteredBookings.length / itemsPerPage));
   }, [itemOffset, itemsPerPage, filteredBookings]);
   const handlePageClick = (event) => {
-    const newOffset = (event.selected * itemsPerPage) % filteredPackages.length;
+    const newOffset = (event.selected * itemsPerPage) % filteredBookings.length;
 
     setItemOffset(newOffset);
   };
@@ -183,6 +183,7 @@ const ViewBookings = () => {
           />
         </div>
         <ViewCustomBooking />
+        <ViewHotelReserve />
       </div>
     </>
   );

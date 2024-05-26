@@ -177,7 +177,6 @@ const UpdatePackage = () => {
     if (productImage) {
       formData.append("image", productImage);
     }
-    console.log(...formData);
 
     const data = await dispatch(updatePackage({ id, formData }));
     if (data.meta.requestStatus === "fulfilled") {

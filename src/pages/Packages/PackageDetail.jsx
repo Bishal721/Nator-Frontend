@@ -56,6 +56,9 @@ const PackageDetail = () => {
     if (user.payload.role === "admin") {
       return toast.error("Only User  can Give review to packages");
     }
+    if (user.payload.isVerified === false) {
+      return toast.error("User must be verified to use this service");
+    }
 
     const reviewText = reviewMsgRef.current.value;
     if (!reviewText || !tourRating || !id) {

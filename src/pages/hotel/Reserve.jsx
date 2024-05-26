@@ -4,13 +4,17 @@ import { useDispatch, useSelector } from "react-redux";
 import { getHotelRooms } from "../../redux/features/hotels/hotelSlice";
 import Loader from "../../components/loader/Loader";
 import { updateRoomAvailability } from "../../redux/features/rooms/roomSlice";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+import authService from "../../services/authService";
+import { toast } from "react-toastify";
+import { getUser } from "../../redux/features/auth/authSlice";
 const Reserve = ({ setOpen, hotelId, dates }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { hotelrooms, isLoading, isError, message } = useSelector(
     (state) => state.hotel
   );
+  const { Hotel } = useSelector((state) => state.hotel);
 
   useEffect(() => {
     dispatch(getHotelRooms(hotelId));
@@ -52,13 +56,36 @@ const Reserve = ({ setOpen, hotelId, dates }) => {
         : selectedRooms.filter((item) => item !== value)
     );
   };
-  const handleClick = async () => {
+  const handleClick = async (e) => {
     try {
+      e.preventDefault();
+      let isloggedin = await authService.GetLoginStatus();
+      if (!isloggedin) {
+        toast.info("Please Log in first");
+        return navigate("/login");
+      }
+      let user = await dispatch(getUser());
+      if (user.payload.role === "admin") {
+        return toast.error("Only User  can Reserve the Hotels");
+      }
+      if (user.payload.isVerified === false) {
+        return toast.error("User must be verified please verify your Account");
+      }
+
+      let datenow = new Date()
+        .toLocaleDateString("en-us", {
+          year: "numeric",
+          month: "2-digit",
+          day: "2-digit",
+        })
+        .replace(/\//g, "-");
       for (const roomId of selectedRooms) {
         const formData = {
           dates: alldates,
+          roomId: roomId,
+          hotelId: Hotel?._id,
+          datenow,
         };
-
         // Dispatch an action to update room availability
         dispatch(updateRoomAvailability({ id: roomId, formData }));
       }
@@ -71,7 +98,6 @@ const Reserve = ({ setOpen, hotelId, dates }) => {
       console.log(err);
     }
   };
-  console.log(hotelrooms);
   return (
     <>
       {isLoading && <Loader />}
@@ -89,7 +115,6 @@ const Reserve = ({ setOpen, hotelId, dates }) => {
               key={item._id}
             >
               <div className="rItemInfo">
-                {/* <div className="font-medium">{item.title}</div> */}
                 <div className="font-light">{item.desc}</div>
                 <div className="text-[12px]">
                   Max people: <b>{item.maxPeople}</b>
@@ -108,7 +133,6 @@ const Reserve = ({ setOpen, hotelId, dates }) => {
                       value={roomNumber._id}
                       onChange={handleSelect}
                       disabled={!isAvailable(roomNumber)}
-                      id=""
                     />
                   </div>
                 ))}

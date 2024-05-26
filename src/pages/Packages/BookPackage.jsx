@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { RiCloseLine } from "react-icons/ri";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import axios from "axios";
@@ -31,7 +31,6 @@ const makePayment = async (formData) => {
   );
 
   const session = await response.data;
-  console.log(session);
   const result = stripe.redirectToCheckout({
     sessionId: session.id,
   });
@@ -95,7 +94,6 @@ const BookPackage = ({
   useEffect(() => {
     setTotalPrice(price * guests);
   }, [price, guests]);
-
   const bookpack = async (e) => {
     e.preventDefault();
     let isloggedin = await authService.GetLoginStatus();
@@ -108,6 +106,10 @@ const BookPackage = ({
     if (user.payload.role === "admin") {
       return toast.error("Only User  can Book the packages");
     }
+    if (user.payload.isVerified === false) {
+      return toast.error("User must be verified please verify your Account");
+    }
+
     if (selectedOptions.status === "full") {
       toast.info("Package Already Full ");
       return toast.info("Please Select another Date ");
@@ -153,7 +155,6 @@ const BookPackage = ({
       specificDateId: selectedOptions.value,
     };
     const data = await dispatch(storeBookingFormData(formData));
-    console.log(data);
     if (data.meta.requestStatus === "fulfilled") {
       await makePayment(formData);
     }

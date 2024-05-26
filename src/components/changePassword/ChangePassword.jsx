@@ -3,7 +3,7 @@ import Loader from "../loader/Loader";
 import { RxCross2 } from "react-icons/rx";
 import { toast } from "react-toastify";
 import { useDispatch } from "react-redux";
-import { changePassword } from "../../redux/features/auth/authSlice";
+import { changePassword, getUser } from "../../redux/features/auth/authSlice";
 
 const ChangePassword = ({ onClose }) => {
   const [isLoading, setIsLoading] = useState(false);
@@ -29,6 +29,10 @@ const ChangePassword = ({ onClose }) => {
 
   const changePass = async (e) => {
     e.preventDefault();
+    const user = await dispatch(getUser());
+    if (user.payload.isVerified !== true) {
+      return toast.error("User must be verified please verify your Account");
+    }
     if (password.length < 6) {
       return toast.error("Passwords must be at least 6 characters");
     }

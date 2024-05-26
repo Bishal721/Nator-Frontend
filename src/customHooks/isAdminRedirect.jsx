@@ -25,7 +25,9 @@ const isAdminRedirect = () => {
       } catch (error) {
         console.log(error.message);
       }
-      console.log(user.role);
+      if (user.role === "admin") {
+        user.isVerified = true;
+      }
       if (user.role !== "admin") {
         toast.info("Unauthorized User");
         navigate("/");

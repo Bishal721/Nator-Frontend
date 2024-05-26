@@ -74,7 +74,6 @@ const AddPackage = () => {
     // Convert endDate to a string in the same format as startDate
     const endDateString = endDate.toISOString().split("T")[0];
 
-    console.log(endDateString); // This will give you the e
     const updatedValue = { ...newValue, endDate: endDateString };
     const newDatePickers = [...recurringDates];
     newDatePickers[index] = updatedValue;
@@ -140,7 +139,6 @@ const AddPackage = () => {
       formData.append("image", productImage);
     }
 
-    console.log(...formData);
 
     const data = await dispatch(createPackage(formData));
     if (data.meta.requestStatus === "fulfilled") {

@@ -4,8 +4,10 @@ import packageService from "../packages/pacakgeService";
 
 const initialState = {
   bookingFormData: null,
+  locationFormData: null,
   bookings: [],
   custombookings: [],
+  hotelreserve: [],
   Booking: null,
   isError: false,
   isSuccess: false,
@@ -17,7 +19,6 @@ const initialState = {
 export const storeBookingFormData = createAsyncThunk(
   "booking/storeBookingFormData",
   async (formData, thunkAPI) => {
-    console.log(formData);
     try {
       // Dispatch an action to update the state with the booking form data
       return formData;
@@ -32,7 +33,6 @@ export const storeBookingFormData = createAsyncThunk(
 export const createBooking = createAsyncThunk(
   "booking/createBooking",
   async (formData, thunkAPI) => {
-    console.log(formData);
     try {
       return await packageService.createBooking(formData);
     } catch (error) {
@@ -101,7 +101,6 @@ export const CancelBooking = createAsyncThunk(
 export const createCustomBooking = createAsyncThunk(
   "booking/createCustomBooking",
   async (formData, thunkAPI) => {
-    console.log(formData);
     try {
       return await packageService.createCustomBooking(formData);
     } catch (error) {
@@ -168,6 +167,70 @@ export const CancelCustomBooking = createAsyncThunk(
   }
 );
 
+export const getAllHotelReservation = createAsyncThunk(
+  "booking/getAllHotelReservation",
+  async (_, thunkAPI) => {
+    try {
+      return await packageService.getAllHotelReservation();
+    } catch (error) {
+      const message =
+        (error.response && error.response.data && error.response.message) ||
+        error.message ||
+        error.toString();
+      toast.error(error.response.data.message);
+      console.log(error);
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
+
+export const getSingleHotelReservation = createAsyncThunk(
+  "booking/getSingleHotelReservation",
+  async (_, thunkAPI) => {
+    try {
+      return await packageService.getSingleHotelReservation();
+    } catch (error) {
+      const message =
+        (error.response && error.response.data && error.response.message) ||
+        error.message ||
+        error.toString();
+      toast.error(error.response.data.message);
+      console.log(error);
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
+
+export const cancelReservation = createAsyncThunk(
+  "booking/cancelReservation",
+  async (id, thunkAPI) => {
+    try {
+      return await packageService.CancelReservation(id);
+      re;
+    } catch (error) {
+      const message =
+        (error.response && error.response.data && error.response.message) ||
+        error.message ||
+        error.toString();
+      toast.error(error.response.data.message);
+      console.log(error);
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
+export const setLocation = createAsyncThunk(
+  "booking/setlocation",
+  async (formData, thunkAPI) => {
+    try {
+      // Dispatch an action to update the state with the booking form data
+      return formData;
+    } catch (error) {
+      console.error("Error storing booking form data:", error);
+      // Return error message to be handled by Redux
+      return thunkAPI.rejectWithValue("Error storing booking form data.");
+    }
+  }
+);
 const bookingdataSlice = createSlice({
   name: "booking",
   initialState,
@@ -180,6 +243,12 @@ const bookingdataSlice = createSlice({
     },
     RESETCUSTOMBOOKINGARR(state) {
       state.custombookings = [];
+    },
+    RESETHOTELRESERVEARR(state) {
+      state.hotelreserve = [];
+    },
+    RESETLOCATION(state) {
+      state.locationFormData = null;
     },
   },
   extraReducers: (builder) => {
@@ -197,6 +266,21 @@ const bookingdataSlice = createSlice({
       })
       // Handle storeBookingFormData rejected action
       .addCase(storeBookingFormData.rejected, (state, action) => {
+        state.isError = true;
+        state.isLoading = false;
+        state.message = action.payload;
+      })
+      .addCase(setLocation.pending, (state) => {
+        state.isLoading = true;
+      })
+      // Handle storeBookingFormData fulfilled action
+      .addCase(setLocation.fulfilled, (state, action) => {
+        state.locationFormData = action.payload.location;
+        state.isSuccess = true;
+        state.isLoading = false;
+      })
+      // Handle storeBookingFormData rejected action
+      .addCase(setLocation.rejected, (state, action) => {
         state.isError = true;
         state.isLoading = false;
         state.message = action.payload;
@@ -315,12 +399,61 @@ const bookingdataSlice = createSlice({
         state.isLoading = false;
         state.isError = true;
         state.message = action.payload;
+      })
+      .addCase(getAllHotelReservation.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(getAllHotelReservation.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isSuccess = true;
+        state.isError = false;
+        state.hotelreserve = action.payload;
+      })
+      .addCase(getAllHotelReservation.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.message = action.payload;
+      })
+      .addCase(getSingleHotelReservation.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(getSingleHotelReservation.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isSuccess = true;
+        state.isError = false;
+        state.hotelreserve = action.payload;
+      })
+      .addCase(getSingleHotelReservation.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.message = action.payload;
+      })
+      .addCase(cancelReservation.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(cancelReservation.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isSuccess = true;
+        state.isError = false;
+        toast.success("Hotel Reservation canceled Successfully");
+      })
+      .addCase(cancelReservation.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.message = action.payload;
+        toast.error(action.payload);
       });
   },
 });
-export const { RESETBOOKING, RESETBOOKINGARR, RESETCUSTOMBOOKINGARR } =
-  bookingdataSlice.actions;
+export const {
+  RESETBOOKING,
+  RESETBOOKINGARR,
+  RESETCUSTOMBOOKINGARR,
+  RESETHOTELRESERVEARR,
+  RESETLOCATION,
+} = bookingdataSlice.actions;
 
 export const selectBookingFormData = (state) => state.booking.bookingFormData;
+export const selectLocationFormData = (state) => state.booking.locationFormData;
 
 export default bookingdataSlice.reducer;

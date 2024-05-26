@@ -31,7 +31,6 @@ const Profile = () => {
   };
   const [profile, setProfile] = useState(initialState);
   const [profileImage, setProfileImage] = useState("");
-
   const [showChangeModel, setShowChangeModel] = useState(false);
 
   useEffect(() => {
@@ -50,6 +49,9 @@ const Profile = () => {
     e.preventDefault();
     try {
       // Handle Image Upload to Cloudinary
+      if (profile?.isVerified !== true) {
+        return toast.error("User must be verified please verify your Account");
+      }
       let imageURL;
       if (
         profileImage &&
@@ -69,7 +71,6 @@ const Profile = () => {
         );
         const imgData = await response.json();
         imageURL = imgData.url.toString();
-        console.log(imageURL);
       }
 
       const formData = {

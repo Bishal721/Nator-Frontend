@@ -38,13 +38,14 @@ const Navbar = () => {
 
   const logout = () => {
     dispatch(logoutUser());
+    localStorage.clear();
     dispatch(RESET());
     navigate("/login");
   };
 
   let [open, setOpen] = useState(false);
   return (
-    <div className="md:sticky md:top-0 z-50 border-b-2 border-b-gray-300 ">
+    <div className="md:sticky md:top-0 z-40 border-b-2 border-b-gray-300 ">
       <div className="w-full bg-white">
         <nav className="md:container flex justify-between items-center w-full  text-gray-700 py-4 mx-auto">
           <div>
@@ -52,7 +53,6 @@ const Navbar = () => {
               className="text-4xl text-orange-400 cursor-pointer font-bold font-heading"
               to="/"
             >
-              {/* <img className="h-9" src="logo.png" alt="logo" /> */}
               Natour
             </Link>
           </div>

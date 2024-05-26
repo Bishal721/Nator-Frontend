@@ -8,8 +8,12 @@ const createPackage = async (formData) => {
   return response.data;
 };
 // Get all Packages
-const getPackages = async () => {
-  const response = await axios.get(API_URL);
+const getPackages = async (formData) => {
+  if (formData === undefined) {
+    const response = await axios.get(`${API_URL}`);
+    return response.data;
+  }
+  const response = await axios.get(`${API_URL}?location=${formData.location}`);
   return response.data;
 };
 // Get Single Package
@@ -59,14 +63,11 @@ const getAllBookings = async () => {
 };
 
 const CancelBooking = async (id) => {
-  console.log(id);
   const response = await axios.patch(API_URL + "cancelBooking/" + id);
-  console.log(response);
   return response.data;
 };
 const createCustomBooking = async (formData) => {
   const response = await axios.post(API_URL + "customBooking ", formData);
-  console.log(response);
   return response.data;
 };
 
@@ -80,12 +81,29 @@ const getAllCustomBookings = async () => {
 };
 
 const CancelCustomBooking = async (id) => {
-  console.log(id);
   const response = await axios.patch(API_URL + "cancelCustomBooking/" + id);
-  console.log(response);
   return response.data;
 };
 
+const getSingleHotelReservation = async () => {
+  const response = await axios.get(
+    `${BACKEND_URL}/api/v1/rooms/reserve/getSingleReserveHotel`
+  );
+  return response.data;
+};
+const getAllHotelReservation = async () => {
+  const response = await axios.get(
+    `${BACKEND_URL}/api/v1/rooms/reserve/getAllReserveHotel`
+  );
+  return response.data;
+};
+
+const CancelReservation = async (id) => {
+  const response = await axios.patch(
+    `${BACKEND_URL}/api/v1/rooms/reserve/cancelReservarion/${id}`
+  );
+  return response.data;
+};
 const packageService = {
   createPackage,
   getPackages,
@@ -103,5 +121,8 @@ const packageService = {
   CancelCustomBooking,
   getSingleCustomBooking,
   getAllCustomBookings,
+  getSingleHotelReservation,
+  getAllHotelReservation,
+  CancelReservation,
 };
 export default packageService;

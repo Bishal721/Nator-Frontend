@@ -94,10 +94,8 @@ const AddHotel = () => {
     if (hotelImage) {
       formData.append("photos", hotelImage);
     }
-    console.log(...formData);
 
     const data = await dispatch(createHotel(formData));
-    console.log(data);
     if (data.meta.requestStatus === "fulfilled") {
       navigate("/admin/dashboard");
     }

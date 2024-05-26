@@ -15,7 +15,6 @@ const initialState = {
 export const createPackage = createAsyncThunk(
   "packages/create",
   async (formData, thunkAPI) => {
-    console.log(formData);
     try {
       return await packageService.createPackage(formData);
     } catch (error) {
@@ -32,9 +31,12 @@ export const createPackage = createAsyncThunk(
 // get all packages
 export const getPackages = createAsyncThunk(
   "packages/getAll",
-  async (_, thunkAPI) => {
+  async (formData, thunkAPI) => {
     try {
-      return await packageService.getPackages();
+      if (formData === undefined) {
+        return await packageService.getPackages();
+      }
+      return await packageService.getPackages(formData);
     } catch (error) {
       const message =
         (error.response && error.response.data && error.response.message) ||
@@ -79,7 +81,6 @@ export const getExtraPeople = createAsyncThunk(
 export const updatePackage = createAsyncThunk(
   "packages/updatePackage",
   async ({ id, formData }, thunkAPI) => {
-    console.log(formData);
     try {
       return await packageService.updatePackage(id, formData);
     } catch (error) {
