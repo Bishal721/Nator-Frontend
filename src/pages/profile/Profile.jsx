@@ -45,12 +45,16 @@ const Profile = () => {
   const HandleImageChange = (e) => {
     setProfileImage(e.target.files[0]);
   };
+
   const updateProfile = async (e) => {
     e.preventDefault();
     try {
       // Handle Image Upload to Cloudinary
       if (profile?.isVerified !== true) {
         return toast.error("User must be verified please verify your Account");
+      }
+      if (profile?.phone <= 0) {
+        return toast.error("Phone number cannnot be a negative  value");
       }
       let imageURL;
       if (
@@ -202,7 +206,7 @@ const Profile = () => {
                           Phone Number
                         </label>
                         <input
-                          type="text"
+                          type="number"
                           id="Phonenum"
                           className="w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-orange-500"
                           value={profile?.phone}
