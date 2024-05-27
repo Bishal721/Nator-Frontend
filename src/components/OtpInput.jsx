@@ -12,6 +12,7 @@ const OtpInput = ({ length, onClose, onOtpSubmit = () => {} }) => {
   const dispatch = useDispatch();
   const inputRefs = useRef([]);
   const modelRef = useRef();
+  const OtpInitiated = useRef(false);
 
   const closeModel = (e) => {
     if (modelRef.current === e.target) {
@@ -24,6 +25,13 @@ const OtpInput = ({ length, onClose, onOtpSubmit = () => {} }) => {
       inputRefs.current[0].focus();
     }
   }, []);
+  useEffect(() => {
+    if (!OtpInitiated.current) {
+      OtpInitiated.current = true;
+      dispatch(getOtp());
+      dispatch(RESET());
+    }
+  }, [dispatch]);
 
   const handleChange = (index, e) => {
     const value = e.target.value;
@@ -66,7 +74,7 @@ const OtpInput = ({ length, onClose, onOtpSubmit = () => {} }) => {
   };
   const resendEmail = async () => {
     setIsLoading(true);
-    dispatch(getOtp());
+    await dispatch(getOtp());
     dispatch(RESET());
     setIsLoading(false);
   };
@@ -76,7 +84,7 @@ const OtpInput = ({ length, onClose, onOtpSubmit = () => {} }) => {
       <div
         ref={modelRef}
         onClick={closeModel}
-        className="fixed inset-0 bg-opacity-40 backdrop-blur-md flex justify-center items-center"
+        className="fixed inset-0 bg-opacity-40 backdrop-blur-md flex justify-center items-center z-50"
       >
         <div className="relative bg-white px-6 pt-10 pb-9 shadow-xl mx-auto w-full max-w-lg rounded-2xl">
           <div className="mx-auto flex w-full max-w-md flex-col space-y-16">

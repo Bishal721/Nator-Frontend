@@ -10,7 +10,6 @@ const SearchItem = ({ item }) => {
     return text;
   };
   const location = useLocation();
-  console.log(item);
   return (
     <div className="border-[1px] border-[solid] border-[lightgray] p-[10px] rounded-[5px] flex justify-between gap-[20px] mb-[20px]">
       <img

@@ -20,7 +20,6 @@ const initialState = {
   max: "",
 };
 const HotelList = ({ hotels, isLoading }) => {
-  //   console.log(hotels);
   const [search, setSearch] = useState("");
   const filteredHotels = useSelector(selectFilteredHotels);
   const dispatch = useDispatch();

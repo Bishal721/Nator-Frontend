@@ -58,7 +58,6 @@ const AddHotel = () => {
     setDesc(content);
   };
   const isEmptyContent = (content) => {
-    // Remove HTML tags and whitespace
     const strippedContent = content.replace(/<\/?[^>]+(>|$)/g, "").trim();
     return strippedContent.length === 0;
   };
@@ -95,10 +94,8 @@ const AddHotel = () => {
     if (hotelImage) {
       formData.append("photos", hotelImage);
     }
-    console.log(...formData);
 
     const data = await dispatch(createHotel(formData));
-    console.log(data);
     if (data.meta.requestStatus === "fulfilled") {
       navigate("/admin/dashboard");
     }

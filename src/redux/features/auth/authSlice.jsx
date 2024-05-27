@@ -459,7 +459,7 @@ const authSlice = createSlice({
         state.isLoading = false;
         state.isSuccess = true;
         state.message = action.payload;
-        toast.success(action.payload);
+        toast.success(action.payload.message);
       })
       .addCase(changePassword.rejected, (state, action) => {
         state.isLoading = false;

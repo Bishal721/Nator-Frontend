@@ -8,6 +8,7 @@ import { getUser, updateUser } from "../../redux/features/auth/authSlice";
 import { useDispatch, useSelector } from "react-redux";
 import Loader from "../../components/loader/Loader";
 import Notification from "../../components/notification/Notification";
+import ChangePassword from "../../components/changePassword/ChangePassword";
 
 const Profile = () => {
   const dispatch = useDispatch();
@@ -28,13 +29,9 @@ const Profile = () => {
     role: user?.role || "",
     isVerified: user?.isVerified || false,
   };
-  // const logout = () => {
-  //   dispatch(logoutUser());
-  //   dispatch(RESET());
-  //   navigate("/login");
-  // };
   const [profile, setProfile] = useState(initialState);
   const [profileImage, setProfileImage] = useState("");
+  const [showChangeModel, setShowChangeModel] = useState(false);
 
   useEffect(() => {
     dispatch(getUser());
@@ -48,10 +45,17 @@ const Profile = () => {
   const HandleImageChange = (e) => {
     setProfileImage(e.target.files[0]);
   };
+
   const updateProfile = async (e) => {
     e.preventDefault();
     try {
       // Handle Image Upload to Cloudinary
+      if (profile?.isVerified !== true) {
+        return toast.error("User must be verified please verify your Account");
+      }
+      if (profile?.phone <= 0) {
+        return toast.error("Phone number cannnot be a negative  value");
+      }
       let imageURL;
       if (
         profileImage &&
@@ -71,7 +75,6 @@ const Profile = () => {
         );
         const imgData = await response.json();
         imageURL = imgData.url.toString();
-        console.log(imageURL);
       }
 
       const formData = {
@@ -142,10 +145,16 @@ const Profile = () => {
                     </div>
                   </div>
                   <div className="flex mt-4 space-x-4">
-                    <button className="bg-orange-400 text-white px-4 py-2 rounded-md">
+                    <button
+                      className="bg-orange-400 text-white px-4 py-2 rounded-md"
+                      onClick={() => setShowChangeModel(true)}
+                    >
                       Change Password
                     </button>
                   </div>
+                  {showChangeModel && (
+                    <ChangePassword onClose={() => setShowChangeModel(false)} />
+                  )}
                 </div>
               </div>
             </div>
@@ -197,7 +206,7 @@ const Profile = () => {
                           Phone Number
                         </label>
                         <input
-                          type="text"
+                          type="number"
                           id="Phonenum"
                           className="w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-orange-500"
                           value={profile?.phone}

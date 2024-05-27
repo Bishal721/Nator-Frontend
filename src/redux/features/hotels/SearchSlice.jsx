@@ -7,6 +7,7 @@ const initialState = {
     children: undefined,
     room: undefined,
   },
+  location: null,
 };
 const SearchSlice = createSlice({
   name: "search",
@@ -14,6 +15,9 @@ const SearchSlice = createSlice({
   reducers: {
     NewSearch: (state, action) => {
       return action.payload;
+    },
+    NewHomeSearch: (state, action) => {
+      state.location = action.payload;
     },
     resetSearch: () => {
       return {
@@ -29,5 +33,5 @@ const SearchSlice = createSlice({
   },
 });
 
-export const {NewSearch} = SearchSlice.actions;
+export const { NewSearch, NewHomeSearch } = SearchSlice.actions;
 export default SearchSlice.reducer;

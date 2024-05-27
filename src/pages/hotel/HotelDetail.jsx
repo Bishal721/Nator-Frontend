@@ -7,7 +7,6 @@ import { IoLocationOutline } from "react-icons/io5";
 import { IoMdStarOutline } from "react-icons/io";
 import { AiFillDollarCircle } from "react-icons/ai";
 import DOMPurify from "dompurify";
-import BookHotel from "./BookHotel";
 import { selectIsLoggedIn } from "../../redux/features/auth/authSlice";
 import Reserve from "./Reserve";
 import Datepicker from "react-tailwindcss-datepicker";
@@ -125,7 +124,6 @@ const HotelDetail = () => {
         </div>
       </div>
       <div className="p-4 col-span-2 rounded-lg border border-solid border-gray-300  ">
-        {/* <BookHotel price={Hotel?.cheapestPrice} rating={Hotel?.rating} /> */}
         <div className="flex justify-between gap-[20px] mt-[20px]">
           <div className="flex-[1] bg-[#ebf3ff] p-[20px] flex flex-col gap-[20px]">
             <h1 className="text-[18px] text-[#555]">
@@ -133,10 +131,10 @@ const HotelDetail = () => {
             </h1>
             <span className="text-[14px]">
               Located in the real heart of {Hotel?.city}, this property has an
-              excellent location score of {Hotel?.rating}!
+              excellent location
             </span>
             <h2 className="font-light">
-              <b>${total}</b> ({days} nights)
+              <b>Rs {total}</b> ({days} nights)
             </h2>
 
             <div className="w-full">
@@ -154,7 +152,6 @@ const HotelDetail = () => {
                 displayFormat={"DD/MM/YYYY"}
                 popoverDirection="down"
                 minDate={new Date()}
-                // showFooter={true}
               />
             </div>
             <button

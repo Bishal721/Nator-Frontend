@@ -135,10 +135,8 @@ const shortenText = (text, n) => {
       formData.append("photos", hotelImage);
     }
 
-    console.log(hotelImage);
 
     const data = await dispatch(updateHotel({ id, formData }));
-    console.log(data);
     if (data.meta.requestStatus === "fulfilled") {
       navigate("/admin/dashboard");
     }

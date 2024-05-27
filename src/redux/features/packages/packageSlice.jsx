@@ -9,12 +9,12 @@ const initialState = {
   isSuccess: false,
   isLoading: false,
   message: "",
+  maxExtraPeople: null,
 };
 // Create Packages
 export const createPackage = createAsyncThunk(
   "packages/create",
   async (formData, thunkAPI) => {
-    console.log(formData);
     try {
       return await packageService.createPackage(formData);
     } catch (error) {
@@ -31,9 +31,12 @@ export const createPackage = createAsyncThunk(
 // get all packages
 export const getPackages = createAsyncThunk(
   "packages/getAll",
-  async (_, thunkAPI) => {
+  async (formData, thunkAPI) => {
     try {
-      return await packageService.getPackages();
+      if (formData === undefined) {
+        return await packageService.getPackages();
+      }
+      return await packageService.getPackages(formData);
     } catch (error) {
       const message =
         (error.response && error.response.data && error.response.message) ||
@@ -50,6 +53,20 @@ export const getPackage = createAsyncThunk(
   async (id, thunkAPI) => {
     try {
       return await packageService.getPackage(id);
+    } catch (error) {
+      const message =
+        (error.response && error.response.data && error.response.message) ||
+        error.message ||
+        error.toString();
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
+export const getExtraPeople = createAsyncThunk(
+  "packages/getextrapeople",
+  async (_, thunkAPI) => {
+    try {
+      return await packageService.getExtraPeople();
     } catch (error) {
       const message =
         (error.response && error.response.data && error.response.message) ||
@@ -119,23 +136,6 @@ export const createReview = createAsyncThunk(
         (error.response && error.response.data && error.response.message) ||
         error.message ||
         error.toString();
-      console.log(error);
-      return thunkAPI.rejectWithValue(message);
-    }
-  }
-);
-export const createBooking = createAsyncThunk(
-  "packages/createBooking",
-  async (formData, thunkAPI) => {
-    console.log(formData);
-    try {
-      return await packageService.createBooking(formData);
-    } catch (error) {
-      const message =
-        (error.response && error.response.data && error.response.message) ||
-        error.message ||
-        error.toString();
-      toast.error(error.response.data.message);
       console.log(error);
       return thunkAPI.rejectWithValue(message);
     }
@@ -260,17 +260,16 @@ const packageSlice = createSlice({
         state.message = action.payload;
         toast.error(action.payload);
       })
-      .addCase(createBooking.pending, (state) => {
+      .addCase(getExtraPeople.pending, (state) => {
         state.isLoading = true;
       })
-      .addCase(createBooking.fulfilled, (state, action) => {
+      .addCase(getExtraPeople.fulfilled, (state, action) => {
         state.isLoading = false;
         state.isSuccess = true;
         state.isError = false;
-        state.packages.push(action.payload);
-        toast.success("Package Booked successfully");
+        state.maxExtraPeople = action.payload;
       })
-      .addCase(createBooking.rejected, (state, action) => {
+      .addCase(getExtraPeople.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
         state.message = action.payload;

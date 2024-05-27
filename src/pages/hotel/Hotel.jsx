@@ -10,6 +10,7 @@ import { getAllHotels } from "../../redux/features/hotels/hotelSlice";
 import { FaPerson } from "react-icons/fa6";
 import { NewSearch } from "../../redux/features/hotels/SearchSlice";
 import DOMPurify from "dompurify";
+import Loader from "../../components/loader/Loader";
 
 const Hotel = () => {
   const dispatch = useDispatch();
@@ -57,7 +58,6 @@ const Hotel = () => {
   });
 
   const handleValueChange = (newValue) => {
-    console.log("newValue:", newValue);
     setDates(newValue);
   };
   const handleOption = (name, operation) => {
@@ -77,7 +77,6 @@ const Hotel = () => {
     };
     e.preventDefault();
     const data = dispatch(NewSearch({ payload: formData }));
-    console.log(data);
     navigate("/hotel-list", { state: formData });
   };
 
@@ -90,6 +89,7 @@ const Hotel = () => {
 
   return (
     <>
+      {isloading && <Loader />}
       <section className="h-screen" style={styles}>
         <div className="bg-[#222222] opacity-35 h-full w-full absolute top-[4.75rem] mix-blend-multiply [transition:background_0.3s,_border-radius_0.3s,_opacity_0.3s] z-10"></div>
         <div className="relative  h-full w-full flex flex-col justify-center  items-center px-[4rem] z-30">
@@ -250,12 +250,12 @@ const Hotel = () => {
 
             <div className="text-justify mt-8">
               <p>
-                Lorem, ipsum dolor sit amet consectetur adipisicing elit. Alias
-                officia voluptatum sunt. Aspernatur ab delectus alias nam quam
-                libero asperiores aliquid, eveniet saepe ratione praesentium qui
-                adipisci et expedita quibusdam suscipit. Laudantium
-                necessitatibus et distinctio asperiores accusamus doloribus
-                accusantium, a exercitationem
+                Featuring A 24-Hour Front Desk And A Large Outdoor Swimming
+                Pool, The Hyatt Regency Kathmandu Is Located Just 0.8 Mi From
+                The Famous UNESCO World Heritage Of Boudhanath Stupa.The
+                Property Is Located 4.3 Mi From The Famous Tourist Destination
+                Of Thamel. Kathmandu International Airport Is Located 2.5 Mi
+                Away.
               </p>
             </div>
             <div className="grid grid-cols-3 mt-4 text-white font-semibold">
@@ -270,11 +270,12 @@ const Hotel = () => {
                 Experience the Life of Mykonos City
               </h2>
               <p className="text-justify text-md">
-                Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                Repudiandae sapiente nobis dolorum dolore rerum voluptatibus nam
-                maiores mollitia cumque error veniam tenetur consectetur dolorem
-                libero, atque hic ipsum exercitationem labore assumenda repellat
-                ullam et sint facilis perspiciatis. Debitis, molestiae aperiam.
+                Featuring A 24-Hour Front Desk And A Large Outdoor Swimming
+                Pool, The Hyatt Regency Kathmandu Is Located Just 0.8 Mi From
+                The Famous UNESCO World Heritage Of Boudhanath Stupa.The
+                Property Is Located 4.3 Mi From The Famous Tourist Destination
+                Of Thamel. Kathmandu International Airport Is Located 2.5 Mi
+                Away.
               </p>
             </div>
             <div className="mt-8">
@@ -319,14 +320,14 @@ const Hotel = () => {
                       <h3 className="text-lg ">
                         {shortenText(item?.name, 22)}
                       </h3>
-                      <p
+                      {/* <p
                         dangerouslySetInnerHTML={{
                           __html: DOMPurify.sanitize(
                             shortenText(item.desc, 20)
                           ),
                         }}
                         className="mt-4 "
-                      ></p>
+                      ></p> */}
                     </div>
 
                     <div className="w-1/2 my-4 text-white font-semibold ">
@@ -354,14 +355,14 @@ const Hotel = () => {
                       <h3 className="text-xl font-medium my-4">
                         {shortenText(item?.name, 22)}
                       </h3>
-                      <p
+                      {/* <p
                         dangerouslySetInnerHTML={{
                           __html: DOMPurify.sanitize(
                             shortenText(item.desc, 50)
                           ),
                         }}
                         className="mt-4"
-                      ></p>
+                      ></p> */}
                     </div>
 
                     <div className=" w-1/2 my-4 text-white font-semibold">

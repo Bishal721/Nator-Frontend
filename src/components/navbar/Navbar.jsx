@@ -6,6 +6,7 @@ import {
   AdminLink,
   ShowOnLogOut,
   ShowOnLogin,
+  UserLink,
 } from "../../components/protect/HiddenLinks";
 import {
   RESET,
@@ -20,7 +21,6 @@ const Navbar = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const user = useSelector(selectUser);
-  console.log(user);
   const Links = [
     {
       name: "Home",
@@ -38,13 +38,14 @@ const Navbar = () => {
 
   const logout = () => {
     dispatch(logoutUser());
+    localStorage.clear();
     dispatch(RESET());
     navigate("/login");
   };
 
   let [open, setOpen] = useState(false);
   return (
-    <div className="md:sticky md:top-0 z-50 border-b-2 border-b-gray-300 ">
+    <div className="md:sticky md:top-0 z-40 border-b-2 border-b-gray-300 ">
       <div className="w-full bg-white">
         <nav className="md:container flex justify-between items-center w-full  text-gray-700 py-4 mx-auto">
           <div>
@@ -52,12 +53,11 @@ const Navbar = () => {
               className="text-4xl text-orange-400 cursor-pointer font-bold font-heading"
               to="/"
             >
-              {/* <img className="h-9" src="logo.png" alt="logo" /> */}
               Natour
             </Link>
           </div>
           <div
-            className={`md:static absolute  text-base bg-white  font-medium md:min-h-fit min-h-[50vh] left-0 top-[-100%] md:w-auto w-full flex items-center px-5 ease-in ${open ? "top-[8%] " : "top-[-100%] "} z-50`}
+            className={`md:static absolute  text-base bg-white  font-medium md:min-h-fit min-h-[50vh] left-0 top-[-100%] md:w-auto w-full flex items-center px-5 ease-in ${open ? "top-[8%] " : "top-[-100%] "} z-40`}
           >
             <ul className="flex md:flex-row flex-col md:items-center md:gap-[2vw] gap-4 ">
               {Links.map((link, index) => (
@@ -114,19 +114,21 @@ const Navbar = () => {
                           </div>
                         )}
                       </Menu.Item>
-                      <Menu.Item>
-                        {({ active }) => (
-                          <div
-                            onClick={() => navigate("/bookings")}
-                            className={classNames(
-                              active && "bg-gray-100",
-                              "active:bg-gray-200 rounded-sm px-4 py-2 text-gray-700 cursor-pointer focus:bg-gray-200"
-                            )}
-                          >
-                            My Bookings
-                          </div>
-                        )}
-                      </Menu.Item>
+                      <UserLink>
+                        <Menu.Item>
+                          {({ active }) => (
+                            <div
+                              onClick={() => navigate("/bookings")}
+                              className={classNames(
+                                active && "bg-gray-100",
+                                "active:bg-gray-200 rounded-sm px-4 py-2 text-gray-700 cursor-pointer focus:bg-gray-200"
+                              )}
+                            >
+                              My Bookings
+                            </div>
+                          )}
+                        </Menu.Item>
+                      </UserLink>
                       <AdminLink>
                         <Menu.Item>
                           {({ active }) => (

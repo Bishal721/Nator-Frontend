@@ -42,7 +42,6 @@ const Login = () => {
       password,
     };
     const data = await dispatch(loginUser(userData));
-    console.log(data);
     if (data.payload.role === "admin") {
       navigate("/admin/dashboard");
     }
@@ -82,7 +81,7 @@ const Login = () => {
                 type="email"
                 name="email"
                 placeholder="Email"
-                className="w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-orange-500"
+                className="w-full border border-gray-300 rounded-md py-2 px-3 :outline-none focus:border-orange-50focus0"
                 required
                 value={email}
                 onChange={HandleInputChange}

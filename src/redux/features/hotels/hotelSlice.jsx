@@ -17,11 +17,7 @@ export const createHotel = createAsyncThunk(
   "hotels/create",
   async (formData, thunkAPI) => {
     try {
-      // // Convert FormData to a plain object
-      // const convertedFormData = Object.fromEntries(formData);
-
-      // console.log(convertedFormData);
-      console.log(formData);
+ 
       return await hotelService.createHotel(formData);
     } catch (error) {
       const message =
@@ -71,8 +67,6 @@ export const updateHotel = createAsyncThunk(
   "hotels/update",
   async ({ id, formData }, thunkAPI) => {
     try {
-      console.log(id);
-      console.log(formData);
       return await hotelService.updateHotel(id, formData);
     } catch (error) {
       const message =
@@ -223,5 +217,5 @@ const hotelSlice = createSlice({
 
 export const {} = hotelSlice.actions;
 export const selectIsLoading = (state) => state.hotel.isLoading;
-export const selectPackage = (state) => state.hotel.Hotel;
+export const selectHotel = (state) => state.hotel.Hotel;
 export default hotelSlice.reducer;

@@ -31,6 +31,10 @@ import AdminLayout from "./admin/components/layout/AdminLayout";
 import AddHotel from "./admin/pages/hotel/AddHotel";
 import UpdateHotel from "./admin/pages/hotel/UpdateHotel";
 import UserList from "./admin/components/userlist/UserList";
+import PaymentSuccessPage from "./pages/payment/PaymentSuccessPage";
+import PaymentUnsuccessfulPage from "./pages/payment/PaymentUnsuccessfulPage";
+import BookingPage from "./pages/booking/BookingPage";
+import ViewBookings from "./admin/pages/bookings/ViewBookings";
 axios.defaults.withCredentials = true;
 
 function App() {
@@ -107,12 +111,22 @@ function App() {
           }
         />
         <Route path="/forgot" element={<Forgot />} />
+        <Route path="/success" element={<PaymentSuccessPage />} />
+        <Route path="/cancel" element={<PaymentUnsuccessfulPage />} />
         <Route path="/resetpassword/:resetToken" element={<Reset />} />
         <Route
           path="/profile"
           element={
             <Layout>
               <Profile />
+            </Layout>
+          }
+        />
+        <Route
+          path="/bookings"
+          element={
+            <Layout>
+              <BookingPage />
             </Layout>
           }
         />
@@ -133,6 +147,7 @@ function App() {
           <Route path="add-hotels" element={<AddHotel />} />
           <Route path="edit-hotels/:id" element={<UpdateHotel />} />
           <Route path="users" element={<UserList />} />
+          <Route path="Allbookings" element={<ViewBookings />} />
         </Route>
 
         <Route path="/*" element={<ErrorPage />} />
