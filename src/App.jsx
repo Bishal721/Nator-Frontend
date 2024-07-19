@@ -138,6 +138,8 @@ function App() {
             </Layout>
           }
         />
+        <Route path="/*" element={<ErrorPage />} />
+
 
         <Route path="/admin" element={<AdminLayout />}>
           <Route path="dashboard" element={<Dashboard />} />
@@ -150,7 +152,6 @@ function App() {
           <Route path="Allbookings" element={<ViewBookings />} />
         </Route>
 
-        <Route path="/*" element={<ErrorPage />} />
       </Routes>
     </BrowserRouter>
   );
